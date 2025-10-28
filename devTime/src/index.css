@@ -36,6 +36,41 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --primary: #4C79FF;
+  --primary-10: #78B0FF;
+  --primary-30: #4C79FF;
+  --primary-gradient-start: #4C79FF;
+  --primary-gradient-end: #023E99;
+
+  --secondary-indigo: #023E99;
+  --informative: #2563EB;
+  --negative: #DC2626;
+  --notice: #FBBF24;
+  --positive: #22C55E;
+  --fuchsia: #FD28EC;
+
+  --gray-50:  #FFFFFF;
+  --gray-100: #F9FAFB;
+  --gray-200: #F0F2F5;
+  --gray-300: #E5E7EB;
+  --gray-400: #CCD0D6;
+  --gray-500: #969DA8;
+  --gray-600: #717887;
+  --gray-700: #4B5563;
+  --gray-800: #394252;
+  --gray-900: #1F2937;
+
+  --state-disabled: var(--gray-400);
+  --state-hover: #4C79FF1A;  /* Primary 10% 투명도 */
+  --state-active: #4C79FF33; /* Primary 30% 투명도 */
+  --state-focus: #4C79FF;
+  --state-dim1: rgba(0, 0, 0, 0.5);
+  --state-dim2: rgba(0, 0, 0, 0.7);
+  --state-border: var(--gray-300);
+
+  --shadow-1: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-2: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 @theme inline {
@@ -74,6 +109,41 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-primary: var(--primary);
+  --color-primary-10: var(--primary-10);
+  --color-primary-30: var(--primary-30);
+  --color-primary-gradient-start: var(--primary-gradient-start);
+  --color-primary-gradient-end: var(--primary-gradient-end);
+
+  --color-secondary-indigo: var(--secondary-indigo);
+  --color-informative: var(--informative);
+  --color-negative: var(--negative);
+  --color-notice: var(--notice);
+  --color-positive: var(--positive);
+  --color-fuchsia: var(--fuchsia);
+
+  --color-gray-50: var(--gray-50);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+  --color-gray-600: var(--gray-600);
+  --color-gray-700: var(--gray-700);
+  --color-gray-800: var(--gray-800);
+  --color-gray-900: var(--gray-900);
+
+   --color-state-disabled: var(--state-disabled);
+  --color-state-hover: var(--state-hover);
+  --color-state-active: var(--state-active);
+  --color-state-focus: var(--state-focus);
+  --color-state-dim1: var(--state-dim1);
+  --color-state-dim2: var(--state-dim2);
+  --color-state-border: var(--state-border);
+
+  --color-shadow-1: var(--shadow-1);
+  --color-shadow-2: var(--shadow-2);
 }
 
 .dark {
