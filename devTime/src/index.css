@@ -1,9 +1,19 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'Digital Numbers';
+  src: url('/fonts/DigitalNumbers-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
+  --font-main: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -37,34 +47,34 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  --primary: #4C79FF;
-  --primary-10: #78B0FF;
-  --primary-30: #4C79FF;
-  --primary-gradient-start: #4C79FF;
-  --primary-gradient-end: #023E99;
+  --primary: #4c79ff;
+  --primary-10: #78b0ff;
+  --primary-30: #4c79ff;
+  --primary-gradient-start: #4c79ff;
+  --primary-gradient-end: #023e99;
 
-  --secondary-indigo: #023E99;
-  --informative: #2563EB;
-  --negative: #DC2626;
-  --notice: #FBBF24;
-  --positive: #22C55E;
-  --fuchsia: #FD28EC;
+  --secondary-indigo: #023e99;
+  --informative: #2563eb;
+  --negative: #dc2626;
+  --notice: #fbbf24;
+  --positive: #22c55e;
+  --fuchsia: #fd28ec;
 
-  --gray-50:  #FFFFFF;
-  --gray-100: #F9FAFB;
-  --gray-200: #F0F2F5;
-  --gray-300: #E5E7EB;
-  --gray-400: #CCD0D6;
-  --gray-500: #969DA8;
+  --gray-50: #ffffff;
+  --gray-100: #f9fafb;
+  --gray-200: #f0f2f5;
+  --gray-300: #e5e7eb;
+  --gray-400: #ccd0d6;
+  --gray-500: #969da8;
   --gray-600: #717887;
-  --gray-700: #4B5563;
+  --gray-700: #4b5563;
   --gray-800: #394252;
-  --gray-900: #1F2937;
+  --gray-900: #1f2937;
 
   --state-disabled: var(--gray-400);
-  --state-hover: #4C79FF1A;  /* Primary 10% 투명도 */
-  --state-active: #4C79FF33; /* Primary 30% 투명도 */
-  --state-focus: #4C79FF;
+  --state-hover: #4c79ff1a; /* Primary 10% 투명도 */
+  --state-active: #4c79ff33; /* Primary 30% 투명도 */
+  --state-focus: #4c79ff;
   --state-dim1: rgba(0, 0, 0, 0.5);
   --state-dim2: rgba(0, 0, 0, 0.7);
   --state-border: var(--gray-300);
@@ -74,6 +84,55 @@
 }
 
 @theme inline {
+  /* Base font */
+  --font-family-main:
+    'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Digital font */
+  --font-family-digital: 'Digital Numbers', 'Pretendard', sans-serif;
+  --text-digital: 400 154px/200px var(--font-family-digital);
+
+  /* Heading (24/30) */
+  --text-heading-b: 700 1.5rem/1.875rem var(--font-family-main);
+  --text-heading-s: 600 1.5rem/1.875rem var(--font-family-main);
+  --text-heading-m: 500 1.5rem/1.875rem var(--font-family-main);
+  --text-heading-r: 400 1.5rem/1.875rem var(--font-family-main);
+
+  /* Title (20/24) */
+  --text-title-b: 700 1.25rem/1.5rem var(--font-family-main);
+  --text-title-s: 600 1.25rem/1.5rem var(--font-family-main);
+  --text-title-m: 500 1.25rem/1.5rem var(--font-family-main);
+  --text-title-r: 400 1.25rem/1.5rem var(--font-family-main);
+
+  /* Sub-title (18/22) */
+  --text-subtitle-b: 700 1.125rem/1.375rem var(--font-family-main);
+  --text-subtitle-s: 600 1.125rem/1.375rem var(--font-family-main);
+  --text-subtitle-m: 500 1.125rem/1.375rem var(--font-family-main);
+  --text-subtitle-r: 400 1.125rem/1.375rem var(--font-family-main);
+
+  /* Body (16/20) */
+  --text-body-b: 700 1rem/1.25rem var(--font-family-main);
+  --text-body-s: 600 1rem/1.25rem var(--font-family-main);
+  --text-body-m: 500 1rem/1.25rem var(--font-family-main);
+  --text-body-r: 400 1rem/1.25rem var(--font-family-main);
+
+  /* Body Small (14/18) */
+  --text-body-s-b: 700 1rem/1.25rem var(--font-family-main);
+  --text-body-s-s: 600 1rem/1.25rem var(--font-family-main);
+  --text-body-s-m: 500 1rem/1.25rem var(--font-family-main);
+  --text-body-s-r: 400 1rem/1.25rem var(--font-family-main);
+
+  /* Caption (12/16) */
+  --text-caption-b: 700 0.75rem/1rem var(--font-family-main);
+  --text-caption-s: 600 0.75rem/1rem var(--font-family-main);
+  --text-caption-m: 500 0.75rem/1rem var(--font-family-main);
+  --text-caption-r: 400 0.75rem/1rem var(--font-family-main);
+
+  /* Label (10/12) */
+  --text-label-b: 700 0.625rem/0.75rem var(--font-family-main);
+  --text-label-s: 600 0.625rem/0.75rem var(--font-family-main);
+  --text-label-m: 500 0.625rem/0.75rem var(--font-family-main);
+  --text-label-r: 400 0.625rem/0.75rem var(--font-family-main);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -134,7 +193,7 @@
   --color-gray-800: var(--gray-800);
   --color-gray-900: var(--gray-900);
 
-   --color-state-disabled: var(--state-disabled);
+  --color-state-disabled: var(--state-disabled);
   --color-state-hover: var(--state-hover);
   --color-state-active: var(--state-active);
   --color-state-focus: var(--state-focus);
@@ -187,4 +246,53 @@
   body {
     @apply bg-background text-foreground;
   }
+  body {
+    @apply min-h-dvh overflow-x-hidden;
+  }
 }
+
+@utility text-digital {
+  font: var(--text-digital);
+}
+@utility text-heading-b {
+  font: var(--text-heading-b);
+}
+@utility text-heading-s {
+  font: var(--text-heading-s);
+}
+@utility text-heading-m {
+  font: var(--text-heading-m);
+}
+@utility text-heading-r {
+  font: var(--text-heading-r);
+}
+@utility text-body-b {
+  font: var(--text-body-b);
+}
+@utility text-body-s {
+  font: var(--text-body-s);
+}
+@utility text-body-m {
+  font: var(--text-body-m);
+}
+@utility text-body-r {
+  font: var(--text-body-r);
+}
+@utility text-label-b {
+  font: var(--text-label-b);
+}
+@utility text-label-s {
+  font: var(--text-label-s);
+}
+@utility text-label-m {
+  font: var(--text-label-m);
+}
+@utility text-label-r {
+  font: var(--text-label-r);
+}
+
+body {
+  font-family: var(--font-main);
+  letter-spacing: 0;
+}
+
