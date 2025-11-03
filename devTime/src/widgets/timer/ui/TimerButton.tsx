@@ -1,7 +1,11 @@
+import LoginRequiredDialog from '@/features/auth/ui/login-required-dialog/LoginRequiredDialog';
+
 export default function TimerButton() {
   return (
     <div className='mt-20 flex gap-20'>
+      <LoginRequiredDialog />
       <svg
+        onClick={() => <LoginRequiredDialog />}
         className='mx-2.5 cursor-pointer'
         width='80'
         height='100'
