@@ -192,6 +192,7 @@
   --color-gray-700: var(--gray-700);
   --color-gray-800: var(--gray-800);
   --color-gray-900: var(--gray-900);
+  --color-gray-light: var(rgba(249, 250, 251, 1));
 
   --color-state-disabled: var(--state-disabled);
   --color-state-hover: var(--state-hover);
@@ -254,6 +255,30 @@
 @utility text-digital {
   font: var(--text-digital);
 }
+@utility text-subtitle-b {
+  font: var(--text-subtitle-b);
+}
+@utility text-subtitle-s {
+  font: var(--text-subtitle-s);
+}
+@utility text-subtitle-m {
+  font: var(--text-subtitle-m);
+}
+@utility text-subtitle-r {
+  font: var(--text-subtitle-r);
+}
+@utility text-title-b {
+  font: var(--text-title-b);
+}
+@utility text-title-s {
+  font: var(--text-title-s);
+}
+@utility text-title-m {
+  font: var(--text-title-m);
+}
+@utility text-title-r {
+  font: var(--text-title-r);
+}
 @utility text-heading-b {
   font: var(--text-heading-b);
 }
@@ -295,4 +320,3 @@ body {
   font-family: var(--font-main);
   letter-spacing: 0;
 }
-

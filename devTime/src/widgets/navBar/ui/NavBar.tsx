@@ -5,7 +5,9 @@ export default function NavBar() {
   return (
     <div className='max-w-[1200px] h-10 mx-auto flex justify-between  items-center'>
       <div className='flex gap-12'>
-        <img src={navBarLogo} alt='Logo' />
+        <Link to='/'>
+          <img src={navBarLogo} alt='Logo' />
+        </Link>
         <div className='flex justify-center items-center gap-9'>
           <span className='text-body-s text-secondary-indigo border-b border-secondary-indigo'>
             대시보드
