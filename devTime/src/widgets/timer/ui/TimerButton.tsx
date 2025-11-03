@@ -1,11 +1,17 @@
 import LoginRequiredDialog from '@/features/auth/ui/login-required-dialog/LoginRequiredDialog';
+import useAuthStore from '@/shared/store/useAuthStore';
+import useModalStore from '@/shared/store/useModalStroe';
 
 export default function TimerButton() {
+  const isLogined = useAuthStore((state) => state.isLogined);
+  const isModalOpen = useModalStore((state) => state.isModalOpen);
+  const openModal = useModalStore((state) => state.openModal);
+
   return (
     <div className='mt-20 flex gap-20'>
-      <LoginRequiredDialog />
+      {!isLogined && isModalOpen && <LoginRequiredDialog />}
       <svg
-        onClick={() => <LoginRequiredDialog />}
+        onClick={() => openModal()}
         className='mx-2.5 cursor-pointer'
         width='80'
         height='100'
