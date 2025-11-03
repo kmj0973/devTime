@@ -66,10 +66,9 @@
   --gray-300: #e5e7eb;
   --gray-400: #ccd0d6;
   --gray-500: #969da8;
-  --gray-600: #717887;
-  --gray-700: #4b5563;
-  --gray-800: #394252;
-  --gray-900: #1f2937;
+  --gray-600: #4b5563;
+  --gray-700: #394252;
+  --gray-800: #1f2937;
 
   --state-disabled: var(--gray-400);
   --state-hover: #4c79ff1a; /* Primary 10% 투명도 */
@@ -116,10 +115,10 @@
   --text-body-r: 400 1rem/1.25rem var(--font-family-main);
 
   /* Body Small (14/18) */
-  --text-body-s-b: 700 1rem/1.25rem var(--font-family-main);
-  --text-body-s-s: 600 1rem/1.25rem var(--font-family-main);
-  --text-body-s-m: 500 1rem/1.25rem var(--font-family-main);
-  --text-body-s-r: 400 1rem/1.25rem var(--font-family-main);
+  --text-body-s-b: 700 0.875rem/1.125rem var(--font-family-main);
+  --text-body-s-s: 600 0.875rem/1.125rem var(--font-family-main);
+  --text-body-s-m: 500 0.875rem/1.125rem var(--font-family-main);
+  --text-body-s-r: 400 0.875rem/1.125rem var(--font-family-main);
 
   /* Caption (12/16) */
   --text-caption-b: 700 0.75rem/1rem var(--font-family-main);
@@ -303,6 +302,18 @@
 @utility text-body-r {
   font: var(--text-body-r);
 }
+@utility text-body-s-b {
+  font: var(--text-body-s-b);
+}
+@utility text-body-s-s {
+  font: var(--text-body-s-s);
+}
+@utility text-body-s-m {
+  font: var(--text-body-s-m);
+}
+@utility text-body-s-r {
+  font: var(--text-body-s-r);
+}
 @utility text-label-b {
   font: var(--text-label-b);
 }
@@ -319,4 +330,7 @@
 body {
   font-family: var(--font-main);
   letter-spacing: 0;
+
+  margin: 0;
 }
+
