@@ -1,5 +1,5 @@
 import navBarLogo from '@/assets/navBarLogo.svg';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 export default function NavBar() {
   return (
@@ -9,10 +9,15 @@ export default function NavBar() {
           <img src={navBarLogo} alt='Logo' />
         </Link>
         <div className='flex justify-center items-center gap-9'>
-          <span className='text-body-s text-secondary-indigo border-b border-secondary-indigo'>
+          <NavLink
+            to='/dashboard'
+            className='text-body-s text-secondary-indigo border-b border-secondary-indigo'
+          >
             대시보드
-          </span>
-          <span className='text-body-s text-secondary-indigo'>랭킹</span>
+          </NavLink>
+          <NavLink to='/ranking' className='text-body-s text-secondary-indigo'>
+            랭킹
+          </NavLink>
         </div>
       </div>
       <div className='flex justify-center items-center gap-9'>
