@@ -34,12 +34,12 @@ export default function TimerButton() {
         <path
           d='M8 0C3.58172 0 0 3.58172 0 8V92C0 96.4183 3.58172 100 8 100H32C36.4183 100 40 96.4183 40 92V8C40 3.58172 36.4183 0 32 0H8Z'
           fill='#4C79FF'
-          fill-opacity='0.1'
+          fillOpacity='0.1'
         />
         <path
           d='M68 0C63.5817 0 60 3.58172 60 8V92C60 96.4183 63.5817 100 68 100H92C96.4183 100 100 96.4183 100 92V8C100 3.58172 96.4183 0 92 0H68Z'
           fill='#4C79FF'
-          fill-opacity='0.1'
+          fillOpacity='0.1'
         />
       </svg>
       <svg
@@ -52,7 +52,7 @@ export default function TimerButton() {
         <path
           d='M0 8C0 3.58172 3.58172 0 8 0H92C96.4183 0 100 3.58172 100 8V92C100 96.4183 96.4183 100 92 100H8C3.58172 100 0 96.4183 0 92V8Z'
           fill='#4C79FF'
-          fill-opacity='0.1'
+          fillOpacity='0.1'
         />
       </svg>
     </div>

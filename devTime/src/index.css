@@ -48,8 +48,8 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   --primary: #4c79ff;
-  --primary-10: #78b0ff;
-  --primary-30: #4c79ff;
+  --primary-10: #4c79ff1a;
+  --primary-30: #4c79ff4d;
   --primary-gradient-start: #4c79ff;
   --primary-gradient-end: #023e99;
 
@@ -60,12 +60,12 @@
   --positive: #22c55e;
   --fuchsia: #fd28ec;
 
-  --gray-50: #ffffff;
-  --gray-100: #f9fafb;
-  --gray-200: #f0f2f5;
-  --gray-300: #e5e7eb;
-  --gray-400: #ccd0d6;
-  --gray-500: #969da8;
+  --gray-50: #f9fafb;
+  --gray-100: #f0f2f5;
+  --gray-200: #e5e7eb;
+  --gray-300: #ccd0d6;
+  --gray-400: #969da8;
+  --gray-500: #717887;
   --gray-600: #4b5563;
   --gray-700: #394252;
   --gray-800: #1f2937;
@@ -251,80 +251,196 @@
   }
 }
 
-@utility text-digital {
-  font: var(--text-digital);
-}
-@utility text-subtitle-b {
-  font: var(--text-subtitle-b);
-}
-@utility text-subtitle-s {
-  font: var(--text-subtitle-s);
-}
-@utility text-subtitle-m {
-  font: var(--text-subtitle-m);
-}
-@utility text-subtitle-r {
-  font: var(--text-subtitle-r);
-}
-@utility text-title-b {
-  font: var(--text-title-b);
-}
-@utility text-title-s {
-  font: var(--text-title-s);
-}
-@utility text-title-m {
-  font: var(--text-title-m);
-}
-@utility text-title-r {
-  font: var(--text-title-r);
-}
-@utility text-heading-b {
-  font: var(--text-heading-b);
-}
-@utility text-heading-s {
-  font: var(--text-heading-s);
-}
-@utility text-heading-m {
-  font: var(--text-heading-m);
-}
-@utility text-heading-r {
-  font: var(--text-heading-r);
-}
-@utility text-body-b {
-  font: var(--text-body-b);
-}
-@utility text-body-s {
-  font: var(--text-body-s);
-}
-@utility text-body-m {
-  font: var(--text-body-m);
-}
-@utility text-body-r {
-  font: var(--text-body-r);
-}
-@utility text-body-s-b {
-  font: var(--text-body-s-b);
-}
-@utility text-body-s-s {
-  font: var(--text-body-s-s);
-}
-@utility text-body-s-m {
-  font: var(--text-body-s-m);
-}
-@utility text-body-s-r {
-  font: var(--text-body-s-r);
-}
-@utility text-label-b {
-  font: var(--text-label-b);
-}
-@utility text-label-s {
-  font: var(--text-label-s);
-}
-@utility text-label-m {
-  font: var(--text-label-m);
-}
-@utility text-label-r {
-  font: var(--text-label-r);
+@layer utilities {
+  /* Digital */
+  .text-digital {
+    font-weight: 400;
+    font-size: 154px;
+    line-height: 200px;
+    font-family: var(--font-family-digital);
+  }
+
+  /* Heading (24/30) */
+  .text-heading-b {
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.875rem;
+    font-family: var(--font-family-main);
+  }
+  .text-heading-s {
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 1.875rem;
+    font-family: var(--font-family-main);
+  }
+  .text-heading-m {
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.875rem;
+    font-family: var(--font-family-main);
+  }
+  .text-heading-r {
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.875rem;
+    font-family: var(--font-family-main);
+  }
+
+  /* Title (20/24) */
+  .text-title-b {
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    font-family: var(--font-family-main);
+  }
+  .text-title-s {
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    font-family: var(--font-family-main);
+  }
+  .text-title-m {
+    font-weight: 500;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    font-family: var(--font-family-main);
+  }
+  .text-title-r {
+    font-weight: 400;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    font-family: var(--font-family-main);
+  }
+
+  /* Sub-title (18/22) */
+  .text-subtitle-b {
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    font-family: var(--font-family-main);
+  }
+  .text-subtitle-s {
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    font-family: var(--font-family-main);
+  }
+  .text-subtitle-m {
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    font-family: var(--font-family-main);
+  }
+  .text-subtitle-r {
+    font-weight: 400;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    font-family: var(--font-family-main);
+  }
+
+  /* Body (16/20) */
+  .text-body-b {
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    font-family: var(--font-family-main);
+  }
+  .text-body-s {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    font-family: var(--font-family-main);
+  }
+  .text-body-m {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    font-family: var(--font-family-main);
+  }
+  .text-body-r {
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    font-family: var(--font-family-main);
+  }
+
+  /* Body Small (14/18) */
+  .text-body-s-b {
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+    font-family: var(--font-family-main);
+  }
+  .text-body-s-s {
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+    font-family: var(--font-family-main);
+  }
+  .text-body-s-m {
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+    font-family: var(--font-family-main);
+  }
+  .text-body-s-r {
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+    font-family: var(--font-family-main);
+  }
+
+  /* Caption (12/16) */
+  .text-caption-b {
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: var(--font-family-main);
+  }
+  .text-caption-s {
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: var(--font-family-main);
+  }
+  .text-caption-m {
+    font-weight: 500;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: var(--font-family-main);
+  }
+  .text-caption-r {
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-family: var(--font-family-main);
+  }
+
+  /* Label (10/12) */
+  .text-label-b {
+    font-weight: 700;
+    font-size: 0.625rem;
+    line-height: 0.75rem;
+    font-family: var(--font-family-main);
+  }
+  .text-label-s {
+    font-weight: 600;
+    font-size: 0.625rem;
+    line-height: 0.75rem;
+    font-family: var(--font-family-main);
+  }
+  .text-label-m {
+    font-weight: 500;
+    font-size: 0.625rem;
+    line-height: 0.75rem;
+    font-family: var(--font-family-main);
+  }
+  .text-label-r {
+    font-weight: 400;
+    font-size: 0.625rem;
+    line-height: 0.75rem;
+    font-family: var(--font-family-main);
+  }
 }
 
 body {
