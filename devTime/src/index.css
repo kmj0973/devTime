@@ -251,6 +251,10 @@
   }
 }
 
+.input-field:checked + .input-label {
+  @apply text-green-500 font-bold;
+}
+
 @layer utilities {
   /* Digital */
   .text-digital {

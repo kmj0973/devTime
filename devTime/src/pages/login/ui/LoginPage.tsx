@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import BackgroundLogo from './BackgroundLogo';
-import Logo from './Logo';
+import BackgroundLogo from './svg/BackgroundLogo';
+import Logo from './svg/Logo';
 
 export default function LoginPage() {
   return (
     <div className='relative h-screen flex justify-center items-center'>
       <BackgroundLogo />
-      <div className='w-[500px] h-[598px] flex flex-col justify-center items-center bg-white/30 backdrop-blur-[50px] rounded-[10px] shadow-[0_40px_100px_40px_#0368FF0D]'>
+      <form className='w-[500px] h-[598px] flex flex-col justify-center items-center bg-white/30 backdrop-blur-[50px] rounded-[10px] shadow-[0_40px_100px_40px_#0368FF0D]'>
         <Logo />
         <div className='flex flex-col'>
           <label htmlFor='아이디' className='text-body-s-m text-gray-600 mb-2'>
@@ -36,7 +36,7 @@ export default function LoginPage() {
         <Link to='/signup' className='text-primary text-body-s-m'>
           회원가입
         </Link>
-      </div>
+      </form>
     </div>
   );
 }
