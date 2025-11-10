@@ -11,8 +11,12 @@ export default function SignUpForm() {
     email,
     nickname,
     accept,
+    isEmailChecked,
+    isNicknameChecked,
     handleEmailCheck,
     handleEmailNickname,
+    onCheckEmail,
+    onCheckNickname,
     onSubmit,
   } = useSignUpForm();
 
@@ -29,6 +33,7 @@ export default function SignUpForm() {
         <div className='flex gap-3 mb-2'>
           <input
             {...register('email')}
+            onBlur={onCheckEmail}
             id='이메일'
             type='text'
             placeholder='이메일 주소 형식으로 입력해 주세요.'
@@ -36,13 +41,16 @@ export default function SignUpForm() {
           />
           <button
             onClick={handleEmailCheck}
-            className={`h-11 px-4 py-3 rounded-[5px] ${!errors.email && email ? 'bg-primary-10 text-primary' : 'bg-gray-200 text-gray-400'}  text-body-s-s`}
+            disabled={errors.email?.type !== 'duplicate'}
+            className={`h-11 px-4 py-3 rounded-[5px] ${errors.email?.type === 'duplicate' && 'bg-primary-10 text-primary'} ${!errors.email && email ? 'bg-primary-10 text-primary' : 'bg-gray-200 text-gray-400'}  text-body-s-s cursor-pointer`}
           >
             중복 확인
           </button>
         </div>
         {errors.email ? (
           <div className='text-caption-m text-negative'>{errors.email?.message}</div>
+        ) : isEmailChecked ? (
+          <div className='text-caption-m text-positive'>사용 가능한 이메일입니다.</div>
         ) : (
           <div className='h-4'></div>
         )}
@@ -54,6 +62,7 @@ export default function SignUpForm() {
         <div className='flex gap-3 mb-2'>
           <input
             {...register('nickname')}
+            onBlur={onCheckNickname}
             id='닉네임'
             type='text'
             placeholder='닉네임을 입력해 주세요.'
@@ -61,13 +70,15 @@ export default function SignUpForm() {
           />
           <button
             onClick={handleEmailNickname}
-            className={`h-11 px-4 py-3 rounded-[5px] ${!errors.nickname && nickname ? 'bg-primary-10 text-primary' : 'bg-gray-200 text-gray-400'}  text-body-s-s`}
+            className={`h-11 px-4 py-3 rounded-[5px] ${errors.nickname?.type === 'duplicate' && 'bg-primary-10 text-primary'} ${errors.nickname?.type !== 'duplicate' && nickname ? 'bg-primary-10 text-primary' : 'bg-gray-200 text-gray-400'}  text-body-s-s cursor-pointer`}
           >
             중복 확인
           </button>
         </div>
         {errors.nickname ? (
           <div className='text-caption-m text-negative'>{errors.nickname?.message}</div>
+        ) : isNicknameChecked ? (
+          <div className='text-caption-m text-positive'>사용 가능한 닉네임입니다.</div>
         ) : (
           <div className='h-4'></div>
         )}
