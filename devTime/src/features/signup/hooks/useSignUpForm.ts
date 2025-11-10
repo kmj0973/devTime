@@ -23,7 +23,6 @@ export const useSignUpForm = () => {
       accept: false,
     },
     resolver: zodResolver(signupFormSchema),
-    shouldFocusError: false,
     mode: 'onChange',
   });
   const [email, nickname, accept] = watch(['email', 'nickname', 'accept']);
@@ -53,7 +52,7 @@ export const useSignUpForm = () => {
     }
   };
 
-  const handleEmailNickname = async () => {
+  const handleNicknameCheck = async () => {
     const isValidNickname = await trigger('nickname');
     if (!isValidNickname) return;
 
@@ -90,6 +89,14 @@ export const useSignUpForm = () => {
   };
 
   const onSubmit: SubmitHandler<SignUpFormFields> = async (data) => {
+    if (!isEmailChecked) {
+      setError('email', { type: 'duplicate', message: '중복 확인을 해주세요.' });
+      return;
+    }
+    if (!isNicknameChecked) {
+      setError('nickname', { type: 'duplicate', message: '중복 확인을 해주세요.' });
+      return;
+    }
     try {
       const response = await requestSignUp(data);
       if (response.success) {
@@ -114,7 +121,7 @@ export const useSignUpForm = () => {
     isEmailChecked,
     isNicknameChecked,
     handleEmailCheck,
-    handleEmailNickname,
+    handleNicknameCheck,
     onCheckEmail,
     onCheckNickname,
     onSubmit,

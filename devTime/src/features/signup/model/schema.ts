@@ -17,7 +17,7 @@ export const signupFormSchema = z
         /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
         '비밀번호는 8자 이상, 영문과 숫자 조합이어야 합니다.',
       ),
-    confirmPassword: z.string(),
+    confirmPassword: z.string().min(1, { message: '비밀번호가 일치하지 않습니다.' }),
     accept: z.boolean().refine((val) => val === true, { message: '약관에 동의해 주세요.' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
