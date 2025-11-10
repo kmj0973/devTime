@@ -14,7 +14,7 @@ export default function SignUpForm() {
     isEmailChecked,
     isNicknameChecked,
     handleEmailCheck,
-    handleEmailNickname,
+    handleNicknameCheck,
     onCheckEmail,
     onCheckNickname,
     onSubmit,
@@ -69,8 +69,9 @@ export default function SignUpForm() {
             className={`${errors.nickname && 'border border-negative'} w-[324px] h-11 px-4 py-3 rounded-[5px] bg-gray-50 text-body-m text-gray-600 placeholder:text-gray-300 focus:outline-none`}
           />
           <button
-            onClick={handleEmailNickname}
-            className={`h-11 px-4 py-3 rounded-[5px] ${errors.nickname?.type === 'duplicate' && 'bg-primary-10 text-primary'} ${errors.nickname?.type !== 'duplicate' && nickname ? 'bg-primary-10 text-primary' : 'bg-gray-200 text-gray-400'}  text-body-s-s cursor-pointer`}
+            onClick={handleNicknameCheck}
+            disabled={errors.nickname?.type !== 'duplicate'}
+            className={`h-11 px-4 py-3 rounded-[5px] ${errors.nickname?.type === 'duplicate' && 'bg-primary-10 text-primary'} ${!errors.nickname && nickname ? 'bg-primary-10 text-primary' : 'bg-gray-200 text-gray-400'}  text-body-s-s cursor-pointer`}
           >
             중복 확인
           </button>
@@ -137,7 +138,7 @@ export default function SignUpForm() {
       </div>
       <button
         type='submit'
-        className={`w-[423px] h-12 rounded-[5px] ${isValid ? 'bg-primary text-white' : 'bg-gray-400 text-gray-300'} text-subtitle-s mb-6 cursor-pointer`}
+        className={`w-[423px] h-12 rounded-[5px] ${isEmailChecked && isNicknameChecked && isValid  ? 'bg-primary text-white' : 'bg-gray-400 text-gray-300'} text-subtitle-s mb-6 cursor-pointer`}
       >
         회원가입
       </button>
