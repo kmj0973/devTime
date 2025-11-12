@@ -86,6 +86,7 @@ export const useSignUpForm = () => {
   const onCheckNickname = useCallback(
     (e: React.FocusEvent<HTMLInputElement>) => {
       e.preventDefault();
+      console.log('hi');
       if (errors.nickname) return;
       if (!isNicknameChecked && nickname) {
         setError('nickname', { type: 'duplicate', message: '중복 확인을 해주세요.' });
@@ -95,14 +96,20 @@ export const useSignUpForm = () => {
   );
 
   const onSubmit: SubmitHandler<SignUpFormFields> = async (data) => {
+    let hasError = false;
+
     if (!isEmailChecked) {
       setError('email', { type: 'duplicate', message: '중복 확인을 해주세요.' });
-      return;
+      hasError = true;
     }
+
     if (!isNicknameChecked) {
       setError('nickname', { type: 'duplicate', message: '중복 확인을 해주세요.' });
-      return;
+      hasError = true;
     }
+
+    if (hasError) return;
+
     try {
       const response = await requestSignUp(data);
       if (response.success) {

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Caption from './Caption';
 import { useSignUpForm } from '../hooks/useSignUpForm';
-import { FormField } from './InputField';
+import { FormField } from './FormField';
 
 export default function SignUpForm() {
   const {
@@ -92,12 +92,14 @@ export default function SignUpForm() {
         </div>
         <Caption />
       </div>
+
       <button
         type='submit'
         className={`w-[423px] h-12 rounded-[5px] ${isEmailChecked && isNicknameChecked && isValid ? 'bg-primary text-white' : 'bg-gray-400 text-gray-300'} text-subtitle-s mb-6 cursor-pointer`}
       >
         회원가입
       </button>
+
       <div className='text-body-r text-primary'>
         회원이신가요?
         <Link to='/login' className='text-body-b ml-3'>
