@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Caption from './Caption';
 import { useSignUpForm } from '../hooks/useSignUpForm';
+import { FormField } from './InputField';
 
 export default function SignUpForm() {
   const {
@@ -25,99 +26,54 @@ export default function SignUpForm() {
       onSubmit={handleSubmit(onSubmit)}
       className='flex-1 flex flex-col justify-center items-center'
     >
-      <div className='text-heading-b text-primary mb-9'>회원가입</div>
-      <div className='flex flex-col mb-6'>
-        <label htmlFor='이메일' className='text-body-s-m text-gray-600 mb-2'>
-          아이디
-        </label>
-        <div className='flex gap-3 mb-2'>
-          <input
-            {...register('email')}
-            onBlur={onCheckEmail}
-            id='이메일'
-            type='text'
-            placeholder='이메일 주소 형식으로 입력해 주세요.'
-            className={`${errors.email && 'border border-negative'} w-[324px] h-11 px-4 py-3 rounded-[5px] bg-gray-50 text-body-m text-gray-600 placeholder:text-gray-300 focus:outline-none`}
-          />
-          <button
-            onClick={handleEmailCheck}
-            disabled={errors.email?.type !== 'duplicate'}
-            className={`h-11 px-4 py-3 rounded-[5px] ${errors.email?.type === 'duplicate' && 'bg-primary-10 text-primary'} ${!errors.email && email ? 'bg-primary-10 text-primary' : 'bg-gray-200 text-gray-400'}  text-body-s-s cursor-pointer`}
-          >
-            중복 확인
-          </button>
-        </div>
-        {errors.email ? (
-          <div className='text-caption-m text-negative'>{errors.email?.message}</div>
-        ) : isEmailChecked ? (
-          <div className='text-caption-m text-positive'>사용 가능한 이메일입니다.</div>
-        ) : (
-          <div className='h-4'></div>
-        )}
-      </div>
-      <div className='flex flex-col mb-6'>
-        <label htmlFor='닉네임' className='text-body-s-m text-gray-600 mb-2'>
-          닉네임
-        </label>
-        <div className='flex gap-3 mb-2'>
-          <input
-            {...register('nickname')}
-            onBlur={onCheckNickname}
-            id='닉네임'
-            type='text'
-            placeholder='닉네임을 입력해 주세요.'
-            className={`${errors.nickname && 'border border-negative'} w-[324px] h-11 px-4 py-3 rounded-[5px] bg-gray-50 text-body-m text-gray-600 placeholder:text-gray-300 focus:outline-none`}
-          />
-          <button
-            onClick={handleNicknameCheck}
-            disabled={errors.nickname?.type !== 'duplicate'}
-            className={`h-11 px-4 py-3 rounded-[5px] ${errors.nickname?.type === 'duplicate' && 'bg-primary-10 text-primary'} ${!errors.nickname && nickname ? 'bg-primary-10 text-primary' : 'bg-gray-200 text-gray-400'}  text-body-s-s cursor-pointer`}
-          >
-            중복 확인
-          </button>
-        </div>
-        {errors.nickname ? (
-          <div className='text-caption-m text-negative'>{errors.nickname?.message}</div>
-        ) : isNicknameChecked ? (
-          <div className='text-caption-m text-positive'>사용 가능한 닉네임입니다.</div>
-        ) : (
-          <div className='h-4'></div>
-        )}
-      </div>
-      <div className='flex flex-col mb-6'>
-        <label htmlFor='비밀번호' className='text-body-s-m text-gray-600 mb-2'>
-          비밀번호
-        </label>
-        <input
-          {...register('password')}
-          id='비밀번호'
-          type='password'
-          placeholder='비밀번호를 입력해 주세요.'
-          className={`${errors.password && 'border border-negative'} w-[423px] h-11 px-4 py-3 mb-2 rounded-[5px] bg-gray-50 text-body-m text-gray-600 placeholder:text-gray-300 focus:outline-none`}
-        />
-        {errors.password ? (
-          <div className='text-caption-m text-negative'>{errors.password?.message}</div>
-        ) : (
-          <div className='h-4'></div>
-        )}
-      </div>
-      <div className='flex flex-col mb-6'>
-        <label htmlFor='비밀번호 확인' className='text-body-s-m text-gray-600 mb-2'>
-          비밀번호 확인
-        </label>
-        <input
-          {...register('confirmPassword')}
-          id='비밀번호 확인'
-          type='password'
-          placeholder='비밀번호를 다시 입력해 주세요.'
-          className={`${errors.confirmPassword && 'border border-negative'} w-[423px] h-11 px-4 py-3 mb-2 rounded-[5px] bg-gray-50 text-body-m text-gray-600 placeholder:text-gray-300 focus:outline-none`}
-        />
-        {errors.confirmPassword ? (
-          <div className='text-caption-m text-negative'>{errors.confirmPassword?.message}</div>
-        ) : (
-          <div className='h-4'></div>
-        )}
-      </div>
+      <h1 className='text-heading-b text-primary mb-9'>회원가입</h1>
+
+      {/* 이메일 */}
+      <FormField
+        name='email'
+        label='아이디'
+        register={register}
+        value={email}
+        errors={errors}
+        placeholder='이메일 주소 형식으로 입력해 주세요.'
+        onCheck={onCheckEmail}
+        handleCheck={handleEmailCheck}
+        isChecked={isEmailChecked}
+        showCheckButton
+      />
+
+      {/* 닉네임 */}
+      <FormField
+        name='nickname'
+        label='닉네임'
+        register={register}
+        value={nickname}
+        errors={errors}
+        placeholder='닉네임을 입력해 주세요.'
+        onCheck={onCheckNickname}
+        handleCheck={handleNicknameCheck}
+        isChecked={isNicknameChecked}
+        showCheckButton
+      />
+
+      {/* 비밀번호 */}
+      <FormField
+        name='password'
+        label='비밀번호'
+        register={register}
+        errors={errors}
+        placeholder='비밀번호를 입력해 주세요.'
+      />
+
+      {/* 비밀번호 확인 */}
+      <FormField
+        name='confirmPassword'
+        label='비밀번호 확인'
+        register={register}
+        errors={errors}
+        placeholder='비밀번호를 다시 입력해 주세요.'
+      />
+
       <div className='flex flex-col mb-9'>
         <div className='flex justify-between items-center mb-2'>
           <label htmlFor='이용약관' className='text-body-s-m text-gray-600'>
@@ -138,7 +94,7 @@ export default function SignUpForm() {
       </div>
       <button
         type='submit'
-        className={`w-[423px] h-12 rounded-[5px] ${isEmailChecked && isNicknameChecked && isValid  ? 'bg-primary text-white' : 'bg-gray-400 text-gray-300'} text-subtitle-s mb-6 cursor-pointer`}
+        className={`w-[423px] h-12 rounded-[5px] ${isEmailChecked && isNicknameChecked && isValid ? 'bg-primary text-white' : 'bg-gray-400 text-gray-300'} text-subtitle-s mb-6 cursor-pointer`}
       >
         회원가입
       </button>
