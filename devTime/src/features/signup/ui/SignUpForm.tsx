@@ -95,7 +95,7 @@ export default function SignUpForm() {
 
       <button
         type='submit'
-        className={`w-[423px] h-12 rounded-[5px] ${isEmailChecked && isNicknameChecked && isValid ? 'bg-primary text-white' : 'bg-gray-400 text-gray-300'} text-subtitle-s mb-6 cursor-pointer`}
+        className={`w-[423px] h-12 rounded-[5px] ${isEmailChecked && isNicknameChecked && isValid ? 'bg-primary text-white hover:bg-state-hover' : 'bg-gray-400 text-gray-300'} text-subtitle-s mb-6 cursor-pointer`}
       >
         회원가입
       </button>

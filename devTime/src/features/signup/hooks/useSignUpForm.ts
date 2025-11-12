@@ -86,7 +86,6 @@ export const useSignUpForm = () => {
   const onCheckNickname = useCallback(
     (e: React.FocusEvent<HTMLInputElement>) => {
       e.preventDefault();
-      console.log('hi');
       if (errors.nickname) return;
       if (!isNicknameChecked && nickname) {
         setError('nickname', { type: 'duplicate', message: '중복 확인을 해주세요.' });
@@ -114,7 +113,7 @@ export const useSignUpForm = () => {
       const response = await requestSignUp(data);
       if (response.success) {
         console.log('회원가입성공');
-        navigate('/login');
+        navigate('/login', { replace: true });
       } else {
         console.log('회원가입 실패:', response.message);
       }

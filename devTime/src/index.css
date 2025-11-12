@@ -71,8 +71,8 @@
   --gray-800: #1f2937;
 
   --state-disabled: var(--gray-400);
-  --state-hover: #4c79ff1a; /* Primary 10% 투명도 */
-  --state-active: #4c79ff33; /* Primary 30% 투명도 */
+  --state-hover: #446de6; /* Primary 10% 투명도 */
+  --state-active: #446de6; /* Primary 30% 투명도 */
   --state-focus: #4c79ff;
   --state-dim1: rgba(0, 0, 0, 0.5);
   --state-dim2: rgba(0, 0, 0, 0.7);
@@ -453,4 +453,3 @@ body {
 
   margin: 0;
 }
-
