@@ -2,7 +2,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { signupFormSchema, type SignUpFormFields } from '../model/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { requestEmailCheck, requestNicknameCheck, requestSignUp } from '../api/requests';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const useSignUpForm = () => {
@@ -38,55 +38,61 @@ export const useSignUpForm = () => {
     setIsNicknameChecked(false);
   }, [nickname]);
 
-  const handleEmailCheck = async () => {
-    const isValidEmail = await trigger('email');
-    if (!isValidEmail) return;
+  const handleEmailCheck = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      const isValidEmail = await trigger('email');
+      if (!isValidEmail) return;
 
-    const response = await requestEmailCheck(email);
+      const response = await requestEmailCheck(email);
+      if (response.available) {
+        setIsEmailChecked(true);
+        clearErrors('email');
+      } else {
+        setError('email', { message: '이미 사용 중인 이메일입니다.' });
+      }
+    },
+    [email, trigger, clearErrors, setError],
+  );
 
-    if (response.available) {
-      setIsEmailChecked(true);
-      clearErrors('email');
-    } else {
-      setError('email', { message: '이미 사용 중인 이메일입니다.' });
-    }
-  };
+  const handleNicknameCheck = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      const isValidNickname = await trigger('nickname');
+      if (!isValidNickname) return;
 
-  const handleNicknameCheck = async () => {
-    const isValidNickname = await trigger('nickname');
-    if (!isValidNickname) return;
+      const response = await requestNicknameCheck(nickname);
+      if (response.available) {
+        setIsNicknameChecked(true);
+        clearErrors('nickname');
+      } else {
+        setError('nickname', { message: '이미 사용 중인 닉네임입니다.' });
+      }
+    },
+    [nickname, trigger, clearErrors, setError],
+  );
 
-    const response = await requestNicknameCheck(nickname);
+  const onCheckEmail = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      if (errors.email) return;
+      if (!isEmailChecked && email) {
+        setError('email', { type: 'duplicate', message: '중복 확인을 해주세요.' });
+      }
+    },
+    [email, isEmailChecked, errors.email, setError],
+  );
 
-    if (response.available) {
-      setIsNicknameChecked(true);
-      clearErrors('nickname');
-    } else {
-      setError('nickname', { message: '이미 사용 중인 닉네임입니다.' });
-    }
-  };
-
-  const onCheckEmail = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (errors.email) {
-      return;
-    }
-    if (!isEmailChecked && email) {
-      setError('email', { type: 'duplicate', message: '중복 확인을 해주세요.' });
-      return;
-    }
-  };
-
-  const onCheckNickname = (e: React.FocusEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (errors.nickname) {
-      return;
-    }
-    if (!isNicknameChecked && nickname) {
-      setError('nickname', { type: 'duplicate', message: '중복 확인을 해주세요.' });
-      return;
-    }
-  };
+  const onCheckNickname = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      if (errors.nickname) return;
+      if (!isNicknameChecked && nickname) {
+        setError('nickname', { type: 'duplicate', message: '중복 확인을 해주세요.' });
+      }
+    },
+    [nickname, isNicknameChecked, errors.nickname, setError],
+  );
 
   const onSubmit: SubmitHandler<SignUpFormFields> = async (data) => {
     if (!isEmailChecked) {
