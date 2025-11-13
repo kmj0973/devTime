@@ -2,22 +2,11 @@ import navBarLogo from '@/assets/navBarLogo.svg';
 import useAuthStore from '@/shared/store/useAuthStore';
 import { Link, NavLink } from 'react-router-dom';
 import UserProfileImage from './UserProfileImage';
-import { requestLogout } from '@/features/auth/api/requests';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 export default function NavBar() {
-  const accessToken = useAuthStore((state) => state.accessToken);
   const userInfo = useAuthStore((state) => state.user);
-  const logout = useAuthStore((state) => state.logout);
-
-  const onLogout = async () => {
-    if (!accessToken) {
-      console.log('로그아웃 실패');
-      return;
-    }
-    await requestLogout(accessToken);
-    logout();
-    window.location.reload();
-  };
+  const { onLogout } = useAuth();
 
   return (
     <div className='max-w-[1200px] h-10 mx-auto flex justify-between  items-center'>

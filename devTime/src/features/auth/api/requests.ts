@@ -29,7 +29,5 @@ export const requestProfileData = async (accessToken: string) => {
     },
   });
 
-  console.log(response.data);
-
   return response.data;
 };
