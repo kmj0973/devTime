@@ -14,14 +14,14 @@ export default function LoginRequiredDialog() {
         <div className='flex justify-end gap-4'>
           <div
             onClick={() => closeModal()}
-            className='px-4 py-[13px] bg-gray-100 text-subtitle-s text-primary rounded-[5px] hover:bg-gray-400 transition'
+            className='px-4 py-[13px] cursor-pointer bg-gray-100 text-subtitle-s text-primary rounded-[5px] hover:bg-gray-400 transition'
           >
             취소
           </div>
           <Link
             onClick={() => closeModal()}
             to='/login'
-            className='px-4 py-[13px] bg-primary text-subtitle-s text-white rounded-[5px] hover:bg-blue-700 transition'
+            className='px-4 py-[13px] cursor-pointer bg-primary text-subtitle-s text-white rounded-[5px] hover:bg-blue-700 transition'
           >
             로그인하기
           </Link>
