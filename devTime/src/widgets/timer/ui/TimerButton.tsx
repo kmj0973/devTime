@@ -1,4 +1,4 @@
-import LoginRequiredDialog from '@/features/auth/ui/login-required-dialog/LoginRequiredDialog';
+import LoginRequiredDialog from '@/features/auth/ui/LoginRequiredDialog/LoginRequiredDialog';
 import useAuthStore from '@/shared/store/useAuthStore';
 import useModalStore from '@/shared/store/useModalStroe';
 
