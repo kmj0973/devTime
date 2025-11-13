@@ -7,3 +7,29 @@ export const requestLogin = async (data: { email: string; password: string }) =>
 
   return response.data;
 };
+
+export const requestLogout = async (accessToken: string) => {
+  const response = await axios.post(
+    `${url}/api/auth/logout`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+
+  return response.data;
+};
+
+export const requestProfileData = async (accessToken: string) => {
+  const response = await axios.get(`${url}/api/profile`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  console.log(response.data);
+
+  return response.data;
+};

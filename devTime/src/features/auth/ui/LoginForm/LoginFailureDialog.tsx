@@ -9,7 +9,7 @@ export default function LoginFailureDialog() {
         <h2 className='text-title-s text-gray-800 mb-6'>로그인 정보를 다시 확인해 주세요</h2>
         <div
           onClick={() => closeModal()}
-          className='px-4 py-[13px] text-center bg-primary text-subtitle-s text-white rounded-[5px] hover:bg-state-hover transition'
+          className='px-4 py-[13px] cursor-pointer text-center bg-primary text-subtitle-s text-white rounded-[5px] hover:bg-state-hover transition'
         >
           확인
         </div>
