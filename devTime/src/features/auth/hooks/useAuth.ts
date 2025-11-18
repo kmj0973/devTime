@@ -7,8 +7,7 @@ import useModalStore from '@/shared/store/useModalStroe';
 export function useAuth() {
   const navigate = useNavigate();
   const { openModal, isModalOpen } = useModalStore();
-  const { setAccessToken, setRefreshToken, setUser, setIsLogined, accessToken, logout } =
-    useAuthStore();
+  const { setAccessToken, setRefreshToken, setUser, setIsLogined, logout } = useAuthStore();
   const [isDuplicate, setIsDuplicate] = useState(false);
 
   const onLogin = async (data: { email: string; password: string }) => {
@@ -20,7 +19,7 @@ export function useAuth() {
       setRefreshToken(response.refreshToken);
       setIsLogined(true);
 
-      const profile = await requestProfileData(response.accessToken);
+      const profile = await requestProfileData();
       if (profile) setUser(profile);
 
       if (response.isDuplicateLogin) {
@@ -37,8 +36,8 @@ export function useAuth() {
 
   const onLogout = async () => {
     try {
-      if (!accessToken) return;
-      await requestLogout(accessToken);
+      await requestLogout();
+      console.log('로그아웃 성공');
     } catch (err) {
       console.error('Logout failed:', err);
     } finally {

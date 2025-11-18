@@ -1,33 +1,19 @@
-import axios from 'axios';
-
-const url = import.meta.env.VITE_API_BASE_URL;
+import { axiosInstance } from '@/shared/api/axiosInstance';
 
 export const requestLogin = async (data: { email: string; password: string }) => {
-  const response = await axios.post(`${url}/api/auth/login`, data);
+  const response = await axiosInstance.post(`/api/auth/login`, data);
 
   return response.data;
 };
 
-export const requestLogout = async (accessToken: string) => {
-  const response = await axios.post(
-    `${url}/api/auth/logout`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  );
+export const requestLogout = async () => {
+  const response = await axiosInstance.post(`/api/auth/logout`);
 
   return response.data;
 };
 
-export const requestProfileData = async (accessToken: string) => {
-  const response = await axios.get(`${url}/api/profile`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+export const requestProfileData = async () => {
+  const response = await axiosInstance.get(`/api/profile`);
 
   return response.data;
 };
