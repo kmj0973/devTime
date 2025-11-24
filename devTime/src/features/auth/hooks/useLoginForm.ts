@@ -17,7 +17,7 @@ export default function useLoginForm() {
     mode: 'onChange',
   });
 
-  const { onLogin, isDuplicate, isModalOpen } = useAuth(); // ✅ 새로운 훅 (비즈니스 로직)
+  const { onLogin, isDuplicate, isModalOpen } = useAuth();
 
   const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
     await onLogin(data);

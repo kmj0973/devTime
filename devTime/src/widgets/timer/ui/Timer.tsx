@@ -1,24 +1,10 @@
 import timerDivider from '@/assets/timerDivider.svg';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function Timer() {
   const [hours, setHours] = useState('00');
   const [minutes, setMinutes] = useState('00');
   const [seconds, setSeconds] = useState('00');
-
-  useEffect(() => {
-    const updateClock = () => {
-      const now = new Date();
-      setHours(String(now.getHours()).padStart(2, '0'));
-      setMinutes(String(now.getMinutes()).padStart(2, '0'));
-      setSeconds(String(now.getSeconds()).padStart(2, '0'));
-    };
-
-    updateClock();
-
-    const interval = setInterval(updateClock, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className='flex mt-[50px]'>
