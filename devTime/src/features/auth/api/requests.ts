@@ -1,4 +1,4 @@
-import { axiosInstance } from '@/shared/api/axiosInstance';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export const requestLogin = async (data: { email: string; password: string }) => {
   const response = await axiosInstance.post(`/api/auth/login`, data);
