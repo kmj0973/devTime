@@ -10,12 +10,16 @@ export const axiosInstance = axios.create({
 
 let refreshPromise: Promise<void> | null = null;
 
+const rawAxios = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+});
+
 async function refreshAccessToken() {
   if (!refreshPromise) {
     const refreshToken = useAuthStore.getState().refreshToken;
     //중복된 요청 일시 기존 refreshPromise 리턴
-    refreshPromise = axiosInstance
-      .post('/api/auth/refresh', refreshToken)
+    refreshPromise = rawAxios
+      .post(`/api/auth/refresh`, refreshToken)
       .then((res) => {
         const token = res.data.accessToken;
         useAuthStore.getState().setAccessToken(token);
@@ -44,6 +48,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
+    if (!error.response) { //네트워크 에러 일 경우
+      return Promise.reject(error);
+    }
 
     if (error.response?.status === 401 && !originalRequest?._retry) {
       originalRequest._retry = true;
