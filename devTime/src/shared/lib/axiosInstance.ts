@@ -59,7 +59,6 @@ axiosInstance.interceptors.response.use(
         await refreshAccessToken();
         return axiosInstance(originalRequest);
       } catch {
-        await axiosInstance.post('/api/auth/logout');
         useAuthStore.getState().logout();
         return Promise.reject(error);
       }
