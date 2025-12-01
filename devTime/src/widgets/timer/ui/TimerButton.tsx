@@ -11,7 +11,7 @@ export default function TimerButton() {
     <div className='mt-20 flex gap-20'>
       {!isLogined && isModalOpen && <LoginRequiredDialog />}
       <svg
-        onClick={() => openModal()}
+        onClick={() => !isLogined && openModal()}
         className='mx-2.5 cursor-pointer'
         width='80'
         height='100'
