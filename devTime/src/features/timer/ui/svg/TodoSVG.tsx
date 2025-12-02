@@ -1,7 +1,7 @@
 export default function TodoSVG() {
   return (
     <svg xmlns='http://www.w3.org/2000/svg' width='42' height='20' viewBox='0 0 42 20' fill='none'>
-      <g clip-path='url(#clip0_40001579_3503)'>
+      <g clipPath='url(#clip0_40001579_3503)'>
         <path
           fillRule='evenodd'
           clipRule='evenodd'
