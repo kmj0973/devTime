@@ -1,56 +1,29 @@
-import { useFieldArray, useForm, type SubmitHandler } from 'react-hook-form';
 import DeleteSVG from './svg/DeleteSVG';
 import EditSVG from './svg/EditSVG';
 import TodoSVG from './svg/TodoSVG';
-import { todoListFormSchema, type TodoListFormFields } from '../model/schema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
 import CheckSVG from './svg/CheckSVG';
+import { useTodoListForm } from '../hooks/useTodoListForm';
 
 export default function TodoListDialog() {
   const {
     register,
     handleSubmit,
+    onSubmit,
+    isValid,
     watch,
-    control,
-    reset,
-    formState: { isValid },
-  } = useForm<TodoListFormFields>({
-    defaultValues: {
-      todayGoal: '',
-      task: '',
-      tasks: [],
-    },
-    resolver: zodResolver(todoListFormSchema),
-    mode: 'onChange',
-  });
-
-  const { fields, append, remove, update } = useFieldArray({
-    control,
-    name: 'tasks',
-  });
-
-  const [editNum, setEditNum] = useState<string | null>(null);
-
-  const addTask = () => {
-    const value = watch('task');
-
-    if (value.length === 0) {
-      return;
-    }
-    append({ task: value });
-
-    reset({ task: '', tasks: watch('tasks') });
-  };
-
-  const onSubmit: SubmitHandler<TodoListFormFields> = (data) => {
-    console.log(data);
-  };
+    fields,
+    addTask,
+    remove,
+    update,
+    editNum,
+    setEditNum,
+    closeModal,
+  } = useTodoListForm();
 
   return (
     <div className='fixed inset-0 flex items-center justify-center bg-state-dim1'>
       <form
-        onSubmit={() => handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
         className='bg-white py-12 px-9 rounded-[12px] shadow-lg max-w-[640px] w-full'
       >
         <input
@@ -99,11 +72,13 @@ export default function TodoListDialog() {
               {editNum == field.id ? (
                 <>
                   <input
+                    autoFocus
                     {...register(`tasks.${index}.task` as const)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                         update(index, { task: watch(`tasks.${index}.task`) });
+                        setEditNum(null);
                       }
                     }}
                     className='w-[422px] text-body-s text-white focus:outline-none'
@@ -111,7 +86,10 @@ export default function TodoListDialog() {
                   <button
                     className='cursor-pointer'
                     type='button'
-                    onClick={() => update(index, { task: watch(`tasks.${index}.task`) })}
+                    onClick={() => {
+                      update(index, { task: watch(`tasks.${index}.task`) });
+                      setEditNum(null);
+                    }}
                   >
                     <CheckSVG />
                   </button>
@@ -137,14 +115,15 @@ export default function TodoListDialog() {
         <div className='flex justify-end gap-4'>
           <button
             type='button'
+            onClick={() => closeModal()}
             className='px-4 py-[13px] cursor-pointer bg-gray-50 text-subtitle-s text-primary rounded-[5px] hover:bg-gray-300 transition'
           >
             취소
           </button>
           <button
             type='submit'
-            disabled={!isValid}
-            className={`px-4 py-[13px] cursor-pointer ${isValid ? 'bg-primary-10 hover:bg-blue-200 text-primary' : 'bg-gray-200 text-gray-400'} text-subtitle-s rounded-[5px] transition`}
+            disabled={!isValid && editNum == null}
+            className={`px-4 py-[13px] cursor-pointer ${isValid && editNum == null ? 'bg-primary-10 hover:bg-blue-200 text-primary' : 'bg-gray-200 text-gray-400'} text-subtitle-s rounded-[5px] transition`}
           >
             타이머 시작하기
           </button>

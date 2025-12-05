@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import UserProfileImage from './UserProfileImage';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 
-export default function NavBar() {
+export const NavBar = () => {
   const userInfo = useAuthStore((state) => state.user);
   const { onLogout } = useAuth();
 
@@ -46,4 +46,4 @@ export default function NavBar() {
       </div>
     </div>
   );
-}
+};
