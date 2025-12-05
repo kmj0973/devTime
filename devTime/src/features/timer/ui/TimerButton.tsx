@@ -1,17 +1,22 @@
 import LoginRequiredDialog from '@/features/auth/ui/LoginRequiredDialog/LoginRequiredDialog';
+import TodoListDialog from '@/features/timer/ui/TodoListDialog';
 import useAuthStore from '@/shared/store/useAuthStore';
 import useModalStore from '@/shared/store/useModalStroe';
+import { requestDeleteTodoList } from '../api/requests';
+import { useTimerStore } from '@/shared/store/useTimerStore';
 
 export default function TimerButton() {
   const isLogined = useAuthStore((state) => state.isLogined);
   const isModalOpen = useModalStore((state) => state.isModalOpen);
   const openModal = useModalStore((state) => state.openModal);
+  const timerId = useTimerStore((state) => state.timerId);
 
   return (
     <div className='mt-20 flex gap-20'>
       {!isLogined && isModalOpen && <LoginRequiredDialog />}
+      {isLogined && isModalOpen && <TodoListDialog />}
       <svg
-        onClick={() => !isLogined && openModal()}
+        onClick={() => openModal()}
         className='mx-2.5 cursor-pointer'
         width='80'
         height='100'
@@ -25,6 +30,7 @@ export default function TimerButton() {
         />
       </svg>
       <svg
+        onClick={() => requestDeleteTodoList(timerId)}
         xmlns='http://www.w3.org/2000/svg'
         width='100'
         height='100'
