@@ -4,7 +4,7 @@ import useModalStore from '@/shared/store/useModalStroe';
 import { useTimerStore } from '@/shared/store/useTimerStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { requestSaveTodoList } from '../api/requests';
+import { requestSaveTodoList, requestUpdateTodoList } from '../api/requests';
 
 export const useTodoListForm = () => {
   const [editNum, setEditNum] = useState<string | null>(null);
@@ -50,14 +50,19 @@ export const useTodoListForm = () => {
     const newTask = { todayGoal, tasks: newTasks };
 
     const results = await requestSaveTodoList(newTask);
+    await requestUpdateTodoList(results.timerId, {
+      splitTimes: [{ date: results.startTime, timeSpent: 0 }],
+    });
 
     initTimer({
       timerId: results.timerId,
       todayGoal: todayGoal,
       startTime: results.startTime,
+      restartTime: results.startTime,
       lastUpdateTime: results.startTime,
       pause: false,
     });
+
     closeModal();
   };
 
