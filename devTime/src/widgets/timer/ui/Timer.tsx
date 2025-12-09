@@ -1,10 +1,38 @@
 import timerDivider from '@/assets/timerDivider.svg';
-import { useState } from 'react';
+import { useTimerStore } from '@/shared/store/useTimerStore';
+import { useEffect, useState } from 'react';
 
 export default function Timer() {
-  const [hours, setHours] = useState('00');
-  const [minutes, setMinutes] = useState('00');
-  const [seconds, setSeconds] = useState('00');
+  const [hours, setHours] = useState('--');
+  const [minutes, setMinutes] = useState('--');
+  const [seconds, setSeconds] = useState('--');
+  const startTime = useTimerStore((state) => state.startTime);
+  const pause = useTimerStore((state) => state.pause);
+
+  useEffect(() => {
+    if (!startTime) {
+      setHours('00');
+      setMinutes('00');
+      setSeconds('00');
+      return;
+    }
+
+    if (pause) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const diff = Date.now() - new Date(startTime).getTime();
+      const hr = Math.floor(diff / (1000 * 60 * 60));
+      const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const sec = Math.floor((diff % (1000 * 60)) / 1000);
+      setHours(String(hr).padStart(2, '0'));
+      setMinutes(String(min).padStart(2, '0'));
+      setSeconds(String(sec).padStart(2, '0'));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [startTime, pause]);
 
   return (
     <div className='flex mt-[50px]'>

@@ -19,7 +19,7 @@ async function refreshAccessToken() {
     const refreshToken = useAuthStore.getState().refreshToken;
     //중복된 요청 일시 기존 refreshPromise 리턴
     refreshPromise = rawAxios
-      .post(`/api/auth/refresh`, refreshToken)
+      .post(`/api/auth/refresh`, { refreshToken })
       .then((res) => {
         const token = res.data.accessToken;
         useAuthStore.getState().setAccessToken(token);
@@ -49,14 +49,16 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (!error.response) { //네트워크 에러 일 경우
+    if (!error.response) {
+      //네트워크 에러 일 경우
       return Promise.reject(error);
     }
 
     if (error.response?.status === 401 && !originalRequest?._retry) {
       originalRequest._retry = true;
       try {
-        await refreshAccessToken();
+        const re = await refreshAccessToken();
+        console.log('토큰 재발급됨', re);
         return axiosInstance(originalRequest);
       } catch {
         useAuthStore.getState().logout();

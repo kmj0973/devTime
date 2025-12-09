@@ -9,7 +9,7 @@ import { requestSaveTodoList } from '../api/requests';
 export const useTodoListForm = () => {
   const [editNum, setEditNum] = useState<string | null>(null);
   const closeModal = useModalStore((state) => state.closeModal);
-  const setTimerId = useTimerStore((state) => state.setTimerId);
+  const initTimer = useTimerStore((state) => state.initTimer);
 
   const {
     register,
@@ -51,7 +51,13 @@ export const useTodoListForm = () => {
 
     const results = await requestSaveTodoList(newTask);
 
-    setTimerId(results.timerId);
+    initTimer({
+      timerId: results.timerId,
+      todayGoal: todayGoal,
+      startTime: results.startTime,
+      lastUpdateTime: results.startTime,
+      pause: false,
+    });
     closeModal();
   };
 
