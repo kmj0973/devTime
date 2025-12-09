@@ -7,9 +7,14 @@ import { useTimerStore } from '@/shared/store/useTimerStore';
 
 export default function TimerButton() {
   const isLogined = useAuthStore((state) => state.isLogined);
+
   const isModalOpen = useModalStore((state) => state.isModalOpen);
   const openModal = useModalStore((state) => state.openModal);
+
   const timerId = useTimerStore((state) => state.timerId);
+  const reset = useTimerStore((state) => state.reset);
+  const pause = useTimerStore((state) => state.pause);
+  const setPause = useTimerStore((state) => state.setPause);
 
   return (
     <div className='mt-20 flex gap-20'>
@@ -27,10 +32,12 @@ export default function TimerButton() {
         <path
           d='M77.6727 45.5679C80.7758 47.5378 80.7758 52.4623 77.6727 54.4321L6.98182 99.3067C3.87879 101.277 -1.56621e-07 98.8143 0 94.8747L3.56802e-06 5.12534C3.72464e-06 1.18573 3.87879 -1.27653 6.98182 0.693278L77.6727 45.5679Z'
           fill='#4C79FF'
+          fillOpacity={`${timerId && !pause ? '0.1' : '1'}`}
         />
       </svg>
       <svg
-        onClick={() => requestDeleteTodoList(timerId)}
+        className='cursor-pointer'
+        onClick={() => setPause(true)}
         xmlns='http://www.w3.org/2000/svg'
         width='100'
         height='100'
@@ -40,15 +47,21 @@ export default function TimerButton() {
         <path
           d='M8 0C3.58172 0 0 3.58172 0 8V92C0 96.4183 3.58172 100 8 100H32C36.4183 100 40 96.4183 40 92V8C40 3.58172 36.4183 0 32 0H8Z'
           fill='#4C79FF'
-          fillOpacity='0.1'
+          fillOpacity={`${timerId && !pause ? '1' : '0.1'}`}
         />
         <path
           d='M68 0C63.5817 0 60 3.58172 60 8V92C60 96.4183 63.5817 100 68 100H92C96.4183 100 100 96.4183 100 92V8C100 3.58172 96.4183 0 92 0H68Z'
           fill='#4C79FF'
-          fillOpacity='0.1'
+          fillOpacity={`${timerId && !pause ? '1' : '0.1'}`}
         />
       </svg>
       <svg
+        className='cursor-pointer'
+        onClick={() => {
+          if (!timerId) return;
+          requestDeleteTodoList(timerId);
+          reset();
+        }}
         xmlns='http://www.w3.org/2000/svg'
         width='100'
         height='100'
@@ -58,7 +71,7 @@ export default function TimerButton() {
         <path
           d='M0 8C0 3.58172 3.58172 0 8 0H92C96.4183 0 100 3.58172 100 8V92C100 96.4183 96.4183 100 92 100H8C3.58172 100 0 96.4183 0 92V8Z'
           fill='#4C79FF'
-          fillOpacity='0.1'
+          fillOpacity={`${timerId ? '1' : '0.1'}`}
         />
       </svg>
     </div>

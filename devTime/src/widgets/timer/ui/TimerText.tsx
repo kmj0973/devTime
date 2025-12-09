@@ -1,14 +1,22 @@
 import useAuthStore from '@/shared/store/useAuthStore';
+import { useTimerStore } from '@/shared/store/useTimerStore';
 
 export default function TimerText() {
   const isLogined = useAuthStore((state) => state.isLogined);
+  const todayGoal = useTimerStore((state) => state.todayGoal);
 
   return (
     <>
       {isLogined ? (
-        <div className='text-primary-30 text-7xl leading-[86px] font-bold mt-24 mb-[30px]'>
-          오늘도 열심히 달려봐요!
-        </div>
+        todayGoal ? (
+          <div className='text-secondary-indigo text-7xl leading-[86px] font-bold mt-24 mb-[30px]'>
+            {todayGoal}
+          </div>
+        ) : (
+          <div className='text-primary-30 text-7xl leading-[86px] font-bold mt-24 mb-[30px]'>
+            오늘도 열심히 달려봐요!
+          </div>
+        )
       ) : (
         <>
           <div className='text-7xl leading-[86px] font-bold text-secondary-indigo mt-24'>
