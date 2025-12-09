@@ -1,13 +1,18 @@
 import timerDivider from '@/assets/timerDivider.svg';
+import { requestUpdateTodoList } from '@/features/timer/api/requests';
 import { useTimerStore } from '@/shared/store/useTimerStore';
 import { useEffect, useState } from 'react';
 
 export default function Timer() {
+  const startTime = useTimerStore((state) => state.startTime);
+  const pause = useTimerStore((state) => state.pause);
+  const pauseTime = useTimerStore((state) => state.pauseTime);
+  const lastUpdateTime = useTimerStore((state) => state.lastUpdateTime);
+  const setLastUpdateTime = useTimerStore((state) => state.setLastUpdateTime);
+
   const [hours, setHours] = useState('--');
   const [minutes, setMinutes] = useState('--');
   const [seconds, setSeconds] = useState('--');
-  const startTime = useTimerStore((state) => state.startTime);
-  const pause = useTimerStore((state) => state.pause);
 
   useEffect(() => {
     if (!startTime) {
@@ -22,17 +27,26 @@ export default function Timer() {
     }
 
     const interval = setInterval(() => {
-      const diff = Date.now() - new Date(startTime).getTime();
+      const diff = Date.now() - new Date(startTime).getTime() - pauseTime;
       const hr = Math.floor(diff / (1000 * 60 * 60));
       const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const sec = Math.floor((diff % (1000 * 60)) / 1000);
       setHours(String(hr).padStart(2, '0'));
       setMinutes(String(min).padStart(2, '0'));
       setSeconds(String(sec).padStart(2, '0'));
+
+      const updateDiff = Date.now() - new Date(lastUpdateTime).getTime();
+      const updateSec = Math.floor(updateDiff / 1000);
+      if (updateSec == 600) {
+        setLastUpdateTime(new Date().toISOString());
+        requestUpdateTodoList(useTimerStore.getState().timerId, {
+          splitTimes: [{ date: new Date().toISOString(), timeSpent: Math.floor(diff) }],
+        });
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [startTime, pause]);
+  }, [startTime, pause, lastUpdateTime, pauseTime]);
 
   return (
     <div className='flex mt-[50px]'>

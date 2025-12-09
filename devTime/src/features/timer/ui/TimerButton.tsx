@@ -2,26 +2,21 @@ import LoginRequiredDialog from '@/features/auth/ui/LoginRequiredDialog/LoginReq
 import TodoListDialog from '@/features/timer/ui/TodoListDialog';
 import useAuthStore from '@/shared/store/useAuthStore';
 import useModalStore from '@/shared/store/useModalStroe';
-import { requestDeleteTodoList } from '../api/requests';
-import { useTimerStore } from '@/shared/store/useTimerStore';
+import { useTimer } from '../hooks/useTimer';
 
 export default function TimerButton() {
   const isLogined = useAuthStore((state) => state.isLogined);
 
   const isModalOpen = useModalStore((state) => state.isModalOpen);
-  const openModal = useModalStore((state) => state.openModal);
 
-  const timerId = useTimerStore((state) => state.timerId);
-  const reset = useTimerStore((state) => state.reset);
-  const pause = useTimerStore((state) => state.pause);
-  const setPause = useTimerStore((state) => state.setPause);
+  const { timerId, pause, handleStart, handlePause, handleDelete } = useTimer();
 
   return (
     <div className='mt-20 flex gap-20'>
       {!isLogined && isModalOpen && <LoginRequiredDialog />}
       {isLogined && isModalOpen && <TodoListDialog />}
       <svg
-        onClick={() => openModal()}
+        onClick={handleStart}
         className='mx-2.5 cursor-pointer'
         width='80'
         height='100'
@@ -37,7 +32,7 @@ export default function TimerButton() {
       </svg>
       <svg
         className='cursor-pointer'
-        onClick={() => setPause(true)}
+        onClick={handlePause}
         xmlns='http://www.w3.org/2000/svg'
         width='100'
         height='100'
@@ -57,11 +52,7 @@ export default function TimerButton() {
       </svg>
       <svg
         className='cursor-pointer'
-        onClick={() => {
-          if (!timerId) return;
-          requestDeleteTodoList(timerId);
-          reset();
-        }}
+        onClick={handleDelete}
         xmlns='http://www.w3.org/2000/svg'
         width='100'
         height='100'
