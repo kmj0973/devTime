@@ -1,5 +1,6 @@
 import axios from 'axios';
 import useAuthStore from '../store/useAuthStore';
+import { useTimerStore } from '../store/useTimerStore';
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -62,6 +63,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch {
         useAuthStore.getState().logout();
+        useTimerStore.getState().reset();
         return Promise.reject(error);
       }
     }

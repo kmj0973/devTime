@@ -3,10 +3,12 @@ import useAuthStore from '@/shared/store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import useModalStore from '@/shared/store/useModalStroe';
+import { useTimerStore } from '@/shared/store/useTimerStore';
 
 export function useAuth() {
   const navigate = useNavigate();
   const { openModal, isModalOpen } = useModalStore();
+  const { reset } = useTimerStore();
   const { setAccessToken, setRefreshToken, setUser, setIsLogined, logout } = useAuthStore();
   const [isDuplicate, setIsDuplicate] = useState(false);
 
@@ -42,6 +44,7 @@ export function useAuth() {
       console.error('Logout failed:', err);
     } finally {
       logout();
+      reset();
     }
   };
 

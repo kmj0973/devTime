@@ -4,15 +4,21 @@ import { useTimerStore } from '@/shared/store/useTimerStore';
 import { useEffect, useState } from 'react';
 
 export default function Timer() {
-  const startTime = useTimerStore((state) => state.startTime);
-  const pause = useTimerStore((state) => state.pause);
-  const pauseTime = useTimerStore((state) => state.pauseTime);
-  const lastUpdateTime = useTimerStore((state) => state.lastUpdateTime);
-  const setLastUpdateTime = useTimerStore((state) => state.setLastUpdateTime);
+  const { startTime, pause, pauseTime, lastUpdateTime, setLastUpdateTime } = useTimerStore();
 
   const [hours, setHours] = useState('--');
   const [minutes, setMinutes] = useState('--');
   const [seconds, setSeconds] = useState('--');
+
+  useEffect(() => {
+    const diff = Date.now() - new Date(startTime).getTime() - pauseTime;
+    const hr = Math.floor(diff / (1000 * 60 * 60));
+    const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const sec = Math.floor((diff % (1000 * 60)) / 1000);
+    setHours(String(hr).padStart(2, '0'));
+    setMinutes(String(min).padStart(2, '0'));
+    setSeconds(String(sec).padStart(2, '0'));
+  }, [pauseTime, startTime]);
 
   useEffect(() => {
     if (!startTime) {
@@ -46,7 +52,7 @@ export default function Timer() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [startTime, pause, lastUpdateTime, pauseTime]);
+  }, [startTime, pause, lastUpdateTime, pauseTime, setLastUpdateTime]);
 
   return (
     <div className='flex mt-[50px]'>
