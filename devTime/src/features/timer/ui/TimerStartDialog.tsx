@@ -4,7 +4,7 @@ import TodoSVG from './svg/TodoList/TodoSVG';
 import CheckSVG from './svg/TodoList/CheckSVG';
 import { useTodoListForm } from '../hooks/useTodoListForm';
 
-export default function TodoListDialog() {
+export default function TodoStartListDialog() {
   const {
     register,
     handleSubmit,

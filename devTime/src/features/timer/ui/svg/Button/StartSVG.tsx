@@ -2,20 +2,25 @@ import type { ButtonType } from '@/features/timer/model/types';
 
 export default function StartSVG({ onClick, timerId, pause }: ButtonType) {
   return (
-    <svg
+    <button
+      disabled={timerId && !pause ? true : false}
+      type='button'
       onClick={onClick}
-      className='mx-2.5 cursor-pointer'
-      width='80'
-      height='100'
-      viewBox='0 0 80 100'
-      fill='none'
-      xmlns='http://www.w3.org/2000/svg'
+      className={`mx-2.5 cursor-pointer`}
     >
-      <path
-        d='M77.6727 45.5679C80.7758 47.5378 80.7758 52.4623 77.6727 54.4321L6.98182 99.3067C3.87879 101.277 -1.56621e-07 98.8143 0 94.8747L3.56802e-06 5.12534C3.72464e-06 1.18573 3.87879 -1.27653 6.98182 0.693278L77.6727 45.5679Z'
-        fill='#4C79FF'
-        fillOpacity={`${timerId && !pause ? '0.1' : '1'}`}
-      />
-    </svg>
+      <svg
+        width='80'
+        height='100'
+        viewBox='0 0 80 100'
+        fill='none'
+        xmlns='http://www.w3.org/2000/svg'
+      >
+        <path
+          d='M77.6727 45.5679C80.7758 47.5378 80.7758 52.4623 77.6727 54.4321L6.98182 99.3067C3.87879 101.277 -1.56621e-07 98.8143 0 94.8747L3.56802e-06 5.12534C3.72464e-06 1.18573 3.87879 -1.27653 6.98182 0.693278L77.6727 45.5679Z'
+          fill='#4C79FF'
+          fillOpacity={`${timerId && !pause ? '0.1' : '1'}`}
+        />
+      </svg>
+    </button>
   );
 }

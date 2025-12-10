@@ -3,6 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface TimerStore {
   timerId: string;
+  studyLogId: string;
   todayGoal: string;
   startTime: string;
   restartTime: string;
@@ -13,6 +14,7 @@ interface TimerStore {
 
   initTimer: (data: {
     timerId: string;
+    studyLogId: string;
     todayGoal: string;
     startTime: string;
     restartTime: string;
@@ -20,6 +22,7 @@ interface TimerStore {
     pause: boolean;
   }) => void;
   setTimerId: (id: string) => void;
+  setStudyLogId: (id: string) => void;
   setTodayGoal: (goal: string) => void;
   setStartTime: (time: string) => void;
   setRestartTime: (time: string) => void;
@@ -35,6 +38,7 @@ export const useTimerStore = create<TimerStore>()(
   persist(
     (set) => ({
       timerId: '',
+      studyLogId: '',
       todayGoal: '',
       startTime: '',
       restartTime: '',
@@ -46,6 +50,7 @@ export const useTimerStore = create<TimerStore>()(
       initTimer: (data) =>
         set({
           timerId: data.timerId,
+          studyLogId: data.studyLogId,
           todayGoal: data.todayGoal,
           startTime: data.startTime,
           restartTime: data.startTime,
@@ -53,6 +58,7 @@ export const useTimerStore = create<TimerStore>()(
           pause: false,
         }),
       setTimerId: (id: string) => set({ timerId: id }),
+      setStudyLogId: (id: string) => set({ studyLogId: id }),
       setTodayGoal: (goal: string) => set({ todayGoal: goal }),
       setStartTime: (time: string) => set({ startTime: time }),
       setRestartTime: (time: string) => set({ restartTime: time }),
@@ -64,6 +70,7 @@ export const useTimerStore = create<TimerStore>()(
       reset: () =>
         set({
           timerId: '',
+          studyLogId: '',
           todayGoal: '',
           startTime: '',
           restartTime: '',
