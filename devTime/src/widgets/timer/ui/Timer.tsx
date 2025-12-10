@@ -1,5 +1,5 @@
 import timerDivider from '@/assets/timerDivider.svg';
-import { requestUpdateTodoList } from '@/features/timer/api/requests';
+import { requestUpdateTimer } from '@/features/timer/api/requests';
 import { useTimerStore } from '@/shared/store/useTimerStore';
 import { useEffect, useState } from 'react';
 
@@ -45,7 +45,7 @@ export default function Timer() {
       const updateSec = Math.floor(updateDiff / 1000);
       if (updateSec == 600) {
         setLastUpdateTime(new Date().toISOString());
-        requestUpdateTodoList(useTimerStore.getState().timerId, {
+        requestUpdateTimer(useTimerStore.getState().timerId, {
           splitTimes: [{ date: new Date().toISOString(), timeSpent: Math.floor(diff) }],
         });
       }

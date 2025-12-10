@@ -1,6 +1,6 @@
 // src/features/timer/hooks/useTimer.ts
 import { useTimerStore } from '@/shared/store/useTimerStore';
-import { requestGetTodoList, requestUpdateTodoList, requestDeleteTodoList } from '../api/requests';
+import { requestGetTimer, requestUpdateTimer, requestDeleteTimer } from '../api/requests';
 import useModalStore from '@/shared/store/useModalStroe';
 import type { Time } from '../model/types';
 
@@ -44,14 +44,14 @@ export const useTimer = () => {
   };
 
   const handlePause = async () => {
-    const data = await requestGetTodoList();
+    const data = await requestGetTimer();
     const splitTimes = data.splitTimes;
     const newSplitTimes = upsert(splitTimes, {
       date: new Date().toISOString(),
       timeSpent: Date.now() - new Date(restartTime).getTime(),
     });
 
-    await requestUpdateTodoList(timerId, { splitTimes: newSplitTimes });
+    await requestUpdateTimer(timerId, { splitTimes: newSplitTimes });
 
     setPause(true);
     setPauseTimeISOString(new Date().toISOString());
@@ -60,7 +60,7 @@ export const useTimer = () => {
 
   const handleDelete = async () => {
     if (timerId) {
-      await requestDeleteTodoList(timerId);
+      await requestDeleteTimer(timerId);
       useTimerStore.getState().reset();
     }
   };
