@@ -2,11 +2,7 @@
 import { useTimerStore } from '@/shared/store/useTimerStore';
 import { requestGetTodoList, requestUpdateTodoList, requestDeleteTodoList } from '../api/requests';
 import useModalStore from '@/shared/store/useModalStroe';
-
-type Time = {
-  date: string;
-  timeSpent: number;
-};
+import type { Time } from '../model/types';
 
 export const useTimer = () => {
   const {
