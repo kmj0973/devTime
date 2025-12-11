@@ -16,13 +16,14 @@ export const useTodoListForm = () => {
     register,
     handleSubmit,
     watch,
+    setValue,
     control,
     reset,
-    formState: { isValid },
+    trigger,
+    formState: { isValid, errors },
   } = useForm<TodoListFormFields>({
     defaultValues: {
       todayGoal: '',
-      task: '',
       tasks: [],
     },
     resolver: zodResolver(todoListFormSchema),
@@ -34,15 +35,15 @@ export const useTodoListForm = () => {
     name: 'tasks',
   });
 
-  const addTask = () => {
-    const value = watch('task');
+  const addTask = (value: string) => {
+    // const value = watch('task');
 
-    if (value.length === 0) {
+    if (!value) {
       return;
     }
 
     append({ content: value, isCompleted: false });
-    reset({ task: '', tasks: watch('tasks') });
+    reset({ tasks: watch('tasks') });
   };
 
   const onSubmit: SubmitHandler<TodoListFormFields> = async (data) => {
@@ -81,11 +82,14 @@ export const useTodoListForm = () => {
     register,
     handleSubmit,
     watch,
+    errors,
     control,
     isValid,
     fields,
     editNum,
     studyLogId,
+    setValue,
+    trigger,
     setEditNum,
     addTask,
     append,

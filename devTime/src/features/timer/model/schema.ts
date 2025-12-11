@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 export const todoListFormSchema = z.object({
   todayGoal: z.string().min(1, { message: '오늘의 목표를 작성해 주세요' }).optional(),
-  task: z.string(),
   tasks: z
     .array(
       z.object({

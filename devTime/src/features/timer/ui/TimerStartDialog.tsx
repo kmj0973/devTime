@@ -3,6 +3,7 @@ import EditSVG from './svg/TodoList/EditSVG';
 import TodoSVG from './svg/TodoList/TodoSVG';
 import CheckSVG from './svg/TodoList/CheckSVG';
 import { useTodoListForm } from '../hooks/useTodoListForm';
+import { useState } from 'react';
 
 export default function TodoStartListDialog() {
   const {
@@ -19,6 +20,8 @@ export default function TodoStartListDialog() {
     setEditNum,
     closeModal,
   } = useTodoListForm();
+
+  const [taskValue, setTaskValue] = useState('');
 
   return (
     <div className='fixed inset-0 flex items-center justify-center bg-state-dim1'>
@@ -41,13 +44,15 @@ export default function TodoStartListDialog() {
           </label>
           <div className='relative h-14'>
             <input
-              {...register('task')}
+              value={taskValue}
+              onChange={(e) => setTaskValue(e.target.value)}
               id='todolist'
               type='text'
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
-                  addTask();
+                  addTask(taskValue);
+                  setTaskValue('');
                 }
               }}
               className={`w-full h-full pl-6 pr-[68px] py-[18px] rounded-xl bg-gray-100 text-body-m text-gray-600 placeholder:text-gray-300 focus:outline-none`}
@@ -55,8 +60,11 @@ export default function TodoStartListDialog() {
             />
             <button
               type='button'
-              onClick={addTask}
-              className={`absolute right-6 h-full my-auto text-body-b ${watch('task').length > 0 ? 'text-primary' : 'text-gray-400'} cursor-pointer`}
+              onClick={() => {
+                addTask(taskValue);
+                setTaskValue('');
+              }}
+              className={`absolute right-6 h-full my-auto text-body-b ${taskValue != '' ? 'text-primary' : 'text-gray-400'} cursor-pointer`}
             >
               추가
             </button>
