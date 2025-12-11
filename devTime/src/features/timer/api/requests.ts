@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/shared/lib/axiosInstance';
-import type { Time, TodoListType } from '../model/types';
+import type { Task, Time, TodoListType } from '../model/types';
 
 export const requestSaveTimer = async (data: TodoListType) => {
   const response = await axiosInstance.post('/api/timers', data);
@@ -31,6 +31,13 @@ export const requestDeleteTimer = async (timerId: string) => {
 
 export const requestGetTodoLists = async (studyLogId: string) => {
   const response = await axiosInstance.get(`/api/study-logs/${studyLogId}`);
+
+  console.log(response.data);
+  return response.data;
+};
+
+export const requestUpdateTodoLists = async (studyLogId: string, data: Task[]) => {
+  const response = await axiosInstance.put(`/api/${studyLogId}/tasks`, { tasks: data });
 
   console.log(response.data);
   return response.data;

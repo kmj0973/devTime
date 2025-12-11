@@ -1,45 +1,49 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import CheckSVG from './svg/TodoList/CheckSVG';
 import DeleteSVG from './svg/TodoList/DeleteSVG';
 import EditSVG from './svg/TodoList/EditSVG';
 import TodoSVG from './svg/TodoList/TodoSVG';
 import { requestGetTodoLists } from '../api/requests';
-import { useTimerStore } from '@/shared/store/useTimerStore';
-import { useTodoList } from '../hooks/useTodoList';
+import { useTodoListForm } from '../hooks/useTodoListForm';
 
 export default function TodoListDialog() {
   const {
+    closeModal,
     register,
     handleSubmit,
-    onSubmit,
-    isValid,
     watch,
+    isValid,
     fields,
+    editNum,
+    studyLogId,
+    setEditNum,
     addTask,
     append,
     remove,
     update,
-    editNum,
-    setEditNum,
-    closeModal,
-  } = useTodoList();
+    onUpdateSubmit,
+  } = useTodoListForm();
 
-  const studyLogId = useTimerStore((state) => state.studyLogId);
+  const initialized = useRef(false);
 
   useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
     const initialTasks = async () => {
       const data = await requestGetTodoLists(studyLogId);
       data.data.tasks.map((task: { content: string; isCompleted: boolean }) => {
-        append({ task: task.content, isCompleted: task.isCompleted });
+        append({ content: task.content, isCompleted: task.isCompleted });
       });
     };
+
     initialTasks();
   }, []);
 
   return (
     <div className='fixed inset-0 flex items-center justify-center bg-state-dim1'>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onUpdateSubmit)}
         className='bg-white py-12 px-9 rounded-[12px] shadow-lg max-w-[640px] w-full'
       >
         <div className='flex flex-col mb-9'>
@@ -77,11 +81,14 @@ export default function TodoListDialog() {
                 <>
                   <input
                     autoFocus
-                    {...register(`tasks.${index}.task` as const)}
+                    {...register(`tasks.${index}.content` as const)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
-                        update(index, { task: watch(`tasks.${index}.task`) });
+                        update(index, {
+                          content: watch(`tasks.${index}.content`),
+                          isCompleted: false,
+                        });
                         setEditNum(null);
                       }
                     }}
@@ -91,7 +98,10 @@ export default function TodoListDialog() {
                     className='cursor-pointer'
                     type='button'
                     onClick={() => {
-                      update(index, { task: watch(`tasks.${index}.task`) });
+                      update(index, {
+                        content: watch(`tasks.${index}.content`),
+                        isCompleted: false,
+                      });
                       setEditNum(null);
                     }}
                   >
@@ -100,7 +110,7 @@ export default function TodoListDialog() {
                 </>
               ) : (
                 <>
-                  <div className='w-[382px] text-body-s text-white'>{field.task}</div>
+                  <div className='w-[382px] text-body-s text-white'>{field.content}</div>
                   <button
                     className='cursor-pointer'
                     type='button'
