@@ -4,11 +4,12 @@ import useModalStore from '@/shared/store/useModalStroe';
 import { useTimerStore } from '@/shared/store/useTimerStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { requestSaveTimer, requestUpdateTimer } from '../api/requests';
+import { requestSaveTimer, requestUpdateTimer, requestUpdateTodoLists } from '../api/requests';
 
 export const useTodoListForm = () => {
   const [editNum, setEditNum] = useState<string | null>(null);
   const closeModal = useModalStore((state) => state.closeModal);
+  const studyLogId = useTimerStore((state) => state.studyLogId);
   const initTimer = useTimerStore((state) => state.initTimer);
 
   const {
@@ -40,14 +41,14 @@ export const useTodoListForm = () => {
       return;
     }
 
-    append({ task: value });
+    append({ content: value, isCompleted: false });
     reset({ task: '', tasks: watch('tasks') });
   };
 
   const onSubmit: SubmitHandler<TodoListFormFields> = async (data) => {
-    const { tasks, todayGoal } = data;
-    const newTasks = tasks.map((item) => item.task);
-    const newTask = { todayGoal, tasks: newTasks };
+    const { todayGoal, tasks } = data;
+    const newTasks = tasks.map((item) => item.content);
+    const newTask = { todayGoal: todayGoal as string, tasks: newTasks };
 
     const results = await requestSaveTimer(newTask);
     await requestUpdateTimer(results.timerId, {
@@ -57,12 +58,20 @@ export const useTodoListForm = () => {
     initTimer({
       timerId: results.timerId,
       studyLogId: results.studyLogId,
-      todayGoal: todayGoal,
+      todayGoal: todayGoal as string,
       startTime: results.startTime,
       restartTime: results.startTime,
       lastUpdateTime: results.startTime,
       pause: false,
     });
+
+    closeModal();
+  };
+
+  const onUpdateSubmit: SubmitHandler<TodoListFormFields> = async (data) => {
+    const { tasks } = data;
+
+    await requestUpdateTodoLists(studyLogId, tasks);
 
     closeModal();
   };
@@ -76,11 +85,13 @@ export const useTodoListForm = () => {
     isValid,
     fields,
     editNum,
+    studyLogId,
     setEditNum,
     addTask,
     append,
     remove,
     update,
     onSubmit,
+    onUpdateSubmit,
   };
 };

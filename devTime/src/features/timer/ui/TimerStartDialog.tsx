@@ -73,11 +73,14 @@ export default function TodoStartListDialog() {
                 <>
                   <input
                     autoFocus
-                    {...register(`tasks.${index}.task` as const)}
+                    {...register(`tasks.${index}.content` as const)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
-                        update(index, { task: watch(`tasks.${index}.task`) });
+                        update(index, {
+                          content: watch(`tasks.${index}.content`),
+                          isCompleted: false,
+                        });
                         setEditNum(null);
                       }
                     }}
@@ -87,7 +90,10 @@ export default function TodoStartListDialog() {
                     className='cursor-pointer'
                     type='button'
                     onClick={() => {
-                      update(index, { task: watch(`tasks.${index}.task`) });
+                      update(index, {
+                        content: watch(`tasks.${index}.content`),
+                        isCompleted: false,
+                      });
                       setEditNum(null);
                     }}
                   >
@@ -96,7 +102,7 @@ export default function TodoStartListDialog() {
                 </>
               ) : (
                 <>
-                  <div className='w-[382px] text-body-s text-white'>{field.task}</div>
+                  <div className='w-[382px] text-body-s text-white'>{field.content}</div>
                   <button
                     className='cursor-pointer'
                     type='button'

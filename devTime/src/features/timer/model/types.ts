@@ -13,3 +13,8 @@ export type TodoListType = {
   todayGoal: string;
   tasks: string[];
 };
+
+export type Task = {
+  content: string;
+  isCompleted: boolean;
+};
