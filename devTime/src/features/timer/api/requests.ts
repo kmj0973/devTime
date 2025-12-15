@@ -42,3 +42,13 @@ export const requestUpdateTodoLists = async (studyLogId: string, data: Task[]) =
   console.log(response.data);
   return response.data;
 };
+
+export const requestSaveReivew = async (
+  timerId: string,
+  data: { splitTimes: Time[]; tasks: Task[]; review: string },
+) => {
+  const response = await axiosInstance.post(`/api/timers/${timerId}/stop`, data);
+
+  console.log(response.data);
+  return response.data;
+};

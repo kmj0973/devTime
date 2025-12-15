@@ -13,6 +13,7 @@ export const todoListFormSchema = z.object({
       }),
     )
     .min(1, { message: '할 일을 최소 1개는 입력해 주세요.' }),
+  review: z.string().min(15).max(500).optional().or(z.literal('')),
 });
 
 export type TodoListFormFields = z.infer<typeof todoListFormSchema>;

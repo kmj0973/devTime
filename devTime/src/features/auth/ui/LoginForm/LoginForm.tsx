@@ -1,17 +1,13 @@
 import Logo from '@/features/auth/ui/LoginForm/svg/Logo';
 import { Link } from 'react-router-dom';
-import LoginFailureDialog from './LoginFailureDialog';
 import FormField from './FormField';
 import useLoginForm from '../../hooks/useLoginForm';
-import LoginDuplicateDialog from './LoginDuplicateDialog';
 
 export default function LoginForm() {
-  const { register, handleSubmit, onSubmit, isValid, errors, isDuplicate, isModalOpen } =
-    useLoginForm();
+  const { register, handleSubmit, onSubmit, isValid, errors } = useLoginForm();
 
   return (
     <>
-      {isModalOpen && (isDuplicate ? <LoginDuplicateDialog /> : <LoginFailureDialog />)}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className='w-[500px] h-[598px] flex flex-col justify-center items-center bg-white/30 backdrop-blur-[50px] rounded-[10px] shadow-[0_40px_100px_40px_#0368FF0D]'

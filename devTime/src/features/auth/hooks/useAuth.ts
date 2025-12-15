@@ -7,7 +7,7 @@ import { useTimerStore } from '@/shared/store/useTimerStore';
 
 export function useAuth() {
   const navigate = useNavigate();
-  const { openModal, isModalOpen } = useModalStore();
+  const { openModal } = useModalStore();
   const { reset } = useTimerStore();
   const { setAccessToken, setRefreshToken, setUser, setIsLogined, logout } = useAuthStore();
   const [isDuplicate, setIsDuplicate] = useState(false);
@@ -26,13 +26,13 @@ export function useAuth() {
 
       if (response.isDuplicateLogin) {
         setIsDuplicate(true);
-        openModal();
+        openModal('loginDuplicate');
       } else {
         navigate('/');
       }
     } catch (err) {
       console.error(err);
-      openModal();
+      openModal('loginFailure');
     }
   };
 
@@ -48,5 +48,5 @@ export function useAuth() {
     }
   };
 
-  return { onLogin, onLogout, isDuplicate, isModalOpen };
+  return { onLogin, onLogout, isDuplicate };
 }

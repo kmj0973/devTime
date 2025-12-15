@@ -4,13 +4,19 @@ import useModalStore from '@/shared/store/useModalStroe';
 import { useTimerStore } from '@/shared/store/useTimerStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import { requestSaveTimer, requestUpdateTimer, requestUpdateTodoLists } from '../api/requests';
+import {
+  requestGetTimer,
+  requestSaveReivew,
+  requestSaveTimer,
+  requestUpdateTimer,
+  requestUpdateTodoLists,
+} from '../api/requests';
+import type { Time } from '../model/types';
 
 export const useTodoListForm = () => {
   const [editNum, setEditNum] = useState<string | null>(null);
   const closeModal = useModalStore((state) => state.closeModal);
-  const studyLogId = useTimerStore((state) => state.studyLogId);
-  const initTimer = useTimerStore((state) => state.initTimer);
+  const { timerId, studyLogId, restartTime, initTimer } = useTimerStore();
 
   const {
     register,
@@ -18,6 +24,7 @@ export const useTodoListForm = () => {
     watch,
     control,
     reset,
+    setValue,
     formState: { isValid, isDirty, errors },
   } = useForm<TodoListFormFields>({
     defaultValues: {
@@ -39,6 +46,39 @@ export const useTodoListForm = () => {
     }
 
     append({ content: value, isCompleted: false });
+  };
+
+  const upsert = (splitTimes: Time[], newTime: Time): Time[] => {
+    const index = splitTimes.findIndex(
+      (time) => time.date.split('T')[0] === newTime.date.split('T')[0],
+    );
+    if (index !== -1) {
+      const newSplitTimes = [...splitTimes];
+      newSplitTimes[index].timeSpent += newTime.timeSpent;
+      return newSplitTimes;
+    }
+    return [...splitTimes, newTime];
+  };
+
+  const onReviewSubmit: SubmitHandler<TodoListFormFields> = async (data) => {
+    const { tasks, review } = data;
+
+    const results = await requestGetTimer();
+    const splitTimes = results.splitTimes;
+    const newSplitTimes = upsert(splitTimes, {
+      date: new Date().toISOString(),
+      timeSpent: Date.now() - new Date(restartTime).getTime(),
+    });
+
+    await requestSaveReivew(timerId, {
+      splitTimes: newSplitTimes,
+      tasks,
+      review: review as string,
+    });
+
+    useTimerStore.getState().reset();
+
+    closeModal();
   };
 
   const onSubmit: SubmitHandler<TodoListFormFields> = async (data) => {
@@ -90,6 +130,7 @@ export const useTodoListForm = () => {
     fields,
     editNum,
     studyLogId,
+    setValue,
     reset,
     setEditNum,
     addTask,
@@ -97,6 +138,7 @@ export const useTodoListForm = () => {
     remove,
     update,
     onSubmit,
+    onReviewSubmit,
     onUpdateSubmit,
     onUpdateClick,
   };

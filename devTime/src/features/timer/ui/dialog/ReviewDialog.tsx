@@ -8,7 +8,7 @@ import { useTodoListForm } from '../../hooks/useTodoListForm';
 import EditButtonSVG from '../svg/Button/EditButtonSVG';
 import CheckButtonSVG from '../svg/Button/CheckButtonSVG';
 
-export default function TodoListDialog() {
+export default function ReviewDialog() {
   const {
     closeModal,
     register,
@@ -24,7 +24,7 @@ export default function TodoListDialog() {
     setEditNum,
     addTask,
     remove,
-    onUpdateSubmit,
+    onReviewSubmit,
     onUpdateClick,
   } = useTodoListForm();
 
@@ -42,6 +42,7 @@ export default function TodoListDialog() {
       reset({
         todayGoal: '',
         tasks: todoLists.data.tasks,
+        review: '',
       });
     };
 
@@ -51,9 +52,15 @@ export default function TodoListDialog() {
   return (
     <div className='fixed inset-0 flex items-center justify-center bg-state-dim1'>
       <form
-        onSubmit={handleSubmit(onUpdateSubmit)}
+        onSubmit={handleSubmit(onReviewSubmit)}
         className='bg-white py-12 px-9 rounded-[12px] shadow-lg max-w-[640px] w-full'
       >
+        <div className='flex flex-col gap-1 mb-9'>
+          <div className='text-title-b text-gray-700'>오늘도 수고하셨어요!</div>
+          <div className='text-body-m text-gray-500'>
+            완료한 일을 체크하고, 오늘의 학습 회고를 작성해 주세요.
+          </div>
+        </div>
         <div className='flex flex-col mb-9'>
           <div className='relative h-14'>
             <input
@@ -90,14 +97,20 @@ export default function TodoListDialog() {
           {isEdit ? (
             <></>
           ) : (
-            <div className='flex items-center gap-2 cursor-pointer' onClick={() => setIsEdit(true)}>
+            <div
+              className='flex items-center gap-2 cursor-pointer'
+              onClick={() => {
+                reset({ todayGoal: '', tasks: watch('tasks'), review: watch('review') });
+                setIsEdit(true);
+              }}
+            >
               <EditButtonSVG />
               <div className='text-body-s-m text-gray-600'>할 일 수정</div>
             </div>
           )}
         </div>
 
-        <div className='w-full h-[624px] mb-9 overflow-y-auto'>
+        <div className='w-full h-[400px] mb-9 overflow-y-auto'>
           {fields.map((field, index) => {
             const content = watch(`tasks.${index}.content`);
             const completed = watch(`tasks.${index}.isCompleted`);
@@ -203,6 +216,15 @@ export default function TodoListDialog() {
           })}
         </div>
 
+        <div className='w-full flex flex-col gap-2 mb-9'>
+          <div className='text-body-s-m text-gray-600'>학습 회고</div>
+          <textarea
+            {...register('review')}
+            className='w-full h-[84px] bg-gray-50 text-body-m text-state-disabled px-4 py-3 resize-none'
+            placeholder='오늘 학습한 내용을 회고해 보세요(15자 이상 작성 필수).'
+          />
+        </div>
+
         <div className='flex justify-end gap-4'>
           {isEdit ? (
             <>
@@ -224,7 +246,7 @@ export default function TodoListDialog() {
                   setIsEdit(false);
                 }}
                 disabled={!(isDirty && isValid && editNum === null)}
-                className={`px-4 py-[13px] cursor-pointer ${isDirty && isValid && editNum == null ? 'bg-primary-10 hover:bg-blue-200 text-primary' : 'bg-gray-200 text-gray-400'} text-subtitle-s rounded-[5px] transition`}
+                className={`px-4 py-[13px] cursor-pointer ${isDirty && isValid && editNum === null ? 'bg-primary-10 hover:bg-blue-200 text-primary' : 'bg-gray-200 text-gray-400'} text-subtitle-s rounded-[5px] transition`}
               >
                 변경 사항 저장하기
               </button>
@@ -240,10 +262,12 @@ export default function TodoListDialog() {
               </button>
               <button
                 type='submit'
-                disabled={!(isDirty && isValid && editNum === null)}
-                className={`px-4 py-[13px] cursor-pointer ${isDirty && isValid && editNum == null ? 'bg-primary-10 hover:bg-blue-200 text-primary' : 'bg-gray-200 text-gray-400'} text-subtitle-s rounded-[5px] transition`}
+                disabled={
+                  !(isDirty && isValid && editNum === null && watch('review')!.length >= 15)
+                }
+                className={`px-4 py-[13px] cursor-pointer ${isDirty && isValid && editNum == null && watch('review')!.length >= 15 ? 'bg-primary-10 hover:bg-blue-200 text-primary' : 'bg-gray-200 text-gray-400'} text-subtitle-s rounded-[5px] transition`}
               >
-                저장하기
+                공부 완료하기
               </button>
             </>
           )}

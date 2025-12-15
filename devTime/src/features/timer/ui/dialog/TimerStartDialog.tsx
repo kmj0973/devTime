@@ -5,7 +5,7 @@ import CheckSVG from '../svg/TodoList/CheckSVG';
 import { useTodoListForm } from '../../hooks/useTodoListForm';
 import { useState } from 'react';
 
-export default function TodoStartListDialog() {
+export default function TimerStartDialog() {
   const {
     register,
     handleSubmit,
