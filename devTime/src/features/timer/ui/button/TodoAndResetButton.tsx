@@ -1,10 +1,10 @@
 import { useTimerStore } from '@/shared/store/useTimerStore';
-import ResetSVG from './svg/Button/ResetSVG';
-import TodoListSVG from './svg/Button/TodoListSVG';
-import TodoListDialog from './TodoListDialog';
+import ResetSVG from '../svg/Button/ResetSVG';
+import TodoListSVG from '../svg/Button/TodoListSVG';
+import TodoListDialog from '../dialog/TodoListDialog';
 import useModalStore from '@/shared/store/useModalStroe';
 
-export default function TodoAndReset() {
+export default function TodoAndResetButton() {
   const timerId = useTimerStore((state) => state.timerId);
   const isModalOpen = useModalStore((state) => state.isModalOpen);
   const openModal = useModalStore((state) => state.openModal);
