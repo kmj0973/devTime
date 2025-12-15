@@ -32,14 +32,25 @@ export default function Timer() {
       return;
     }
 
+    const start = new Date(startTime).getTime();
+
     const interval = setInterval(() => {
-      const diff = Date.now() - new Date(startTime).getTime() - pauseTime;
+      const now = Date.now();
+      const diff = now - start - pauseTime;
       const hr = Math.floor(diff / (1000 * 60 * 60));
       const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const sec = Math.floor((diff % (1000 * 60)) / 1000);
       setHours(String(hr).padStart(2, '0'));
       setMinutes(String(min).padStart(2, '0'));
       setSeconds(String(sec).padStart(2, '0'));
+
+      const kst = new Date(now + 9 * 60 * 60 * 1000);
+      if (kst.getHours() === 23 && kst.getMinutes() === 59 && kst.getSeconds() === 59) {
+        setLastUpdateTime(new Date().toISOString());
+        requestUpdateTimer(useTimerStore.getState().timerId, {
+          splitTimes: [{ date: new Date().toISOString(), timeSpent: Math.floor(diff) }],
+        });
+      }
 
       const updateDiff = Date.now() - new Date(lastUpdateTime).getTime();
       const updateSec = Math.floor(updateDiff / 1000);
@@ -52,7 +63,7 @@ export default function Timer() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [startTime, pause, lastUpdateTime, pauseTime, setLastUpdateTime]);
+  }, [startTime, pause]);
 
   return (
     <div className='flex mt-[50px]'>
