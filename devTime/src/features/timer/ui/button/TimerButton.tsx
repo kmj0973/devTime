@@ -1,12 +1,12 @@
 import LoginRequiredDialog from '@/features/auth/ui/LoginRequiredDialog/LoginRequiredDialog';
-import TimerStartDialog from '@/features/timer/ui/TimerStartDialog';
+import TimerStartDialog from '@/features/timer/ui/dialog/TimerStartDialog';
 import useAuthStore from '@/shared/store/useAuthStore';
 import useModalStore from '@/shared/store/useModalStroe';
-import { useTimer } from '../hooks/useTimer';
-import StartSVG from './svg/Button/StartSVG';
-import PauseSVG from './svg/Button/PauseSVG';
-import FinishSVG from './svg/Button/FinishSVG';
-import TodoAndReset from './TodoAndReset';
+import { useTimer } from '../../hooks/useTimer';
+import StartSVG from '../svg/Button/StartSVG';
+import PauseSVG from '../svg/Button/PauseSVG';
+import FinishSVG from '../svg/Button/FinishSVG';
+import TodoAndResetButton from './TodoAndResetButton';
 
 export default function TimerButton() {
   const isLogined = useAuthStore((state) => state.isLogined);
@@ -24,7 +24,7 @@ export default function TimerButton() {
         <PauseSVG onClick={handlePause} timerId={timerId} pause={pause} />
         <FinishSVG onClick={handleDelete} timerId={timerId} pause={pause} />
       </div>
-      {timerId && <TodoAndReset />}
+      {timerId && <TodoAndResetButton />}
     </div>
   );
 }

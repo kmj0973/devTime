@@ -16,11 +16,9 @@ export const useTodoListForm = () => {
     register,
     handleSubmit,
     watch,
-    setValue,
     control,
     reset,
-    trigger,
-    formState: { isValid, errors },
+    formState: { isValid, isDirty, errors },
   } = useForm<TodoListFormFields>({
     defaultValues: {
       todayGoal: '',
@@ -36,14 +34,11 @@ export const useTodoListForm = () => {
   });
 
   const addTask = (value: string) => {
-    // const value = watch('task');
-
     if (!value) {
       return;
     }
 
     append({ content: value, isCompleted: false });
-    reset({ tasks: watch('tasks') });
   };
 
   const onSubmit: SubmitHandler<TodoListFormFields> = async (data) => {
@@ -69,6 +64,12 @@ export const useTodoListForm = () => {
     closeModal();
   };
 
+  const onUpdateClick = async (data: TodoListFormFields) => {
+    const { tasks } = data;
+
+    await requestUpdateTodoLists(studyLogId, tasks);
+  };
+
   const onUpdateSubmit: SubmitHandler<TodoListFormFields> = async (data) => {
     const { tasks } = data;
 
@@ -85,11 +86,11 @@ export const useTodoListForm = () => {
     errors,
     control,
     isValid,
+    isDirty,
     fields,
     editNum,
     studyLogId,
-    setValue,
-    trigger,
+    reset,
     setEditNum,
     addTask,
     append,
@@ -97,5 +98,6 @@ export const useTodoListForm = () => {
     update,
     onSubmit,
     onUpdateSubmit,
+    onUpdateClick,
   };
 };

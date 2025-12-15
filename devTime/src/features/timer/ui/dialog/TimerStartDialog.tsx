@@ -1,64 +1,47 @@
-import { useEffect, useRef, useState } from 'react';
-import CheckSVG from './svg/TodoList/CheckSVG';
-import DeleteSVG from './svg/TodoList/DeleteSVG';
-import EditSVG from './svg/TodoList/EditSVG';
-import TodoSVG from './svg/TodoList/TodoSVG';
-import { requestGetTodoLists } from '../api/requests';
-import { useTodoListForm } from '../hooks/useTodoListForm';
-import EditButtonSVG from './svg/Button/EditButtonSVG';
-import CheckButtonSVG from './svg/Button/CheckButtonSVG';
+import DeleteSVG from '../svg/TodoList/DeleteSVG';
+import EditSVG from '../svg/TodoList/EditSVG';
+import TodoSVG from '../svg/TodoList/TodoSVG';
+import CheckSVG from '../svg/TodoList/CheckSVG';
+import { useTodoListForm } from '../../hooks/useTodoListForm';
+import { useState } from 'react';
 
-export default function TodoListDialog() {
+export default function TodoStartListDialog() {
   const {
-    closeModal,
     register,
     handleSubmit,
-    watch,
-    trigger,
-    errors,
+    onSubmit,
     isValid,
+    watch,
     fields,
-    editNum,
-    studyLogId,
-    setValue,
-    setEditNum,
     addTask,
-    append,
     remove,
     update,
-    onUpdateSubmit,
+    editNum,
+    setEditNum,
+    closeModal,
   } = useTodoListForm();
 
-  const initialized = useRef(false);
-
-  useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
-
-    const initialTasks = async () => {
-      const todoLists = await requestGetTodoLists(studyLogId);
-
-      todoLists.data.tasks.map((task: { content: string; isCompleted: boolean }) => {
-        append({ content: task.content, isCompleted: task.isCompleted });
-      });
-
-      await trigger('tasks');
-    };
-
-    initialTasks();
-  }, []);
-
-  const [isEdit, setIsEdit] = useState(false);
   const [taskValue, setTaskValue] = useState('');
 
-  console.log(errors, isValid);
   return (
     <div className='fixed inset-0 flex items-center justify-center bg-state-dim1'>
       <form
-        onSubmit={handleSubmit(onUpdateSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
         className='bg-white py-12 px-9 rounded-[12px] shadow-lg max-w-[640px] w-full'
       >
+        <input
+          {...register('todayGoal')}
+          className='text-4xl leading-[46px] font-bold text-primary-gradient-end placeholder:text-gray-300 mb-9 w-full focus:outline-none'
+          type='text'
+          placeholder='오늘의 목표'
+        />
         <div className='flex flex-col mb-9'>
+          <label
+            htmlFor='todolist'
+            className='text-[14px] leading-[18px] font-medium text-gray-600 mb-2'
+          >
+            할 일 목록
+          </label>
           <div className='relative h-14'>
             <input
               value={taskValue}
@@ -87,53 +70,25 @@ export default function TodoListDialog() {
             </button>
           </div>
         </div>
-        <div className='w-full flex justify-between items-center mb-6'>
-          <div className='text-title-b text-gray-700'>할 일 목록</div>
-          {isEdit ? (
-            <></>
-          ) : (
-            <div className='flex items-center gap-2 cursor-pointer' onClick={() => setIsEdit(true)}>
-              <EditButtonSVG />
-              <div className='text-body-s-m text-gray-600'>할 일 수정</div>
-            </div>
-          )}
-        </div>
-        <div className='w-full h-[624px] mb-9 overflow-y-auto'>
+        <div className='w-full h-[460px] mb-9 overflow-y-auto'>
           {fields.map((field, index) => (
             <div
               key={field.id}
-              className={`flex justify-between items-center w-full h-[72px] ${field.isCompleted ? 'bg-state-disabled' : 'bg-primary'} rounded-xl px-6 py-[26px] gap-4 mb-3`}
+              className='flex justify-center items-center w-full h-[72px] bg-primary rounded-xl px-6 py-[26px] gap-4 mb-3'
             >
               <TodoSVG />
-              {!isEdit ? (
-                <>
-                  <div className='w-[422px] text-body-s text-white'>{field.content}</div>
-                  <button
-                    className={`${field.isCompleted ? 'bg-white/50' : ''} flex justify-center items-center w-7 h-7 border-[1.5px] border-white rounded-[8px] cursor-pointer`}
-                    type='button'
-                    onClick={() => {
-                      update(index, {
-                        content: watch(`tasks.${index}.content`),
-                        isCompleted: !field.isCompleted,
-                      });
-                    }}
-                  >
-                    {field.isCompleted ? <CheckButtonSVG /> : <></>}
-                  </button>
-                </>
-              ) : editNum == field.id ? (
+              {editNum == field.id ? (
                 <>
                   <input
                     autoFocus
                     {...register(`tasks.${index}.content` as const)}
-                    onKeyDown={async (e) => {
+                    onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
                         update(index, {
                           content: watch(`tasks.${index}.content`),
                           isCompleted: false,
                         });
-
                         setEditNum(null);
                       }
                     }}
@@ -179,23 +134,13 @@ export default function TodoListDialog() {
           >
             취소
           </button>
-          {isEdit ? (
-            <button
-              type='submit'
-              disabled={!isValid && editNum == null}
-              className={`px-4 py-[13px] cursor-pointer ${isValid && editNum == null ? 'bg-primary-10 hover:bg-blue-200 text-primary' : 'bg-gray-200 text-gray-400'} text-subtitle-s rounded-[5px] transition`}
-            >
-              변경 사항 저장하기
-            </button>
-          ) : (
-            <button
-              type='submit'
-              disabled={!isValid && editNum == null}
-              className={`px-4 py-[13px] cursor-pointer ${isValid && editNum == null ? 'bg-primary-10 hover:bg-blue-200 text-primary' : 'bg-gray-200 text-gray-400'} text-subtitle-s rounded-[5px] transition`}
-            >
-              저장하기
-            </button>
-          )}
+          <button
+            type='submit'
+            disabled={!isValid && editNum == null}
+            className={`px-4 py-[13px] cursor-pointer ${isValid && editNum == null ? 'bg-primary-10 hover:bg-blue-200 text-primary' : 'bg-gray-200 text-gray-400'} text-subtitle-s rounded-[5px] transition`}
+          >
+            타이머 시작하기
+          </button>
         </div>
       </form>
     </div>

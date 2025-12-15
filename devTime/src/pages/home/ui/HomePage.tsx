@@ -1,6 +1,6 @@
 import { NavBar } from '@/widgets/navBar/ui/NavBar';
 import Timer from '@/widgets/timer/ui/Timer';
-import TimerButton from '@/features/timer/ui/TimerButton';
+import TimerButton from '@/features/timer/ui/button/TimerButton';
 import TimerText from '@/widgets/timer/ui/TimerText';
 
 export default function HomePage() {
