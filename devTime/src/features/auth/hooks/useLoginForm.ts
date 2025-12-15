@@ -17,7 +17,7 @@ export default function useLoginForm() {
     mode: 'onChange',
   });
 
-  const { onLogin, isDuplicate, isModalOpen } = useAuth();
+  const { onLogin, isDuplicate } = useAuth();
 
   const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
     await onLogin(data);
@@ -30,6 +30,5 @@ export default function useLoginForm() {
     isValid,
     errors,
     isDuplicate,
-    isModalOpen,
   };
 }

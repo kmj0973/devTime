@@ -1,24 +1,22 @@
-import { useTimerStore } from '@/shared/store/useTimerStore';
 import ResetSVG from '../svg/Button/ResetSVG';
 import TodoListSVG from '../svg/Button/TodoListSVG';
-import TodoListDialog from '../dialog/TodoListDialog';
 import useModalStore from '@/shared/store/useModalStroe';
 
 export default function TodoAndResetButton() {
-  const timerId = useTimerStore((state) => state.timerId);
-  const isModalOpen = useModalStore((state) => state.isModalOpen);
   const openModal = useModalStore((state) => state.openModal);
 
   return (
     <div className='flex gap-6'>
-      {isModalOpen && timerId && <TodoListDialog />}
       <div
-        onClick={() => openModal()}
+        onClick={() => openModal('todoList')}
         className='w-16 h-16 bg-white rounded-4xl cursor-pointer flex justify-center items-center'
       >
         <TodoListSVG />
       </div>
-      <div className='w-16 h-16 bg-white rounded-4xl cursor-pointer flex justify-center items-center'>
+      <div
+        onClick={() => openModal('reset')}
+        className='w-16 h-16 bg-white rounded-4xl cursor-pointer flex justify-center items-center'
+      >
         <ResetSVG />
       </div>
     </div>

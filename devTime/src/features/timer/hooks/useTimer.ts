@@ -1,8 +1,9 @@
 // src/features/timer/hooks/useTimer.ts
 import { useTimerStore } from '@/shared/store/useTimerStore';
 import { requestGetTimer, requestUpdateTimer, requestDeleteTimer } from '../api/requests';
-import useModalStore from '@/shared/store/useModalStroe';
 import type { Time } from '../model/types';
+import useAuthStore from '@/shared/store/useAuthStore';
+import useModalStore from '@/shared/store/useModalStroe';
 
 export const useTimer = () => {
   const {
@@ -18,6 +19,7 @@ export const useTimer = () => {
     setLastUpdateTime,
   } = useTimerStore();
 
+  const isLogined = useAuthStore((state) => state.isLogined);
   const openModal = useModalStore((state) => state.openModal);
 
   const upsert = (splitTimes: Time[], newTime: Time): Time[] => {
@@ -39,7 +41,8 @@ export const useTimer = () => {
       setPause(false);
       setRestartTime(new Date().toISOString());
     } else {
-      openModal();
+      if (isLogined) openModal('timerStart');
+      else openModal('loginRequired');
     }
   };
 
@@ -65,5 +68,9 @@ export const useTimer = () => {
     }
   };
 
-  return { timerId, pause, handleStart, handlePause, handleDelete };
+  const handleReview = async () => {
+    openModal('review');
+  };
+
+  return { timerId, pause, handleStart, handlePause, handleDelete, handleReview };
 };
