@@ -17,7 +17,7 @@ export const NavBar = () => {
         <div className='flex justify-center items-center gap-9'>
           <NavLink
             to='/dashboard'
-            className='text-body-s text-secondary-indigo border-b border-secondary-indigo'
+            className={`text-body-s text-secondary-indigo border-b border-secondary-indigo`}
           >
             대시보드
           </NavLink>

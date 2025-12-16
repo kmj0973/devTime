@@ -1,3 +1,4 @@
+import DashboardPage from '@/pages/dashboard/ui/DashboardPage';
 import HomePage from '@/pages/home/ui/HomePage';
 import LoginPage from '@/pages/login/ui/LoginPage';
 import ProfilePage from '@/pages/profile/ProfilePage';
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignUpPage /> },
       { path: 'profile', element: <ProfilePage /> },
+      { path: 'dashboard', element: <DashboardPage /> },
     ],
   },
 ]);
