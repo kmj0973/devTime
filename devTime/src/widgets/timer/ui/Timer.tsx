@@ -37,13 +37,16 @@ export default function Timer() {
     const interval = setInterval(() => {
       const now = Date.now();
       const diff = now - start - pauseTime;
+
       const hr = Math.floor(diff / (1000 * 60 * 60));
       const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const sec = Math.floor((diff % (1000 * 60)) / 1000);
+
       setHours(String(hr).padStart(2, '0'));
       setMinutes(String(min).padStart(2, '0'));
       setSeconds(String(sec).padStart(2, '0'));
 
+      //정각 업데이트
       const kst = new Date(now + 9 * 60 * 60 * 1000);
       if (kst.getHours() === 23 && kst.getMinutes() === 59 && kst.getSeconds() === 59) {
         setLastUpdateTime(new Date().toISOString());
@@ -52,6 +55,7 @@ export default function Timer() {
         });
       }
 
+      //10분 단위 업데이트
       const updateDiff = Date.now() - new Date(lastUpdateTime).getTime();
       const updateSec = Math.floor(updateDiff / 1000);
       if (updateSec == 600) {
