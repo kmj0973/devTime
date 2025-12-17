@@ -2,7 +2,7 @@ import { requestGetStats } from '@/widgets/dashboard/api/requests';
 import StatDiv from '@/widgets/dashboard/ui/StatDiv';
 import { NavBar } from '@/widgets/navBar/ui/NavBar';
 import { useEffect, useState } from 'react';
-import WeekdayStudyTimeDiv from './WeekDayStudyTimeDiv';
+import WeekdayStudyTimeDiv from './WeekdayStudyTimeDiv';
 
 export default function DashboardContainer() {
   const [stats, setStats] = useState({

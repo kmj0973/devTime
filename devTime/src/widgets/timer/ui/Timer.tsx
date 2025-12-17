@@ -11,6 +11,17 @@ export default function Timer() {
   const [seconds, setSeconds] = useState('--');
 
   useEffect(() => {
+    if (pause) {
+      const diff = new Date(lastUpdateTime).getTime() - new Date(startTime).getTime() - pauseTime;
+      const hr = Math.floor(diff / (1000 * 60 * 60));
+      const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const sec = Math.floor((diff % (1000 * 60)) / 1000);
+      setHours(String(hr).padStart(2, '0'));
+      setMinutes(String(min).padStart(2, '0'));
+      setSeconds(String(sec).padStart(2, '0'));
+      return;
+    }
+
     const diff = Date.now() - new Date(startTime).getTime() - pauseTime;
     const hr = Math.floor(diff / (1000 * 60 * 60));
     const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -18,7 +29,7 @@ export default function Timer() {
     setHours(String(hr).padStart(2, '0'));
     setMinutes(String(min).padStart(2, '0'));
     setSeconds(String(sec).padStart(2, '0'));
-  }, [pauseTime, startTime]);
+  }, []);
 
   useEffect(() => {
     if (!startTime) {
