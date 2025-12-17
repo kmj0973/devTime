@@ -220,7 +220,7 @@ export default function ReviewDialog() {
           <div className='text-body-s-m text-gray-600'>학습 회고</div>
           <textarea
             {...register('review')}
-            className='w-full h-[84px] bg-gray-50 text-body-m text-state-disabled px-4 py-3 resize-none'
+            className={`w-full h-[84px] bg-gray-50 text-body-m px-4 py-3 resize-none text-gray-600 placeholder:text-state-disabled`}
             placeholder='오늘 학습한 내용을 회고해 보세요(15자 이상 작성 필수).'
           />
         </div>
