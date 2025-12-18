@@ -6,3 +6,10 @@ export const requestGetStats = async () => {
   console.log(response.data);
   return response.data;
 };
+
+export const requestGetHeatMap = async () => {
+  const response = await axiosInstance.get(`/api/heatmap`);
+
+  console.log(response.data);
+  return response.data;
+};

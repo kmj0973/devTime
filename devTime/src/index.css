@@ -70,6 +70,12 @@
   --gray-700: #394252;
   --gray-800: #1f2937;
 
+  --heatmap-level-1: #b8caff;
+  --heatmap-level-2: #87a6ff;
+  --heatmap-level-3: #4c79ff;
+  --heatmap-level-4: #1e50e5;
+  --heatmap-level-5: #023e99;
+
   --state-disabled: var(--gray-400);
   --state-hover: #446de6; /* Primary 10% 투명도 */
   --state-active: #446de6; /* Primary 30% 투명도 */
@@ -192,6 +198,12 @@
   --color-gray-800: var(--gray-800);
   --color-gray-900: var(--gray-900);
   --color-gray-light: var(rgba(249, 250, 251, 1));
+
+  --color-heatmap-level-1: var(--heatmap-level-1);
+  --color-heatmap-level-2: var(--heatmap-level-2);
+  --color-heatmap-level-3: var(--heatmap-level-3);
+  --color-heatmap-level-4: var(--heatmap-level-4);
+  --color-heatmap-level-5: var(--heatmap-level-5);
 
   --color-state-disabled: var(--state-disabled);
   --color-state-hover: var(--state-hover);
