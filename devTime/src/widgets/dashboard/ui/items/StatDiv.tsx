@@ -1,4 +1,6 @@
-export default function StatDiv({ title, content }: { title: string; content: number }) {
+import type { Item } from '../../model/types';
+
+export default function StatDiv({ title, content }: Item) {
   const hr = Math.floor(content / (1000 * 60 * 60));
   const min = Math.floor((content % (1000 * 60 * 60)) / (1000 * 60));
 

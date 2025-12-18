@@ -1,8 +1,9 @@
 import { requestGetStats } from '@/widgets/dashboard/api/requests';
-import StatDiv from '@/widgets/dashboard/ui/StatDiv';
+import StatDiv from '@/widgets/dashboard/ui/items/StatDiv';
 import { NavBar } from '@/widgets/navBar/ui/NavBar';
 import { useEffect, useState } from 'react';
-import WeekdayStudyTimeDiv from './WeekdayStudyTimeDiv';
+import WeekdayStudyTimeDiv from './items/WeekdayStudyTimeDiv';
+import HeatMap from './items/HeatMap';
 
 export default function DashboardContainer() {
   const [stats, setStats] = useState({
@@ -46,8 +47,6 @@ export default function DashboardContainer() {
     fetchStats();
   }, []);
 
-  console.log(weekDayStudyTime);
-
   return (
     <div className=' w-full items-center bg-linear-to-b from-[#F6F7F9] to-[#E9ECF5] pt-4 pb-12'>
       <NavBar />
@@ -65,7 +64,7 @@ export default function DashboardContainer() {
                 <div className='text-caption-b text-white/50 border-t border-white/50'>8시간</div>
               </div>
               {Object.entries(weekDayStudyTime).map(([day, studyTime]) => (
-                <WeekdayStudyTimeDiv key={day} day={day} studyTime={studyTime} />
+                <WeekdayStudyTimeDiv key={day} title={day} content={studyTime} />
               ))}
             </div>
           </div>
@@ -74,9 +73,9 @@ export default function DashboardContainer() {
           <StatDiv title={'목표 달성률'} content={stats['목표 달성률']} />
         </div>
 
-        <div className='bg-white w-full h-full min-h-[306px] col-span-3'></div>
+        <HeatMap />
 
-        <div className='bg-white w-full h-full min-h-[444px] col-span-3'></div>
+        <div className='bg-white w-full h-full min-h-[444px] col-span-3 rounded-[18px]'></div>
       </div>
     </div>
   );

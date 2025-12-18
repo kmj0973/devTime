@@ -1,15 +1,11 @@
-export default function WeekdayStudyTimeDiv({
-  day,
-  studyTime,
-}: {
-  day: string;
-  studyTime: number;
-}) {
-  const height = Math.floor((studyTime / 86400000) * 160);
+import type { Item } from '../../model/types';
 
-  const hr = String(Math.floor(studyTime / (1000 * 60 * 60))).padStart(2, '0');
-  const min = String(Math.floor((studyTime % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-  const sec = String(Math.floor((studyTime % (1000 * 60)) / 1000)).padStart(2, '0');
+export default function WeekdayStudyTimeDiv({ title, content }: Item) {
+  const height = Math.floor((content / 86400000) * 160);
+
+  const hr = String(Math.floor(content / (1000 * 60 * 60))).padStart(2, '0');
+  const min = String(Math.floor((content % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+  const sec = String(Math.floor((content % (1000 * 60)) / 1000)).padStart(2, '0');
 
   return (
     <div className='relative flex flex-col w-9 gap-2'>
@@ -25,7 +21,7 @@ export default function WeekdayStudyTimeDiv({
         </div>
       </div>
       <div className='bg-white/50 h-5 rounded-[10px] mx-2 flex justify-center items-center text-caption-b text-secondary-indigo'>
-        {day.charAt(0)}
+        {title.charAt(0)}
       </div>
     </div>
   );
