@@ -16,7 +16,7 @@ import type { Time } from '../model/types';
 export const useTodoListForm = () => {
   const [editNum, setEditNum] = useState<string | null>(null);
   const closeModal = useModalStore((state) => state.closeModal);
-  const { timerId, studyLogId, restartTime, initTimer } = useTimerStore();
+  const { timerId, studyLogId, pause, restartTime, initTimer } = useTimerStore();
 
   const {
     register,
@@ -52,8 +52,10 @@ export const useTodoListForm = () => {
     const index = splitTimes.findIndex(
       (time) => time.date.split('T')[0] === newTime.date.split('T')[0],
     );
+
+    const newSplitTimes = splitTimes.map((t) => ({ ...t })); // 깊은 복사
+
     if (index !== -1) {
-      const newSplitTimes = [...splitTimes];
       newSplitTimes[index].timeSpent += newTime.timeSpent;
       return newSplitTimes;
     }
@@ -70,12 +72,24 @@ export const useTodoListForm = () => {
       timeSpent: Date.now() - new Date(restartTime).getTime(),
     });
 
-    await requestSaveReivew(timerId, {
-      splitTimes: newSplitTimes,
-      tasks,
-      review: review as string,
-    });
+    console.log('newSplitTimes', newSplitTimes);
 
+    console.log('SplitTimes', splitTimes);
+    if (pause) {
+      console.log('true');
+      await requestSaveReivew(timerId, {
+        splitTimes: splitTimes,
+        tasks,
+        review: review as string,
+      });
+    } else {
+      console.log('false');
+      await requestSaveReivew(timerId, {
+        splitTimes: newSplitTimes,
+        tasks,
+        review: review as string,
+      });
+    }
     useTimerStore.getState().reset();
 
     closeModal();

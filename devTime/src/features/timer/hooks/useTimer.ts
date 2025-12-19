@@ -26,8 +26,10 @@ export const useTimer = () => {
     const index = splitTimes.findIndex(
       (time) => time.date.split('T')[0] === newTime.date.split('T')[0],
     );
+
+    const newSplitTimes = splitTimes.map((t) => ({ ...t })); // 깊은 복사
+
     if (index !== -1) {
-      const newSplitTimes = [...splitTimes];
       newSplitTimes[index].timeSpent += newTime.timeSpent;
       return newSplitTimes;
     }
