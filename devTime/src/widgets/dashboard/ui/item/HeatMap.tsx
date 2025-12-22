@@ -148,7 +148,7 @@ export default function HeatMap() {
               level = mergedData[formatDate].colorLevel;
               console.log(mergedData[formatDate]);
 
-              const totalSeconds = Math.floor(mergedData[formatDate].studyTimeHours * 3600);
+              const totalSeconds = Math.floor(mergedData[formatDate].studyTimeHours * 12960);
 
               hh = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
               mm = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
