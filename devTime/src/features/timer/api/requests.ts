@@ -48,7 +48,7 @@ export const requestSaveReivew = async (
   data: { splitTimes: Time[]; tasks: Task[]; review: string },
 ) => {
   const response = await axiosInstance.post(`/api/timers/${timerId}/stop`, data);
-
+  console.log(data);
   console.log(response.data);
   return response.data;
 };

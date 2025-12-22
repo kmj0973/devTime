@@ -12,6 +12,8 @@ import {
   requestUpdateTodoLists,
 } from '../api/requests';
 import type { Time } from '../model/types';
+import mergeSplitTimes from '../util/mergeSplitTimes';
+import splitTimeByDate from '../util/splitTimeByDate';
 
 export const useTodoListForm = () => {
   const [editNum, setEditNum] = useState<string | null>(null);
@@ -48,48 +50,36 @@ export const useTodoListForm = () => {
     append({ content: value, isCompleted: false });
   };
 
-  const upsert = (splitTimes: Time[], newTime: Time): Time[] => {
-    const index = splitTimes.findIndex(
-      (time) => time.date.split('T')[0] === newTime.date.split('T')[0],
-    );
-
-    const newSplitTimes = splitTimes.map((t) => ({ ...t })); // 깊은 복사
-
-    if (index !== -1) {
-      newSplitTimes[index].timeSpent += newTime.timeSpent;
-      return newSplitTimes;
-    }
-    return [...splitTimes, newTime];
-  };
-
   const onReviewSubmit: SubmitHandler<TodoListFormFields> = async (data) => {
     const { tasks, review } = data;
 
-    const results = await requestGetTimer();
-    const splitTimes = results.splitTimes;
-    const newSplitTimes = upsert(splitTimes, {
-      date: new Date().toISOString(),
-      timeSpent: Date.now() - new Date(restartTime).getTime(),
+    // 서버에서 기존 splitTimes 가져오기
+    const { splitTimes: original } = await requestGetTimer();
+
+    let newSplitTimes: Time[] = [];
+
+    if (!pause) {
+      // 🔥 타이머가 실행 중이었다면 → startTime ~ now 구간을 날짜별로 split
+      const start = new Date(restartTime).getTime();
+      const end = Date.now();
+
+      const segments = splitTimeByDate(start, end);
+
+      // 🔥 기존 splitTimes + 새 segments 병합
+      newSplitTimes = mergeSplitTimes(original, segments);
+    } else {
+      // 🔒 pause 상태 → 이미 기록된 splitTimes 사용
+      newSplitTimes = original;
+    }
+
+    // 저장 요청
+    await requestSaveReivew(timerId, {
+      splitTimes: newSplitTimes,
+      tasks,
+      review: review as string,
     });
 
-    console.log('newSplitTimes', newSplitTimes);
-
-    console.log('SplitTimes', splitTimes);
-    if (pause) {
-      console.log('true');
-      await requestSaveReivew(timerId, {
-        splitTimes: splitTimes,
-        tasks,
-        review: review as string,
-      });
-    } else {
-      console.log('false');
-      await requestSaveReivew(timerId, {
-        splitTimes: newSplitTimes,
-        tasks,
-        review: review as string,
-      });
-    }
+    // 타이머 상태 초기화
     useTimerStore.getState().reset();
 
     closeModal();
