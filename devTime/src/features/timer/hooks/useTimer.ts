@@ -1,9 +1,10 @@
 // src/features/timer/hooks/useTimer.ts
 import { useTimerStore } from '@/shared/store/useTimerStore';
 import { requestGetTimer, requestUpdateTimer, requestDeleteTimer } from '../api/requests';
-import type { Time } from '../model/types';
 import useAuthStore from '@/shared/store/useAuthStore';
 import useModalStore from '@/shared/store/useModalStroe';
+import splitTimeByDate from '../util/splitTimeByDate';
+import mergeSplitTimes from '../util/mergeSplitTimes';
 
 export const useTimer = () => {
   const {
@@ -16,25 +17,10 @@ export const useTimer = () => {
     setPauseTime,
     setPauseTimeISOString,
     setRestartTime,
-    setLastUpdateTime,
   } = useTimerStore();
 
   const isLogined = useAuthStore((state) => state.isLogined);
   const openModal = useModalStore((state) => state.openModal);
-
-  const upsert = (splitTimes: Time[], newTime: Time): Time[] => {
-    const index = splitTimes.findIndex(
-      (time) => time.date.split('T')[0] === newTime.date.split('T')[0],
-    );
-
-    const newSplitTimes = splitTimes.map((t) => ({ ...t })); // 깊은 복사
-
-    if (index !== -1) {
-      newSplitTimes[index].timeSpent += newTime.timeSpent;
-      return newSplitTimes;
-    }
-    return [...splitTimes, newTime];
-  };
 
   const handleStart = () => {
     if (timerId) {
@@ -49,18 +35,25 @@ export const useTimer = () => {
   };
 
   const handlePause = async () => {
-    const data = await requestGetTimer();
-    const splitTimes = data.splitTimes;
-    const newSplitTimes = upsert(splitTimes, {
-      date: new Date().toISOString(),
-      timeSpent: Date.now() - new Date(restartTime).getTime(),
-    });
+    const now = Date.now();
 
+    // 1. 이번 세션 공부 시간 날짜별 분리
+    const segments = splitTimeByDate(new Date(restartTime).getTime(), now);
+
+    // 2. 서버 기존 데이터 가져오기
+    const data = await requestGetTimer();
+    const original = data.splitTimes;
+
+    // 3. 기존 + 신규 segment 병합
+    const newSplitTimes = mergeSplitTimes(original, segments);
+    console.log(newSplitTimes);
+
+    // 4. 서버에 저장
     await requestUpdateTimer(timerId, { splitTimes: newSplitTimes });
 
+    // 5. 클라이언트 상태 갱신
     setPause(true);
     setPauseTimeISOString(new Date().toISOString());
-    setLastUpdateTime(new Date().toISOString());
   };
 
   const handleDelete = async () => {
@@ -71,6 +64,8 @@ export const useTimer = () => {
   };
 
   const handleReview = async () => {
+    await handlePause();
+
     openModal('review');
   };
 

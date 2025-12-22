@@ -1,35 +1,17 @@
 import timerDivider from '@/assets/timerDivider.svg';
-import { requestUpdateTimer } from '@/features/timer/api/requests';
+import { requestGetTimer, requestUpdateTimer } from '@/features/timer/api/requests';
+import mergeSplitTimes from '@/features/timer/util/mergeSplitTimes';
+import splitTimeByDate from '@/features/timer/util/splitTimeByDate';
 import { useTimerStore } from '@/shared/store/useTimerStore';
 import { useEffect, useState } from 'react';
 
 export default function Timer() {
-  const { startTime, pause, pauseTime, lastUpdateTime, setLastUpdateTime } = useTimerStore();
+  const { timerId, startTime, pause, pauseTime, pauseTimeISOString, restartTime, setRestartTime } =
+    useTimerStore();
 
   const [hours, setHours] = useState('--');
   const [minutes, setMinutes] = useState('--');
   const [seconds, setSeconds] = useState('--');
-
-  useEffect(() => {
-    if (pause) {
-      const diff = new Date(lastUpdateTime).getTime() - new Date(startTime).getTime() - pauseTime;
-      const hr = Math.floor(diff / (1000 * 60 * 60));
-      const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const sec = Math.floor((diff % (1000 * 60)) / 1000);
-      setHours(String(hr).padStart(2, '0'));
-      setMinutes(String(min).padStart(2, '0'));
-      setSeconds(String(sec).padStart(2, '0'));
-      return;
-    }
-
-    const diff = Date.now() - new Date(startTime).getTime() - pauseTime;
-    const hr = Math.floor(diff / (1000 * 60 * 60));
-    const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const sec = Math.floor((diff % (1000 * 60)) / 1000);
-    setHours(String(hr).padStart(2, '0'));
-    setMinutes(String(min).padStart(2, '0'));
-    setSeconds(String(sec).padStart(2, '0'));
-  }, []);
 
   useEffect(() => {
     if (!startTime) {
@@ -39,46 +21,58 @@ export default function Timer() {
       return;
     }
 
-    if (pause) {
-      return;
-    }
-
-    const start = new Date(startTime).getTime();
-
-    const interval = setInterval(() => {
+    const updateDisplay = () => {
       const now = Date.now();
-      const diff = now - start - pauseTime;
 
-      const hr = Math.floor(diff / (1000 * 60 * 60));
-      const min = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const sec = Math.floor((diff % (1000 * 60)) / 1000);
+      let totalPause = pauseTime;
+
+      if (pause && pauseTimeISOString) {
+        // 현재 일시정지 중이면 pause 중 시간 포함
+        totalPause += now - new Date(pauseTimeISOString).getTime();
+      }
+
+      const total = now - new Date(startTime).getTime() - totalPause;
+
+      const hr = Math.floor(total / 3600000);
+      const min = Math.floor((total % 3600000) / 60000);
+      const sec = Math.floor((total % 60000) / 1000);
 
       setHours(String(hr).padStart(2, '0'));
       setMinutes(String(min).padStart(2, '0'));
       setSeconds(String(sec).padStart(2, '0'));
+    };
 
-      //정각 업데이트
-      const kst = new Date(now + 9 * 60 * 60 * 1000);
-      if (kst.getHours() === 23 && kst.getMinutes() === 59 && kst.getSeconds() === 59) {
-        setLastUpdateTime(new Date().toISOString());
-        requestUpdateTimer(useTimerStore.getState().timerId, {
-          splitTimes: [{ date: new Date().toISOString(), timeSpent: Math.floor(diff) }],
-        });
-      }
+    updateDisplay(); // 초기 실행
 
-      //10분 단위 업데이트
-      const updateDiff = Date.now() - new Date(lastUpdateTime).getTime();
-      const updateSec = Math.floor(updateDiff / 1000);
-      if (updateSec == 600) {
-        setLastUpdateTime(new Date().toISOString());
-        requestUpdateTimer(useTimerStore.getState().timerId, {
-          splitTimes: [{ date: new Date().toISOString(), timeSpent: Math.floor(diff) }],
-        });
-      }
-    }, 1000);
+    const interval = setInterval(updateDisplay, 1000);
+    return () => clearInterval(interval);
+  }, [startTime, pause, pauseTimeISOString, pauseTime]);
+
+  useEffect(() => {
+    if (pause) return;
+
+    const interval = setInterval(async () => {
+      const now = Date.now();
+      const start = new Date(restartTime).getTime();
+
+      // 1️⃣ 세션을 날짜별로 분리
+      const segments = splitTimeByDate(start, now);
+
+      // 2️⃣ 서버 데이터 조회
+      const data = await requestGetTimer();
+
+      // 3️⃣ 병합
+      const merged = mergeSplitTimes(data.splitTimes, segments);
+
+      // 4️⃣ 업데이트
+      await requestUpdateTimer(timerId, { splitTimes: merged });
+
+      // 5️⃣ 기준 시점 갱신
+      setRestartTime(new Date().toISOString());
+    }, 600_000);
 
     return () => clearInterval(interval);
-  }, [startTime, pause]);
+  }, [pause, restartTime]);
 
   return (
     <div className='flex mt-[50px]'>
