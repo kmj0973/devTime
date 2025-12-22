@@ -55,19 +55,19 @@ export default function Timer() {
       const now = Date.now();
       const start = new Date(restartTime).getTime();
 
-      // 1️⃣ 세션을 날짜별로 분리
+      // 세션을 날짜별로 분리
       const segments = splitTimeByDate(start, now);
 
-      // 2️⃣ 서버 데이터 조회
+      // 서버 데이터 조회
       const data = await requestGetTimer();
 
-      // 3️⃣ 병합
+      // 병합
       const merged = mergeSplitTimes(data.splitTimes, segments);
 
-      // 4️⃣ 업데이트
+      // 업데이트
       await requestUpdateTimer(timerId, { splitTimes: merged });
 
-      // 5️⃣ 기준 시점 갱신
+      // 기준 시점 갱신
       setRestartTime(new Date().toISOString());
     }, 600_000);
 

@@ -13,3 +13,17 @@ export const requestGetHeatMap = async () => {
   console.log(response.data);
   return response.data;
 };
+
+export const requestGetStudyLogs = async () => {
+  const response = await axiosInstance.get(`/api/study-logs`);
+
+  console.log(response.data);
+  return response.data;
+};
+
+export const requestDeleteStudyLog = async (studyLogId: string) => {
+  const response = await axiosInstance.delete(`/api/study-logs/${studyLogId}`);
+
+  console.log(response.data);
+  return response.data;
+};

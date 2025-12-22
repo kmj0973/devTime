@@ -9,7 +9,6 @@ interface TimerStore {
   restartTime: string;
   pauseTime: number;
   pauseTimeISOString: string;
-  lastUpdateTime: string;
   pause: boolean;
 
   initTimer: (data: {
@@ -28,7 +27,6 @@ interface TimerStore {
   setRestartTime: (time: string) => void;
   setPauseTime: (time: number) => void;
   setPauseTimeISOString: (time: string) => void;
-  setLastUpdateTime: (time: string) => void;
   setPause: (pause: boolean) => void;
 
   reset: () => void;
@@ -54,7 +52,6 @@ export const useTimerStore = create<TimerStore>()(
           todayGoal: data.todayGoal,
           startTime: data.startTime,
           restartTime: data.startTime,
-          lastUpdateTime: data.startTime,
           pause: false,
         }),
       setTimerId: (id: string) => set({ timerId: id }),
@@ -64,7 +61,6 @@ export const useTimerStore = create<TimerStore>()(
       setRestartTime: (time: string) => set({ restartTime: time }),
       setPauseTime: (time: number) => set({ pauseTime: time }),
       setPauseTimeISOString: (time: string) => set({ pauseTimeISOString: time }),
-      setLastUpdateTime: (time: string) => set({ lastUpdateTime: time }),
       setPause: (pause: boolean) => set({ pause }),
 
       reset: () =>
@@ -76,7 +72,6 @@ export const useTimerStore = create<TimerStore>()(
           restartTime: '',
           pauseTime: 0,
           pauseTimeISOString: '',
-          lastUpdateTime: '',
           pause: false,
         }),
     }),

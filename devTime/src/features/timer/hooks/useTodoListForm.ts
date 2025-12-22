@@ -59,16 +59,16 @@ export const useTodoListForm = () => {
     let newSplitTimes: Time[] = [];
 
     if (!pause) {
-      // 🔥 타이머가 실행 중이었다면 → startTime ~ now 구간을 날짜별로 split
+      // 타이머가 실행 중이었다면 → startTime ~ now 구간을 날짜별로 split
       const start = new Date(restartTime).getTime();
       const end = Date.now();
 
       const segments = splitTimeByDate(start, end);
 
-      // 🔥 기존 splitTimes + 새 segments 병합
+      // 기존 splitTimes + 새 segments 병합
       newSplitTimes = mergeSplitTimes(original, segments);
     } else {
-      // 🔒 pause 상태 → 이미 기록된 splitTimes 사용
+      // pause 상태 → 이미 기록된 splitTimes 사용
       newSplitTimes = original;
     }
 

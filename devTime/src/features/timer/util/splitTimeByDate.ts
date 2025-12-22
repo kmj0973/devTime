@@ -16,7 +16,6 @@ export default function splitTimeByDate(start: number, end: number): Time[] {
     const iso = new Date(current).toISOString();
     const dateKey = iso.split('T')[0]; // yyyy-MM-dd
 
-    console.log(dateKey);
     if (map.has(dateKey)) {
       // 이미 존재하면 timeSpent만 누적
       map.get(dateKey)!.timeSpent += timeSpent;

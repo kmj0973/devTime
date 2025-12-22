@@ -1,9 +1,10 @@
 import { requestGetStats } from '@/widgets/dashboard/api/requests';
-import StatDiv from '@/widgets/dashboard/ui/items/StatDiv';
+import StatDiv from '@/widgets/dashboard/ui/item/StatDiv';
 import { NavBar } from '@/widgets/navBar/ui/NavBar';
 import { useEffect, useState } from 'react';
-import WeekdayStudyTimeDiv from './items/WeekdayStudyTimeDiv';
-import HeatMap from './items/HeatMap';
+import WeekdayStudyTimeDiv from './item/WeekdayStudyTimeDiv';
+import HeatMap from './item/HeatMap';
+import StudyLogDiv from './item/StudyLogDiv';
 
 export default function DashboardContainer() {
   const [stats, setStats] = useState({
@@ -48,7 +49,7 @@ export default function DashboardContainer() {
   }, []);
 
   return (
-    <div className=' w-full h-screen items-center bg-linear-to-b from-[#F6F7F9] to-[#E9ECF5] pt-4 pb-12'>
+    <div className=' w-full items-center bg-linear-to-b from-[#F6F7F9] to-[#E9ECF5] pt-4 pb-12'>
       <NavBar />
       <div className='grid grid-cols-3 gap-4 max-w-[1200px] mx-auto mt-10'>
         <div className='grid grid-cols-[240px_240px_688px] grid-rows-2 gap-4'>
@@ -74,8 +75,7 @@ export default function DashboardContainer() {
         </div>
 
         <HeatMap />
-
-        <div className='bg-white w-full h-full min-h-[444px] col-span-3 rounded-[18px]'></div>
+        <StudyLogDiv />
       </div>
     </div>
   );

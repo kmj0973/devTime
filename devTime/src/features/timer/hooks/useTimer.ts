@@ -37,21 +37,19 @@ export const useTimer = () => {
   const handlePause = async () => {
     const now = Date.now();
 
-    // 1. 이번 세션 공부 시간 날짜별 분리
+    // 이번 세션 공부 시간 날짜별 분리
     const segments = splitTimeByDate(new Date(restartTime).getTime(), now);
 
-    // 2. 서버 기존 데이터 가져오기
+    // 서버 기존 데이터 가져오기
     const data = await requestGetTimer();
     const original = data.splitTimes;
 
-    // 3. 기존 + 신규 segment 병합
+    // 기존 + 신규 segment 병합
     const newSplitTimes = mergeSplitTimes(original, segments);
-    console.log(newSplitTimes);
-
-    // 4. 서버에 저장
+    // 서버에 저장
     await requestUpdateTimer(timerId, { splitTimes: newSplitTimes });
 
-    // 5. 클라이언트 상태 갱신
+    // 클라이언트 상태 갱신
     setPause(true);
     setPauseTimeISOString(new Date().toISOString());
   };
