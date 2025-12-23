@@ -1,84 +1,23 @@
-import { useEffect, useState } from 'react';
-import { requestDeleteStudyLog, requestGetStudyLogs } from '../../api/requests';
 import TrashSVG from '../svg/TrashSVG';
 import formatMsToHMS from '@/features/timer/util/formatMsToHMS';
 import DeleteDialog from '../dialog/DeleteDialog';
-import { useTimerStore } from '@/shared/store/useTimerStore';
-import { requestDeleteTimer } from '@/features/timer/api/requests';
 import DoubleArrowSVG from '../svg/DoubleArrowSVG';
 import ArrowSVG from '../svg/ArrowSVG';
-import type { GetStudyLogsParams } from '../../model/types';
-import useModalStore from '@/shared/store/useModalStroe';
-
-type StudyLog = {
-  id: string;
-  date: string;
-  todayGoal: string;
-  studyTime: number;
-  totalTasks: number;
-  incompleteTasks: number;
-  completionRate: number;
-};
-
-type PagiNation = {
-  currentPage: number;
-  hasNext: boolean;
-  hasPrev: boolean;
-  totalItems: number;
-  totalPages: number;
-};
+import { useStudyLog } from '../../hooks/useStudyLog';
 
 export default function StudyLogDiv() {
-  const studyLogId = useTimerStore((state) => state.studyLogId);
-  const timerId = useTimerStore((state) => state.timerId);
-  const reset = useTimerStore((state) => state.reset);
-
-  const openModal = useModalStore((state) => state.openModal);
-
-  const [studyLogs, setStudyLogs] = useState<StudyLog[]>([]);
-  const [targetId, setTargetId] = useState<string>('');
-  const [isOpen, setIsOpen] = useState(false);
-
-  const [pagiNation, setPagiNation] = useState<PagiNation>();
-  const [targetPage, setTargetPage] = useState<number>(1);
-
-  const openDialog = (id: string) => {
-    setTargetId(id);
-    setIsOpen(true);
-  };
-
-  const closeDialog = () => {
-    setIsOpen(false);
-    setTargetId('');
-  };
-
-  const handleDelete = async (id: string) => {
-    if (studyLogId == id) {
-      await requestDeleteTimer(timerId);
-      reset();
-    } else {
-      await requestDeleteStudyLog(id);
-    }
-    setStudyLogs((prevLogs) => prevLogs.filter((log) => log.id !== id));
-  };
-
-  const getStudyLogs = async ({ page = 1 }: GetStudyLogsParams = {}) => {
-    if ((pagiNation && page > pagiNation?.totalPages) || page < 1) return;
-
-    const results = await requestGetStudyLogs({ page });
-    setTargetPage(page);
-    setStudyLogs(results.data.studyLogs);
-  };
-
-  useEffect(() => {
-    const fetchStudyLogs = async () => {
-      const results = await requestGetStudyLogs();
-      setPagiNation(results.data.pagination);
-      setStudyLogs(results.data.studyLogs);
-    };
-
-    fetchStudyLogs();
-  }, []);
+  const {
+    studyLogs,
+    targetId,
+    isOpen,
+    pagiNation,
+    targetPage,
+    openModal,
+    openDialog,
+    closeDialog,
+    handleDelete,
+    getStudyLogs,
+  } = useStudyLog();
 
   return (
     <div className='bg-white w-[1200px] min-h-[450px] col-span-3 rounded-[18px] p-6'>
