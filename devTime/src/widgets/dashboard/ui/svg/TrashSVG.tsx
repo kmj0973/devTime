@@ -1,7 +1,10 @@
 export default function TrashSVG({ onOpen }: { onOpen: () => void }) {
   return (
     <svg
-      onClick={() => onOpen()}
+      onClick={(e) => {
+        e.stopPropagation();
+        onOpen();
+      }}
       xmlns='http://www.w3.org/2000/svg'
       width='24'
       height='24'

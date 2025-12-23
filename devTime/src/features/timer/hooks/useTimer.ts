@@ -62,7 +62,9 @@ export const useTimer = () => {
   };
 
   const handleReview = async () => {
-    await handlePause();
+    if (!pause) {
+      await handlePause();
+    }
 
     openModal('review');
   };

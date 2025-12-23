@@ -6,9 +6,10 @@ import ReviewDialog from '@/features/timer/ui/dialog/ReviewDialog';
 import TimerStartDialog from '@/features/timer/ui/dialog/TimerStartDialog';
 import TodoListDialog from '@/features/timer/ui/dialog/TodoListDialog';
 import useModalStore from '@/shared/store/useModalStroe';
+import StudyLogDialog from '@/widgets/dashboard/ui/dialog/StudyLogDialog';
 
 export default function ModalRoot() {
-  const { modal } = useModalStore();
+  const { modal, modalProps } = useModalStore();
 
   if (!modal) return null;
 
@@ -27,6 +28,9 @@ export default function ModalRoot() {
       return <LoginDuplicateDialog />;
     case 'review':
       return <ReviewDialog />;
+    case 'studyLog':
+      if (!modalProps) return;
+      return <StudyLogDialog studyLogId={modalProps} />;
     default:
       return null;
   }
