@@ -1,12 +1,13 @@
 import navBarLogo from '@/assets/navBarLogo.svg';
 import useAuthStore from '@/shared/store/useAuthStore';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import UserProfileImage from './UserProfileImage';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 
 export const NavBar = () => {
   const userInfo = useAuthStore((state) => state.user);
   const { onLogout } = useAuth();
+  const location = useLocation();
 
   return (
     <div className='max-w-[1200px] h-10 mx-auto flex justify-between  items-center'>
@@ -17,11 +18,14 @@ export const NavBar = () => {
         <div className='flex justify-center items-center gap-9'>
           <NavLink
             to='/dashboard'
-            className={`text-body-s text-secondary-indigo border-b border-secondary-indigo`}
+            className={`${location.pathname.includes('dashboard') && 'border-b border-secondary-indigo'} text-body-s text-secondary-indigo`}
           >
             대시보드
           </NavLink>
-          <NavLink to='/ranking' className='text-body-s text-secondary-indigo'>
+          <NavLink
+            to='/ranking'
+            className={`${location.pathname.includes('ranking') && 'border-b border-secondary-indigo'} text-body-s text-secondary-indigo`}
+          >
             랭킹
           </NavLink>
         </div>

@@ -34,7 +34,7 @@ export default function HeatMap() {
   // 월 별 라벨
   const monthLabels: MonthLabel[] = [];
 
-  let prevLabel: string | null = null;
+  let prevLabel: string = '';
   let startCol = 2;
 
   results.forEach((week, weekIndex) => {
@@ -62,7 +62,7 @@ export default function HeatMap() {
   });
 
   // 마지막 달 추가
-  if (prevLabel !== null) {
+  if (prevLabel) {
     monthLabels.push({
       label: prevLabel,
       month: Number(prevLabel.split('-')[1]),
