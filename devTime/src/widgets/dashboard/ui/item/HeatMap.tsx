@@ -146,7 +146,6 @@ export default function HeatMap() {
 
             if (formatDate in mergedData) {
               level = mergedData[formatDate].colorLevel;
-              console.log(mergedData[formatDate]);
 
               const totalSeconds = Math.floor(mergedData[formatDate].studyTimeHours * 12960);
 
