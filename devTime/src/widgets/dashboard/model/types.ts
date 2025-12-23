@@ -24,3 +24,33 @@ export type StudyLog = {
   tasks: Task[];
   todayGoal: string;
 };
+
+export type StudyLogs = {
+  id: string;
+  date: string;
+  todayGoal: string;
+  studyTime: number;
+  totalTasks: number;
+  incompleteTasks: number;
+  completionRate: number;
+};
+
+export type PagiNation = {
+  currentPage: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  totalItems: number;
+  totalPages: number;
+};
+
+export type Stats = {
+  totalStudyTime: number;
+  consecutiveDays: number;
+  averageDailyStudyTime: number;
+  taskCompletionRate: number;
+};
+
+export type WeekdayStudyTime = Record<
+  'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday',
+  number
+>;
