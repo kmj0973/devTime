@@ -33,25 +33,34 @@ export default function StudyLogDiv() {
         <div className='w-[93px]'>미완료 할 일</div>
         <div className='w-[90px]'>달성률</div>
       </div>
-      <div className='flex flex-col mb-9 min-h-[230px]'>
-        {studyLogs.map((log) => {
-          return (
-            <div
-              key={log.id}
-              onClick={() => openModal('studyLog', log.id)}
-              className='w-6xl grid grid-cols-[90px_minmax(186px,2fr)_repeat(4,90px)_24px] text-body-m text-gray-700 border-b border-gray-300 gap-18 px-9 py-6'
-            >
-              <div className=''>{log.date.split('-').join('.')}</div>
-              <div className='text-secondary-indigo text-body-s'>{log.todayGoal}</div>
-              <div className=''>{formatMsToHMS(log.studyTime)}</div>
-              <div className=''>{log.totalTasks}</div>
-              <div className=''>{log.incompleteTasks}</div>
-              <div className=''>{log.completionRate}%</div>
-              <TrashSVG onOpen={() => openDialog(log.id)} />
-            </div>
-          );
-        })}
-      </div>
+
+      {studyLogs.length == 0 ? (
+        <div className='flex justify-center items-center text-body-b text-gray-500 min-h-[230px] mb-9'>
+          학습 기록이 없습니다.
+        </div>
+      ) : (
+        <div className='flex flex-col mb-9 min-h-[230px]'>
+          {studyLogs &&
+            studyLogs.map((log) => {
+              return (
+                <div
+                  key={log.id}
+                  onClick={() => openModal('studyLog', log.id)}
+                  className='w-6xl grid grid-cols-[90px_minmax(186px,2fr)_repeat(4,90px)_24px] text-body-m text-gray-700 border-b border-gray-300 gap-18 px-9 py-6'
+                >
+                  <div className=''>{log.date.split('-').join('.')}</div>
+                  <div className='text-secondary-indigo text-body-s'>{log.todayGoal}</div>
+                  <div className=''>{formatMsToHMS(log.studyTime)}</div>
+                  <div className=''>{log.totalTasks}</div>
+                  <div className=''>{log.incompleteTasks}</div>
+                  <div className=''>{log.completionRate}%</div>
+                  <TrashSVG onOpen={() => openDialog(log.id)} />
+                </div>
+              );
+            })}
+        </div>
+      )}
+
       <div className='w-full flex justify-center items-center gap-3 mb-3'>
         <div onClick={() => getStudyLogs({ page: 1 })} className='cursor-pointer'>
           <DoubleArrowSVG />
