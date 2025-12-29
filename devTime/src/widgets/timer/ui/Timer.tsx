@@ -9,15 +9,15 @@ export default function Timer() {
   const { timerId, startTime, pause, pauseTime, pauseTimeISOString, restartTime, setRestartTime } =
     useTimerStore();
 
-  const [hours, setHours] = useState('--');
-  const [minutes, setMinutes] = useState('--');
-  const [seconds, setSeconds] = useState('--');
+  const [time, setTime] = useState({ hours: '00', minutes: '00', seconds: '00' });
 
   useEffect(() => {
     if (!startTime) {
-      setHours('00');
-      setMinutes('00');
-      setSeconds('00');
+      setTime({
+        hours: '00',
+        minutes: '00',
+        seconds: '00',
+      });
       return;
     }
 
@@ -37,9 +37,11 @@ export default function Timer() {
       const min = Math.floor((total % 3600000) / 60000);
       const sec = Math.floor((total % 60000) / 1000);
 
-      setHours(String(hr).padStart(2, '0'));
-      setMinutes(String(min).padStart(2, '0'));
-      setSeconds(String(sec).padStart(2, '0'));
+      setTime({
+        hours: String(hr).padStart(2, '0'),
+        minutes: String(min).padStart(2, '0'),
+        seconds: String(sec).padStart(2, '0'),
+      });
     };
 
     updateDisplay(); // 초기 실행
@@ -77,21 +79,21 @@ export default function Timer() {
   return (
     <div className='flex mt-[50px]'>
       <div className='w-[264px] h-[298px] bg-linear-to-br from-[rgba(76,121,255,0)] to-[rgba(76,121,255,0.2)] text-primary rounded-[12px]'>
-        <div className='w-[250px] h-[200px] mt-2 mx-[7px] text-digital'>{hours}</div>
+        <div className='w-[250px] h-[200px] mt-2 mx-[7px] text-digital'>{time.hours}</div>
         <div className='text-sm leading-4.5 font-semibold flex justify-center items-center mt-9'>
           H O U R S
         </div>
       </div>
       <img src={timerDivider} alt=':' className='mx-12' />
       <div className='w-[264px] h-[298px] bg-linear-to-br from-[rgba(76,121,255,0)] to-[rgba(76,121,255,0.2)] text-primary rounded-[12px]'>
-        <div className='w-[250px] h-[200px] mt-2 mx-[7px] text-digital'>{minutes}</div>
+        <div className='w-[250px] h-[200px] mt-2 mx-[7px] text-digital'>{time.minutes}</div>
         <div className='text-sm leading-4.5 font-semibold flex justify-center items-center mt-9'>
           M I N U T E S
         </div>
       </div>
       <img src={timerDivider} alt=':' className='mx-12' />
       <div className='w-[264px] h-[298px] bg-linear-to-br from-[rgba(76,121,255,0)] to-[rgba(76,121,255,0.2)] text-primary rounded-[12px]'>
-        <div className='w-[250px] h-[200px] mt-2 mx-[7px] text-digital'>{seconds}</div>
+        <div className='w-[250px] h-[200px] mt-2 mx-[7px] text-digital'>{time.seconds}</div>
         <div className='text-sm leading-4.5 font-semibold flex justify-center items-center mt-9'>
           S E C O N D S
         </div>

@@ -3,13 +3,6 @@ import { requestGetHeatMap } from '../../api/requests';
 import { eachDayOfInterval, format, subYears } from 'date-fns';
 import toHeatMapMatrix from '../../lib/toHeatMapMatrix';
 
-type MonthLabel = {
-  label: string; // "2024-12"
-  month: number;
-  start: number;
-  end: number;
-};
-
 type HeatMapData = {
   date: string;
   studyTimeHours: number;
@@ -32,44 +25,20 @@ export default function HeatMap() {
   const results = toHeatMapMatrix(days);
 
   // 월 별 라벨
-  const monthLabels: MonthLabel[] = [];
-
-  let prevLabel: string = '';
-  let startCol = 2;
+  const monthLabels: string[] = new Array(50).fill('');
+  const prevLabel: number[] = new Array(2).fill(0);
 
   results.forEach((week, weekIndex) => {
-    const firstDay = week[0];
-    if (!firstDay) return;
+    const year = week[0].getFullYear();
+    const month = week[0].getMonth();
 
-    const year = firstDay.getFullYear();
-    const month = firstDay.getMonth() + 1;
-
-    const ym = `${year}-${month}`; // 연월 조합
-
-    // month가 바뀐 경우만 push
-    if (prevLabel !== null && prevLabel !== ym) {
-      monthLabels.push({
-        label: prevLabel,
-        month: Number(prevLabel.split('-')[1]),
-        start: startCol,
-        end: weekIndex + 2,
-      });
-
-      startCol = weekIndex + 2;
+    if (prevLabel[0] != year || prevLabel[1] != month) {
+      monthLabels[weekIndex] = `${month + 1}월`;
     }
 
-    prevLabel = ym;
+    prevLabel[0] = year;
+    prevLabel[1] = month;
   });
-
-  // 마지막 달 추가
-  if (prevLabel) {
-    monthLabels.push({
-      label: prevLabel,
-      month: Number(prevLabel.split('-')[1]),
-      start: startCol,
-      end: results.length + 2,
-    });
-  }
 
   useEffect(() => {
     const getHeatMap = async () => {
@@ -109,19 +78,20 @@ export default function HeatMap() {
 
       <div className='grid grid-cols-[20px_repeat(48,1fr)] grid-rows-[20px_repeat(7,1fr)] gap-[3px] mb-6'>
         {/* --- 동적 월 라벨 --- */}
-        {monthLabels.map(({ month, start, end }) => (
-          <div
-            key={`${month}-${start}`}
-            style={{
-              gridColumn: `${start} / ${end}`,
-              gridRow: 1,
-              textAlign: 'center',
-            }}
-            className='text-caption-m text-gray-600'
-          >
-            {month}월
-          </div>
-        ))}
+        <div className='col-span-1'></div>
+        {monthLabels.map((month, index) =>
+          month != '' ? (
+            <div
+              key={index}
+              className='col-span-1 text-caption-m text-gray-600 whitespace-nowrap min-w-0
+       text-center'
+            >
+              {month}
+            </div>
+          ) : (
+            <div key={index} className='col-span-1'></div>
+          ),
+        )}
 
         {/* --- 요일 라벨 --- */}
         {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => (
@@ -173,11 +143,11 @@ export default function HeatMap() {
                   gridColumn: weekIndex + 2,
                   gridRow: dayIndex + 2,
                 }}
-                className={`w-[18px] h-[18px] ${level != null ? `bg-heatmap-level-${level + 1}` : 'bg-gray-50'} border border-gray-300 rounded-[5px]`}
+                className={`group w-[18px] h-[18px] ${level != null ? `bg-heatmap-level-${level + 1}` : 'bg-gray-50'} border border-gray-300 rounded-[5px]`}
               >
                 <div
-                  className='absolute w-[124px] h-5 z-1 opacity-0 hover:opacity-100 whitespace-nowrap
-            transition-all duration-100'
+                  className='absolute w-[124px] h-5 z-10  opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap
+            transition-all duration-100 pointer-events-none'
                 >
                   <div className='absolute top-6 left-5 bg-black w-[124px] text-body-s-r text-white text-center rounded-[3px] px-2 py-1'>
                     {hh}시간 {mm}분 {ss}초
