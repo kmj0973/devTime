@@ -29,6 +29,8 @@ export default function HeatMap() {
   const prevLabel: number[] = new Array(2).fill(0);
 
   results.forEach((week, weekIndex) => {
+    if (!(week[0] instanceof Date)) return;
+
     const year = week[0].getFullYear();
     const month = week[0].getMonth();
 
