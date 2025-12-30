@@ -1,9 +1,11 @@
+import type { ProfileType } from '@/features/profile/model/types';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface UserInfo {
   email: string;
   nickname: string;
+  profile: ProfileType;
 }
 
 interface AuthStore {
