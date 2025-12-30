@@ -3,11 +3,12 @@ import { useProfileForm } from '../hooks/useProfileForm';
 import SelectField from './FormField/SelectField';
 import { FormField } from './FormField/FormField';
 import TechStackField from './FormField/TechStackField';
+import { ImageField } from './FormField/ImageField';
 
 export default function ProfileForm() {
-  const { control, purpose, register, errors, handleSubmit, onSubmit, isValid } = useProfileForm();
+  const { control, watch, purpose, register, errors, handleSubmit, onSubmit, isValid } =
+    useProfileForm();
 
-  console.log(errors);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -69,6 +70,14 @@ export default function ProfileForm() {
         control={control}
       />
 
+      <ImageField
+        name='profileImage'
+        watch={watch}
+        label='프로필 이미지'
+        register={register}
+        errors={errors}
+      />
+
       <button
         type='submit'
         className={`w-[423px] h-12 rounded-[5px] ${isValid ? 'bg-primary text-white hover:bg-state-hover' : 'bg-gray-400 text-gray-300'} text-subtitle-s mb-6 cursor-pointer`}
@@ -78,7 +87,7 @@ export default function ProfileForm() {
 
       <div className='text-body-r text-primary'>
         다음에 하시겠어요?
-        <Link to='/login' className='text-body-b ml-3'>
+        <Link to='/' className='text-body-b ml-3'>
           건너뛰기
         </Link>
       </div>

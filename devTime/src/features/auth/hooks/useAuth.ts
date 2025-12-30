@@ -28,7 +28,7 @@ export function useAuth() {
         setIsDuplicate(true);
         openModal('loginDuplicate');
       } else {
-        navigate('/');
+        navigate('/profile', { replace: true });
       }
     } catch (err) {
       console.error(err);

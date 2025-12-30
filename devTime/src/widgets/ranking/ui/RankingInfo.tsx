@@ -55,8 +55,16 @@ export default function RankingInfo({ sortset }: { sortset: string }) {
             >
               {ranking.rank}위
             </div>
-            <div>
-              <ProfileImageSVG />
+            <div className='w-20 h-20'>
+              {!ranking.profile.profileImage ? (
+                <ProfileImageSVG />
+              ) : (
+                <img
+                  className='w-full h-full object-cover'
+                  src={`https://dev-time-bucket.s3.ap-northeast-2.amazonaws.com/${ranking.profile.profileImage}`}
+                  alt='프로필 이미지'
+                />
+              )}
             </div>
           </div>
           <div className='flex flex-col gap-4'>
@@ -68,13 +76,13 @@ export default function RankingInfo({ sortset }: { sortset: string }) {
               <div>
                 누적
                 <span className='text-body-s text-gray-700 pl-2'>
-                  {Math.round((ranking.totalStudyTime / 3_600_000) * 100) / 10}시간
+                  {Math.round((ranking.totalStudyTime / 3_600_000) * 10) / 10}시간
                 </span>
               </div>
               <div>
                 일 평균
                 <span className='text-body-s text-gray-700 pl-2'>
-                  {Math.round((ranking.averageStudyTime / 3_600_000) * 100) / 10}시간
+                  {Math.round((ranking.averageStudyTime / 3_600_000) * 10) / 10}시간
                 </span>
               </div>
               <div>

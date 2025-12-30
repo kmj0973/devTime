@@ -1,5 +1,20 @@
 import { axiosInstance } from '@/shared/lib/axiosInstance';
 
+type ProfileType = {
+  career: string;
+  purpose: string;
+  goal: string;
+  techStacks: string[];
+  profileImage: string;
+};
+
+export const requestCreateProfile = async (data: ProfileType) => {
+  const response = await axiosInstance.post('/api/profile', data);
+  console.log(response.data);
+
+  return response.data;
+};
+
 export const requestGetTechStacks = async (keyword: string) => {
   const response = await axiosInstance.get('/api/tech-stacks', { params: { keyword } });
   console.log(response.data);
@@ -7,8 +22,21 @@ export const requestGetTechStacks = async (keyword: string) => {
   return response.data;
 };
 
-export const requestPostTechStacks = async (name: string) => {
+export const requestCreateTechStacks = async (name: string) => {
   const response = await axiosInstance.post('/api/tech-stacks', { name });
+  console.log(response.data);
+
+  return response.data;
+};
+
+export const requestFileUpload = async ({
+  fileName,
+  contentType,
+}: {
+  fileName: string;
+  contentType: string;
+}) => {
+  const response = await axiosInstance.post('/api/file/presigned-url', { fileName, contentType });
   console.log(response.data);
 
   return response.data;
