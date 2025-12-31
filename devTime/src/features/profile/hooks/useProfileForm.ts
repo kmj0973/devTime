@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { profileFormSchema, type ProfileFormFields } from '../model/schema';
 import { requestCreateProfile, requestFileUpload } from '../api/requests';
 import { useNavigate } from 'react-router-dom';
+import useAuthStore from '@/shared/store/useAuthStore';
 
 export const useProfileForm = () => {
   const {
@@ -25,6 +26,8 @@ export const useProfileForm = () => {
     shouldUnregister: true,
   });
 
+  const setUser = useAuthStore((state) => state.setUser);
+  const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
   const purpose = watch('purpose');
 
@@ -32,6 +35,13 @@ export const useProfileForm = () => {
     //나머지 데이터 재포장하고
     //url post해서 받아온 url로 또 fetch한 후에 profile post하기
     try {
+      const newData = {
+        career: data.career,
+        purpose: data.purpose,
+        goal: data.goal,
+        techStacks: data.techStacks,
+        profileImage: data.profileImage,
+      };
       const ImageName = data.profileImage[0].name;
       const ImageType = data.profileImage[0].type;
 
@@ -51,7 +61,8 @@ export const useProfileForm = () => {
         body: data.profileImage[0], // 사용자가 직접 업로드 한 이미지 파일 데이터
       });
 
-      await requestCreateProfile({ ...data, profileImage: key });
+      await requestCreateProfile({ ...newData, profileImage: key });
+      if (user) setUser({ ...user, profile: { ...newData, profileImage: key } });
 
       navigate('/', { replace: true });
     } catch (err) {
