@@ -55,7 +55,7 @@ export default function RankingInfo({ sortset }: { sortset: string }) {
             >
               {ranking.rank}위
             </div>
-            <div className='w-20 h-20'>
+            <div className='w-20 h-20 rounded-2xl'>
               {!ranking.profile.profileImage ? (
                 <ProfileImageSVG />
               ) : (

@@ -23,12 +23,13 @@ export function useAuth() {
 
       const profile = await requestProfileData();
       if (profile) setUser(profile);
-
+      console.log(profile);
       if (response.isDuplicateLogin) {
         setIsDuplicate(true);
         openModal('loginDuplicate');
       } else {
-        navigate('/profile', { replace: true });
+        if (profile.profile) navigate('/');
+        else navigate('/profile', { replace: true });
       }
     } catch (err) {
       console.error(err);
