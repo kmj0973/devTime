@@ -26,20 +26,20 @@ export default function HeatMap() {
 
   // 월 별 라벨
   const monthLabels: string[] = new Array(50).fill('');
-  const prevLabel: number[] = new Array(2).fill(0);
+  let prevYear: number | null = null;
+  let prevMonth: number | null = null;
 
   results.forEach((week, weekIndex) => {
-    if (!(week[0] instanceof Date)) return;
+    if (!(week[0] instanceof Date) || week.join().length < 250) return;
 
     const year = week[0].getFullYear();
     const month = week[0].getMonth();
 
-    if (prevLabel[0] != year || prevLabel[1] != month) {
+    if (prevYear != year || prevMonth != month) {
       monthLabels[weekIndex] = `${month + 1}월`;
+      prevYear = year;
+      prevMonth = month;
     }
-
-    prevLabel[0] = year;
-    prevLabel[1] = month;
   });
 
   useEffect(() => {
