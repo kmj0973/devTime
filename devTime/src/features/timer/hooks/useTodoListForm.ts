@@ -99,7 +99,7 @@ export const useTodoListForm = () => {
       timerId: results.timerId,
       studyLogId: results.studyLogId,
       todayGoal: todayGoal as string,
-      startTime: results.startTime,
+      startTime: new Date().toISOString(),
       restartTime: results.startTime,
       lastUpdateTime: results.startTime,
       pause: false,

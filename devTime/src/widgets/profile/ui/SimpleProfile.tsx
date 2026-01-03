@@ -20,7 +20,7 @@ export default function SimpleProfile() {
             onClick={() => setIsOpen(!isOpen)}
             className='flex justify-center items-center gap-3 cursor-pointer'
           >
-            {userInfo.profile.profileImage ? (
+            {userInfo.profile?.profileImage ? (
               <img
                 className='w-10 h-10 object-cover rounded-3xl'
                 src={`https://dev-time-bucket.s3.ap-northeast-2.amazonaws.com/${userInfo.profile.profileImage}`}
