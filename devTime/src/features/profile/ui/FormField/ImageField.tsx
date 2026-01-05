@@ -1,19 +1,30 @@
-import type { FieldErrors, UseFormRegister, UseFormWatch } from 'react-hook-form';
+import {
+  get,
+  type FieldErrors,
+  type Path,
+  type UseFormRegister,
+  type UseFormWatch,
+} from 'react-hook-form';
 import PlusImageSVG from '../svg/PlusImageSVG';
-import type { ProfileFormFields } from '../../model/schema';
 import { useEffect, useState } from 'react';
 
-interface FormFieldProps {
-  name: 'profileImage';
+interface FormFieldProps<T extends { profileImage?: FileList | null }> {
+  name: Path<T>;
   label: string;
-  register: UseFormRegister<ProfileFormFields>;
-  errors: FieldErrors<ProfileFormFields>;
-  watch: UseFormWatch<ProfileFormFields>;
+  register: UseFormRegister<T>;
+  errors: FieldErrors<T>;
+  watch: UseFormWatch<T>;
   value?: string;
 }
 
-export const ImageField = ({ name, watch, label, register, errors }: FormFieldProps) => {
-  const error = errors[name];
+export const ImageField = <T extends { profileImage?: FileList | null }>({
+  name,
+  watch,
+  label,
+  register,
+  errors,
+}: FormFieldProps<T>) => {
+  const error = get(errors, name);
   const files = watch(name);
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -35,11 +46,15 @@ export const ImageField = ({ name, watch, label, register, errors }: FormFieldPr
         {label}
         <div className='flex items-end gap-2'>
           <div
-            className='flex justify-center items-center w-30 h-30 
-        bg-white border border-dashed border-primary rounded-xl'
+            className={`flex justify-center items-center w-30 h-30 
+        bg-white ${!previewUrl && 'border border-dashed border-primary'} rounded-xl`}
           >
             {previewUrl ? (
-              <img src={previewUrl} alt='미리보기' className='w-full h-full object-cover' />
+              <img
+                src={previewUrl}
+                alt='미리보기'
+                className='w-full h-full object-cover rounded-xl'
+              />
             ) : (
               <PlusImageSVG />
             )}
@@ -59,7 +74,11 @@ export const ImageField = ({ name, watch, label, register, errors }: FormFieldPr
         />
       </div>
 
-      {error && <p className='mt-2 text-caption-m text-negative'>{error.message as string}</p>}
+      {error ? (
+        <div className='text-caption-m text-negative'>{error.message as string}</div>
+      ) : (
+        <div className='h-4' />
+      )}
     </div>
   );
 };

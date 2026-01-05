@@ -2,6 +2,7 @@ import { NavBar } from '@/widgets/navBar/ui/NavBar';
 import UserSVG from './svg/UserSVG';
 import EditSVG from './svg/EditSVG';
 import useAuthStore from '@/shared/store/useAuthStore';
+import { Link } from 'react-router-dom';
 
 export default function MyPageContainer() {
   const user = useAuthStore((state) => state.user);
@@ -10,7 +11,7 @@ export default function MyPageContainer() {
     <div className='h-screen items-center bg-linear-to-b from-[#F6F7F9] to-[#E9ECF5] pt-4'>
       <NavBar />
       <div className='w-full flex flex-col justify-center items-center mt-10'>
-        <div className='bg-white w-[1200px] h-[424px] flex justify-between p-9 gap-14'>
+        <div className='bg-white w-[1200px] h-[424px] flex justify-between p-9 gap-14 rounded-xl'>
           <div className='w-[180px] h-[180px] bg-gray-100 flex justify-center items-center'>
             {user?.profile ? (
               <img
@@ -73,7 +74,9 @@ export default function MyPageContainer() {
           <div className='flex justify-center items-start'>
             <div className='flex justify-center items-center gap-2'>
               <EditSVG />
-              <div className='text-body-s-m text-gray-600'>회원정보 수정</div>
+              <Link to='/mypage/edit' className='text-body-s-m text-gray-600'>
+                회원정보 수정
+              </Link>
             </div>
           </div>
         </div>

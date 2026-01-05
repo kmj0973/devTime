@@ -1,23 +1,31 @@
 import { useState } from 'react';
 import SelectArrowSVG from '../svg/SelectArrowSVG';
-import { Controller, type Control, type FieldErrors, type UseFormRegister } from 'react-hook-form';
-import type { ProfileFormFields } from '../../model/schema';
+import {
+  Controller,
+  get,
+  type Control,
+  type FieldErrors,
+  type Path,
+  type UseFormRegister,
+} from 'react-hook-form';
 
-type SelectFieldType = {
-  name: 'career' | 'purpose';
+type SelectFieldType<T extends { profileImage?: FileList | null; purposeContent?: string }> = {
+  name: Path<T>;
   label: string;
   purpose: string | null;
   placeholder: string;
   selectItems: string[];
-  errors: FieldErrors<ProfileFormFields>;
-  control: Control<ProfileFormFields>;
-  register: UseFormRegister<ProfileFormFields>;
+  errors: FieldErrors<T>;
+  control: Control<T>;
+  register: UseFormRegister<T>;
 };
 
-export default function SelectField(props: SelectFieldType) {
+export default function SelectField<
+  T extends { profileImage?: FileList | null; purposeContent?: string },
+>(props: SelectFieldType<T>) {
   const [isClicked, setIsClicked] = useState<string>('');
 
-  const error = props.errors[props.name];
+  const error = get(props.errors, props.name);
 
   return (
     <Controller
@@ -28,12 +36,12 @@ export default function SelectField(props: SelectFieldType) {
           <label htmlFor={props.name} className='text-body-s-m text-gray-600 mb-2'>
             {props.label}
           </label>
-          <div className='relative w-[420px]'>
+          <div className='relative w-full'>
             <div
-              className={`${error ? 'border border-negative' : ''} flex justify-between items-center h-11 bg-gray-50 rounded-[5px] text-body-m text-gray-300 py-3 px-4`}
+              className={`${error ? 'border border-negative' : ''} flex justify-between items-center h-11 bg-gray-50 rounded-[5px] text-body-m text-gray-300 py-3 px-4 mb-2`}
             >
               <div className={`${field.value ? 'text-gray-600' : 'text-gray-300'}`}>
-                {field.value ? field.value : props.placeholder}
+                {field.value ? (field.value as string) : props.placeholder}
               </div>
               <button
                 onClick={() => {
@@ -56,7 +64,7 @@ export default function SelectField(props: SelectFieldType) {
                           field.onChange(item);
                           setIsClicked('');
                         }}
-                        className='text-gray-600 w-[396px] h-9 border-b'
+                        className='text-gray-600 w-full h-9 border-b px-3'
                       >
                         {item}
                       </div>
@@ -80,10 +88,10 @@ export default function SelectField(props: SelectFieldType) {
           </div>
           {props.purpose == '기타(직접 입력)' && (
             <input
-              {...props.register('purposeContent')}
+              {...props.register('purposeContent' as Path<T>)}
               type='text'
               placeholder='목적을 입력해주세요'
-              className='h-11 bg-gray-50 rounded-[5px] text-body-m text-gray-600 py-3 px-4 mt-2'
+              className='h-11 bg-gray-50 rounded-[5px] text-body-m text-gray-600 py-3 px-4 mt-2 mb-2'
             />
           )}
           {error ? (

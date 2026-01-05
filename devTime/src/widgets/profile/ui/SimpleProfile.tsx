@@ -32,7 +32,7 @@ export default function SimpleProfile() {
             <div className='text-secondary-indigo text-body-b'>{userInfo.nickname}</div>
           </div>
           {isOpen && (
-            <div className='absolute w-[136px] top-12 right-0 flex flex-col justify-center items-center text-body-m text-gray-600 bg-white border border-gray-300 rounded-[5px] cursor-pointer'>
+            <div className='absolute z-10 w-[136px] top-12 right-0 flex flex-col justify-center items-center text-body-m text-gray-600 bg-white border border-gray-300 rounded-[5px] cursor-pointer'>
               <Link to='/mypage' className='flex gap-4 px-3 py-4'>
                 <UserSVG />
                 마이페이지

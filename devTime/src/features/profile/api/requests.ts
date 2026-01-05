@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/shared/lib/axiosInstance';
-import type { ProfileType } from '../model/types';
+import type { ProfileType, UpdateProfileType } from '../model/types';
 
 export const requestGetProfile = async () => {
   const response = await axiosInstance.get('/api/profile');
@@ -10,6 +10,13 @@ export const requestGetProfile = async () => {
 
 export const requestCreateProfile = async (data: ProfileType) => {
   const response = await axiosInstance.post('/api/profile', data);
+  console.log(response.data);
+
+  return response.data;
+};
+
+export const requestUpdateProfile = async (data: UpdateProfileType) => {
+  const response = await axiosInstance.put('/api/profile', data);
   console.log(response.data);
 
   return response.data;

@@ -46,6 +46,7 @@ export function useAuth() {
     } finally {
       logout();
       reset();
+      navigate('/', { replace: true });
     }
   };
 
