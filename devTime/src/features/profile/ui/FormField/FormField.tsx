@@ -1,16 +1,23 @@
-import type { FieldErrors, UseFormRegister } from 'react-hook-form';
-import type { ProfileFormFields } from '../../model/schema';
+import type { FieldErrors, Path, UseFormRegister } from 'react-hook-form';
 
-interface FormFieldProps {
-  name: 'goal';
+interface FormFieldProps<T extends { profileImage?: FileList | null }> {
+  name: Path<T>;
   label: string;
-  register: UseFormRegister<ProfileFormFields>;
-  errors: FieldErrors<ProfileFormFields>;
+  register: UseFormRegister<T>;
+  errors: FieldErrors<T>;
   placeholder?: string;
   value?: string;
+  edit?: boolean;
 }
 
-export const FormField = ({ name, label, register, errors, placeholder }: FormFieldProps) => {
+export const FormField = <T extends { profileImage?: FileList | null }>({
+  name,
+  label,
+  register,
+  errors,
+  placeholder,
+  edit = false,
+}: FormFieldProps<T>) => {
   const error = errors[name];
 
   return (
@@ -23,9 +30,9 @@ export const FormField = ({ name, label, register, errors, placeholder }: FormFi
         <input
           {...register(name)}
           id={name}
-          type='text'
+          type={name === 'password' || name === 'confirmPassword' ? 'password' : 'text'}
           placeholder={placeholder}
-          className={`${error ? 'border border-negative' : ''} w-[420px] h-11 px-4 py-3 rounded-[5px] bg-gray-50 text-body-m text-gray-600 placeholder:text-gray-300 focus:outline-none`}
+          className={`${error ? 'border border-negative' : ''} ${edit ? 'w-full' : 'w-[420px]'} h-11 px-4 py-3 rounded-[5px] bg-gray-50 text-body-m text-gray-600 mb-2 placeholder:text-gray-300 focus:outline-none`}
         />
       </div>
 

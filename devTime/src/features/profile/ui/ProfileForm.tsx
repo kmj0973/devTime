@@ -4,6 +4,7 @@ import SelectField from './FormField/SelectField';
 import { FormField } from './FormField/FormField';
 import TechStackField from './FormField/TechStackField';
 import { ImageField } from './FormField/ImageField';
+import type { ProfileFormFields } from '../model/schema';
 
 export default function ProfileForm() {
   const { control, watch, purpose, register, errors, handleSubmit, onSubmit, isValid } =
@@ -17,66 +18,68 @@ export default function ProfileForm() {
       <h1 className='text-heading-b text-primary mb-9'>프로필 설정</h1>
 
       {/* 이메일 */}
-      <SelectField
-        name='career'
-        label='개발 경력'
-        purpose={null}
-        placeholder='개발 경력을 선택해 주세요.'
-        selectItems={['경력 없음', '0 - 3년', '4 - 7년', '8 - 10년', '11년 이상']}
-        errors={errors}
-        control={control}
-        register={register}
-      />
+      <div className='w-[420px]'>
+        <SelectField<ProfileFormFields>
+          name='career'
+          label='개발 경력'
+          purpose={null}
+          placeholder='개발 경력을 선택해 주세요.'
+          selectItems={['경력 없음', '0 - 3년', '4 - 7년', '8 - 10년', '11년 이상']}
+          errors={errors}
+          control={control}
+          register={register}
+        />
 
-      {/* 이메일 */}
-      <SelectField
-        name='purpose'
-        label='공부 목적'
-        purpose={purpose}
-        placeholder='공부의 목적을 선택해 주세요.'
-        selectItems={[
-          '취업 준비',
-          '이직 준비',
-          '단순 개발 역량 향상',
-          '회사 내 프로젝트 원할하게 수행',
-          '기타(직접 입력)',
-        ]}
-        errors={errors}
-        control={control}
-        register={register}
-      />
+        {/* 이메일 */}
+        <SelectField<ProfileFormFields>
+          name='purpose'
+          label='공부 목적'
+          purpose={purpose}
+          placeholder='공부의 목적을 선택해 주세요.'
+          selectItems={[
+            '취업 준비',
+            '이직 준비',
+            '단순 개발 역량 향상',
+            '회사 내 프로젝트 원할하게 수행',
+            '기타(직접 입력)',
+          ]}
+          errors={errors}
+          control={control}
+          register={register}
+        />
 
-      <FormField
-        name='goal'
-        label='공부 목표'
-        register={register}
-        errors={errors}
-        placeholder='공부 목표를 입력해 주세요.'
-      />
+        <FormField<ProfileFormFields>
+          name='goal'
+          label='공부 목표'
+          register={register}
+          errors={errors}
+          placeholder='공부 목표를 입력해 주세요.'
+        />
 
-      <TechStackField
-        name='techStacks'
-        label='공부/사용 중인 기술 스택'
-        placeholder='기술 스택을 검색해 등록해 주세요.'
-        selectItems={[
-          '취업 준비',
-          '이직 준비',
-          '단순 개발 역량 향상',
-          '회사 내 프로젝트 원할하게 수행',
-          '기타(직접 입력)',
-        ]}
-        register={register}
-        errors={errors}
-        control={control}
-      />
+        <TechStackField
+          name='techStacks'
+          label='공부/사용 중인 기술 스택'
+          placeholder='기술 스택을 검색해 등록해 주세요.'
+          selectItems={[
+            '취업 준비',
+            '이직 준비',
+            '단순 개발 역량 향상',
+            '회사 내 프로젝트 원할하게 수행',
+            '기타(직접 입력)',
+          ]}
+          register={register}
+          errors={errors}
+          control={control}
+        />
 
-      <ImageField
-        name='profileImage'
-        watch={watch}
-        label='프로필 이미지'
-        register={register}
-        errors={errors}
-      />
+        <ImageField<ProfileFormFields>
+          name='profileImage'
+          watch={watch}
+          label='프로필 이미지'
+          register={register}
+          errors={errors}
+        />
+      </div>
 
       <button
         type='submit'

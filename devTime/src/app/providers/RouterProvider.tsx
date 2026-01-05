@@ -1,6 +1,7 @@
 import DashboardPage from '@/pages/dashboard/ui/DashboardPage';
 import HomePage from '@/pages/home/ui/HomePage';
 import LoginPage from '@/pages/login/ui/LoginPage';
+import EditMyPage from '@/pages/mypage/ui/EditMyPage';
 import MyPage from '@/pages/mypage/ui/MyPage';
 import ProfilePage from '@/pages/profile/ProfilePage';
 import ModalRoot from '@/pages/public/ModalRoot';
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
       { path: 'dashboard', element: <DashboardPage /> },
       { path: 'ranking', element: <RankingPage /> },
       { path: 'mypage', element: <MyPage /> },
+      { path: 'mypage/edit', element: <EditMyPage /> },
     ],
   },
 ]);

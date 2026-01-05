@@ -1,17 +1,27 @@
 import { useState } from 'react';
-import { Controller, type Control, type FieldErrors, type UseFormRegister } from 'react-hook-form';
-import type { ProfileFormFields } from '../../model/schema';
+import {
+  Controller,
+  get,
+  type Control,
+  type FieldErrors,
+  type Path,
+  type UseFormRegister,
+} from 'react-hook-form';
 import { requestCreateTechStacks, requestGetTechStacks } from '../../api/requests';
 import DeleteTech from '../svg/DeleteTechSVG';
 
-type SelectFieldType = {
-  name: 'techStacks';
+type SelectFieldType<
+  T extends {
+    techStacks: string[];
+  },
+> = {
+  name: Path<T>;
   label: string;
   placeholder: string;
   selectItems: string[];
-  errors: FieldErrors<ProfileFormFields>;
-  control: Control<ProfileFormFields>;
-  register: UseFormRegister<ProfileFormFields>;
+  errors: FieldErrors<T>;
+  control: Control<T>;
+  register: UseFormRegister<T>;
 };
 
 type techStack = {
@@ -21,12 +31,16 @@ type techStack = {
   updatedAt: string;
 };
 
-export default function TechStackField(props: SelectFieldType) {
+export default function TechStackField<
+  T extends {
+    techStacks: string[];
+  },
+>(props: SelectFieldType<T>) {
   const [techStacks, setTechStacks] = useState<techStack[]>([]);
   const [techStackInput, setTechStackInput] = useState('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
-  const error = props.errors[props.name];
+  const error = get(props.errors, props.name);
 
   const getTechStacks = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const response = await requestGetTechStacks(e.target.value);
@@ -39,12 +53,12 @@ export default function TechStackField(props: SelectFieldType) {
       name={props.name}
       control={props.control}
       render={({ field }) => (
-        <div className='flex flex-col mb-6'>
+        <div className='flex flex-col mb-6 w-full'>
           <label htmlFor={props.name} className='text-body-s-m text-gray-600 mb-2'>
             {props.label}
           </label>
           <div
-            className='relative w-[420px]'
+            className='relative w-full'
             onFocus={() => setIsFocused(true)}
             onBlur={(e) => {
               if (!e.currentTarget.contains(e.relatedTarget as Node)) {
@@ -53,30 +67,26 @@ export default function TechStackField(props: SelectFieldType) {
             }}
           >
             <input
-              {...props.register('techStackInput')}
               onChange={getTechStacks}
               onFocus={() => setIsFocused(true)}
               id={props.name}
               type='text'
               placeholder={props.placeholder}
-              className={`${error ? 'border border-negative' : ''} w-[420px] h-11 px-4 py-3 rounded-[5px] bg-gray-50 text-body-m text-gray-800 placeholder:text-gray-300 focus:outline-none`}
+              className={`${error ? 'border border-negative' : ''} w-full h-11 px-4 py-3 rounded-[5px] bg-gray-50 text-body-m text-gray-800 placeholder:text-gray-300 focus:outline-none`}
             />
-            {techStacks && isFocused && (
+            {techStacks && isFocused && techStackInput.length > 0 && (
               <div className='absolute bg-white z-10 top-13 w-full max-h-48 flex flex-col border border-gray-300 rounded-[5px] py-4 px-3 gap-4 overflow-y-auto overflow-x-hidden'>
                 {techStacks.map((techStack, index) => (
                   <div
                     key={index}
                     tabIndex={0}
                     onClick={() => {
-                      const prev = field.value ?? [];
-
-                      if (!prev.includes(techStack.name)) {
-                        field.onChange([...prev, techStack.name]);
+                      if (!field.value.includes(techStack.name)) {
+                        field.onChange([...field.value, techStack.name]);
                       }
-
                       setIsFocused(false);
                     }}
-                    className='w-[396px] h-9'
+                    className='w-full h-9'
                   >
                     {techStack.name.split('').map((word, index) => {
                       const lowerTech = techStackInput.toLowerCase();
@@ -114,24 +124,26 @@ export default function TechStackField(props: SelectFieldType) {
             )}
           </div>
 
-          <div className='flex flex-wrap gap-2 w-[420px] mt-2'>
-            {field.value?.map((tech, index) => (
-              <div
-                key={index}
-                className='flex justify-center items-center gap-2 w-auto h-11 text-body-s-s text-primary bg-primary-10 border border-primary rounded-[5px] p-3'
-              >
-                <div>{tech}</div>
+          <div className='flex flex-wrap gap-2 w-full mt-2'>
+            {Array.isArray(field.value) &&
+              field.value?.map((tech, index) => (
                 <div
-                  onClick={() => {
-                    const prev = field.value.filter((value) => value != tech) ?? [];
-
-                    field.onChange([...prev]);
-                  }}
+                  key={index}
+                  className='flex justify-center items-center gap-2 w-auto h-11 text-body-s-s text-primary bg-primary-10 border border-primary rounded-[5px] p-3'
                 >
-                  <DeleteTech />
+                  <div>{tech}</div>
+                  <div
+                    onClick={() => {
+                      if (!Array.isArray(field.value)) return;
+                      const prev = field.value?.filter((value) => value != tech) ?? [];
+
+                      field.onChange([...prev]);
+                    }}
+                  >
+                    <DeleteTech />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
 
           {error ? (
