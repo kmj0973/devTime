@@ -8,6 +8,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { requestNicknameCheck } from '@/features/signup/api/requests';
 
 export const useEditMyPageForm = () => {
+  const setUser = useAuthStore((state) => state.setUser);
+  const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
+
   const {
     watch,
     control,
@@ -19,29 +23,34 @@ export const useEditMyPageForm = () => {
     clearErrors,
   } = useForm<EditMyPageFormFields>({
     defaultValues: {
-      nickname: '',
+      nickname: user?.nickname || '',
       password: '',
       confirmPassword: '',
-      career: '',
-      goal: '',
-      techStacks: [],
-      profileImage: undefined,
+      career: user?.profile.career || '',
+      goal: user?.profile.goal || '',
+      purpose: user?.profile.purpose || '',
+      purposeContent: '',
+      techStacks: user?.profile.techStacks || [],
+      profileImage: '',
     },
     resolver: zodResolver(editMyPageFormSchema),
     mode: 'onChange',
     shouldUnregister: true,
   });
-
-  const setUser = useAuthStore((state) => state.setUser);
-  const user = useAuthStore((state) => state.user);
-  const navigate = useNavigate();
   const nickname = watch('nickname');
+  const purpose = watch('purpose');
+  const originalNickname = user?.nickname;
+  const isNicknameChanged = nickname !== originalNickname;
 
   const [isNicknameChecked, setIsNicknameChecked] = useState(false);
 
   useEffect(() => {
-    setIsNicknameChecked(false);
-  }, [nickname]);
+    if (isNicknameChanged) {
+      setIsNicknameChecked(false);
+    } else {
+      setIsNicknameChecked(true);
+    }
+  }, [nickname, isNicknameChanged]);
 
   const handleNicknameCheck = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -60,25 +69,22 @@ export const useEditMyPageForm = () => {
     [nickname, trigger, clearErrors, setError],
   );
 
-  const onCheckNickname = useCallback(
-    (e: React.FocusEvent<HTMLInputElement>) => {
-      e.preventDefault();
-      if (errors.nickname) return;
-      if (!isNicknameChecked && nickname) {
-        setError('nickname', { type: 'duplicate', message: '중복 확인을 해주세요.' });
-      }
-    },
-    [nickname, isNicknameChecked, errors.nickname, setError],
-  );
+  const onCheckNickname = useCallback(() => {
+    if (!isNicknameChanged) return;
+    if (!isNicknameChecked && nickname) {
+      setError('nickname', { type: 'duplicate', message: '중복 확인을 해주세요.' });
+    }
+  }, [nickname, isNicknameChecked, isNicknameChanged, setError]);
 
   const onSubmit: SubmitHandler<EditMyPageFormFields> = async (data) => {
     //나머지 데이터 재포장하고
     //url post해서 받아온 url로 또 fetch한 후에 profile post하기
+    onCheckNickname();
     try {
       const newData = {
         nickname: data.nickname,
         career: data.career,
-        purpose: user?.profile.purpose || '',
+        purpose: data.purpose,
         goal: data.goal,
         techStacks: data.techStacks,
         profileImage: data.profileImage,
@@ -103,12 +109,27 @@ export const useEditMyPageForm = () => {
         body: data.profileImage[0], // 사용자가 직접 업로드 한 이미지 파일 데이터
       });
 
-      await requestUpdateProfile({ ...newData, profileImage: key });
+      await requestUpdateProfile({
+        career: newData.career,
+        purpose: newData.purpose,
+        goal: newData.goal,
+        techStacks: newData.techStacks,
+        password: newData.password,
+        profileImage: key,
+        ...(isNicknameChanged && { nickname: newData.nickname }),
+      });
+
       if (user)
         setUser({
           ...user,
-          nickname: newData.nickname,
-          profile: { ...newData, profileImage: key },
+          ...(isNicknameChanged && { nickname: data.nickname }),
+          profile: {
+            career: newData.career,
+            purpose: newData.purpose,
+            goal: newData.goal,
+            techStacks: newData.techStacks,
+            profileImage: key,
+          },
         });
 
       navigate('/', { replace: true });
@@ -118,6 +139,7 @@ export const useEditMyPageForm = () => {
   };
 
   return {
+    purpose,
     watch,
     control,
     register,

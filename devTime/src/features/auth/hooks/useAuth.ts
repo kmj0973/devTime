@@ -1,9 +1,10 @@
-import { requestLogin, requestLogout, requestProfileData } from '../api/requests';
+import { requestLogin, requestLogout } from '../api/requests';
 import useAuthStore from '@/shared/store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import useModalStore from '@/shared/store/useModalStroe';
 import { useTimerStore } from '@/shared/store/useTimerStore';
+import { requestGetProfile } from '@/features/profile/api/requests';
 
 export function useAuth() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export function useAuth() {
       setRefreshToken(response.refreshToken);
       setIsLogined(true);
 
-      const profile = await requestProfileData();
+      const profile = await requestGetProfile();
       if (profile) setUser(profile);
       console.log(profile);
       if (response.isDuplicateLogin) {

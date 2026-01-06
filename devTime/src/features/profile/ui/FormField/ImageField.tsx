@@ -30,14 +30,15 @@ export const ImageField = <T extends { profileImage?: FileList | null }>({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (files && files.length > 0) {
-      const file = files[0];
-      console.log(files);
-      const url = URL.createObjectURL(file);
-      setPreviewUrl(url);
+    if (files)
+      if (files && files.length > 0) {
+        const file = files[0];
+        console.log(files);
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
 
-      return () => URL.revokeObjectURL(url);
-    }
+        return () => URL.revokeObjectURL(url);
+      }
   }, [files]);
 
   return (

@@ -7,7 +7,7 @@ export type ProfileType = {
 };
 
 export type UpdateProfileType = {
-  nickname: string;
+  nickname?: string;
   career: string;
   purpose: string;
   goal: string;

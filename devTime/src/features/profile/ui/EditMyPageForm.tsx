@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function EditMyPageForm() {
   const {
+    purpose,
     watch,
     control,
     nickname,
@@ -25,6 +26,7 @@ export default function EditMyPageForm() {
 
   const navigate = useNavigate();
 
+  console.log(errors, isValid, nickname);
   return (
     <div className='h-screen items-center bg-linear-to-b from-[#F6F7F9] to-[#E9ECF5] pt-4'>
       <NavBar />
@@ -53,6 +55,22 @@ export default function EditMyPageForm() {
                 handleCheck={handleNicknameCheck}
                 isChecked={isNicknameChecked}
                 showCheckButton
+              />
+              <SelectField<EditMyPageFormFields>
+                name='purpose'
+                label='공부 목적'
+                purpose={purpose}
+                placeholder='공부의 목적을 선택해 주세요.'
+                selectItems={[
+                  '취업 준비',
+                  '이직 준비',
+                  '단순 개발 역량 향상',
+                  '회사 내 프로젝트 원할하게 수행',
+                  '기타(직접 입력)',
+                ]}
+                errors={errors}
+                control={control}
+                register={register}
               />
               <FormField<EditMyPageFormFields>
                 name='password'
@@ -121,7 +139,8 @@ export default function EditMyPageForm() {
             </button>
             <button
               type='submit'
-              className={`px-4 py-[13px] rounded-[5px] ${isValid ? 'bg-primary text-white hover:bg-state-hover' : 'bg-gray-400 text-gray-300'} text-subtitle-s cursor-pointer`}
+              disabled={!isValid || !isNicknameChecked}
+              className={`px-4 py-[13px] rounded-[5px] ${isValid && isNicknameChecked ? 'bg-primary text-white hover:bg-state-hover' : 'bg-gray-400 text-gray-300'} text-subtitle-s cursor-pointer`}
             >
               변경 사항 저장하기
             </button>
