@@ -12,10 +12,10 @@ export default function MyPageContainer() {
       <NavBar />
       <div className='w-full flex flex-col justify-center items-center mt-10'>
         <div className='bg-white w-[1200px] h-[424px] flex justify-between p-9 gap-14 rounded-xl'>
-          <div className='w-[180px] h-[180px] bg-gray-100 flex justify-center items-center'>
+          <div className='w-[180px] h-[180px] bg-gray-100 flex justify-center items-center rounded-[90px]'>
             {user?.profile ? (
               <img
-                className='w-full h-full object-cover'
+                className='w-full h-full object-cover rounded-[90px]'
                 src={`https://dev-time-bucket.s3.ap-northeast-2.amazonaws.com/${user.profile.profileImage}`}
                 alt='프로필 이미지'
               />
@@ -57,8 +57,11 @@ export default function MyPageContainer() {
                 <div className='text-body-s-s text-state-disabled mb-1'>개발 스택</div>
                 {user?.profile ? (
                   <div className='flex gap-2'>
-                    {user.profile.techStacks.map((tech) => (
-                      <div className='h-7 bg-gray-100 text-body-m text-gray-500 rounded-[5px] py-1 px-2'>
+                    {user.profile.techStacks.map((tech, index) => (
+                      <div
+                        key={index}
+                        className='h-7 bg-gray-100 text-body-m text-gray-500 rounded-[5px] py-1 px-2'
+                      >
                         {tech}
                       </div>
                     ))}

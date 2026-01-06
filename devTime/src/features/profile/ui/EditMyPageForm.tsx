@@ -74,7 +74,7 @@ export default function EditMyPageForm() {
               />
               <FormField<EditMyPageFormFields>
                 name='password'
-                label='비밀번호'
+                label='새 비밀번호'
                 register={register}
                 errors={errors}
                 placeholder='비밀번호를 입력해 주세요.'
@@ -82,7 +82,7 @@ export default function EditMyPageForm() {
               />
               <FormField<EditMyPageFormFields>
                 name='confirmPassword'
-                label='비밀번호 확인'
+                label='새 비밀번호 재입력'
                 register={register}
                 errors={errors}
                 placeholder='비밀번호를 다시 입력해 주세요.'

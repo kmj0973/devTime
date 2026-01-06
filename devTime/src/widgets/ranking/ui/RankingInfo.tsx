@@ -60,7 +60,7 @@ export default function RankingInfo({ sortset }: { sortset: string }) {
                 <ProfileImageSVG />
               ) : (
                 <img
-                  className='w-full h-full object-cover'
+                  className='w-full h-full object-cover rounded-2xl'
                   src={`https://dev-time-bucket.s3.ap-northeast-2.amazonaws.com/${ranking.profile.profileImage}`}
                   alt='프로필 이미지'
                 />
