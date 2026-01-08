@@ -26,7 +26,6 @@ export default function EditMyPageForm() {
 
   const navigate = useNavigate();
 
-  console.log(errors, isValid, nickname);
   return (
     <div className='h-screen items-center bg-linear-to-b from-[#F6F7F9] to-[#E9ECF5] pt-4'>
       <NavBar />

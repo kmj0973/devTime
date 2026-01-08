@@ -2,7 +2,7 @@ import useAuthStore from '@/shared/store/useAuthStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { requestFileUpload, requestUpdateProfile } from '../api/requests';
+import { requestCreateProfile, requestFileUpload, requestUpdateProfile } from '../api/requests';
 import { editMyPageFormSchema, type EditMyPageFormFields } from '../model/schema';
 import { useCallback, useEffect, useState } from 'react';
 import { requestNicknameCheck } from '@/features/signup/api/requests';
@@ -26,11 +26,11 @@ export const useEditMyPageForm = () => {
       nickname: user?.nickname || '',
       password: '',
       confirmPassword: '',
-      career: user?.profile.career || '',
-      goal: user?.profile.goal || '',
-      purpose: user?.profile.purpose || '',
+      career: user?.profile?.career || '',
+      goal: user?.profile?.goal || '',
+      purpose: user?.profile?.purpose || '',
       purposeContent: '',
-      techStacks: user?.profile.techStacks || [],
+      techStacks: user?.profile?.techStacks || [],
       profileImage: '',
     },
     resolver: zodResolver(editMyPageFormSchema),
@@ -77,8 +77,6 @@ export const useEditMyPageForm = () => {
   }, [nickname, isNicknameChecked, isNicknameChanged, setError]);
 
   const onSubmit: SubmitHandler<EditMyPageFormFields> = async (data) => {
-    //나머지 데이터 재포장하고
-    //url post해서 받아온 url로 또 fetch한 후에 profile post하기
     onCheckNickname();
     try {
       const newData = {
@@ -109,15 +107,34 @@ export const useEditMyPageForm = () => {
         body: data.profileImage[0], // 사용자가 직접 업로드 한 이미지 파일 데이터
       });
 
-      await requestUpdateProfile({
-        career: newData.career,
-        purpose: newData.purpose,
-        goal: newData.goal,
-        techStacks: newData.techStacks,
-        password: newData.password,
-        profileImage: key,
-        ...(isNicknameChanged && { nickname: newData.nickname }),
-      });
+      if (user?.profile) {
+        await requestUpdateProfile({
+          career: newData.career,
+          purpose: newData.purpose,
+          goal: newData.goal,
+          techStacks: newData.techStacks,
+          password: newData.password,
+          profileImage: key,
+          ...(isNicknameChanged && { nickname: newData.nickname }),
+        });
+      } else if (!user?.profile) {
+        await requestCreateProfile({
+          career: newData.career,
+          purpose: newData.purpose,
+          goal: newData.goal,
+          techStacks: newData.techStacks,
+          profileImage: key,
+        });
+        await requestUpdateProfile({
+          career: newData.career,
+          purpose: newData.purpose,
+          goal: newData.goal,
+          techStacks: newData.techStacks,
+          password: newData.password,
+          profileImage: key,
+          ...(isNicknameChanged && { nickname: newData.nickname }),
+        });
+      }
 
       if (user)
         setUser({
