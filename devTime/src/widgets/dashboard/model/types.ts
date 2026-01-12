@@ -54,3 +54,10 @@ export type WeekdayStudyTime = Record<
   'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday',
   number
 >;
+
+
+export type HeatMapData = {
+  date: string;
+  studyTimeHours: number;
+  colorLevel: number;
+};

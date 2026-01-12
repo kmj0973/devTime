@@ -1,78 +1,8 @@
-import { useEffect, useState } from 'react';
-import { requestGetHeatMap } from '../../api/requests';
-import { eachDayOfInterval, format, subYears } from 'date-fns';
-import toHeatMapMatrix from '../../lib/toHeatMapMatrix';
-
-type HeatMapData = {
-  date: string;
-  studyTimeHours: number;
-  colorLevel: number;
-};
+import { format } from 'date-fns';
+import { useHeatMap } from '../../hooks/useHeatMap';
 
 export default function HeatMap() {
-  const [mergedData, setMergedData] = useState<Record<string, HeatMapData>>({});
-
-  const today = new Date();
-  const oneYearAgo = subYears(today, 1);
-
-  //오늘 기준으로 1년 전의 날들을 배열로 전달
-  const days = eachDayOfInterval({
-    start: oneYearAgo,
-    end: today,
-  });
-
-  // 전달된 날짜 배열을 주단위로 변환
-  const results = toHeatMapMatrix(days);
-
-  // 월 별 라벨
-  const monthLabels: string[] = new Array(50).fill('');
-  let prevYear: number | null = null;
-  let prevMonth: number | null = null;
-
-  results.forEach((week, weekIndex) => {
-    if (!(week[0] instanceof Date) || week.join().length < 250) return;
-
-    const year = week[0].getFullYear();
-    const month = week[0].getMonth();
-
-    if (prevYear != year || prevMonth != month) {
-      monthLabels[weekIndex] = `${month + 1}월`;
-      prevYear = year;
-      prevMonth = month;
-    }
-  });
-
-  useEffect(() => {
-    const getHeatMap = async () => {
-      const result = await requestGetHeatMap();
-
-      const mergedData = result.heatmap.reduce(
-        (acc: Record<string, HeatMapData>, curr: HeatMapData) => {
-          const date = curr.date;
-          if (!acc[date]) {
-            acc[date] = {
-              date: curr.date,
-              studyTimeHours: curr.studyTimeHours,
-              colorLevel: curr.colorLevel,
-            };
-          } else {
-            acc[date] = {
-              date: curr.date,
-              studyTimeHours: acc[date].studyTimeHours + curr.studyTimeHours,
-              colorLevel: curr.colorLevel,
-            };
-          }
-          return acc;
-        },
-        {},
-      );
-
-      setMergedData(mergedData);
-    };
-
-    getHeatMap(); //같은 날짜는 합치고(합칠 때 시간이 나오기때문에 가장 높은 시간을 가진 객체만 남기기),
-    //레벨도 내가 다시 객체로 만들기 { 2024-06-01: { time:000, level: 2 } }
-  }, []);
+  const { results, monthLabels, mergedData } = useHeatMap();
 
   return (
     <div className='bg-white w-full min-w-[800px] h-full min-h-[306px] col-span-3 rounded-[18px] p-6 pr-15'>
