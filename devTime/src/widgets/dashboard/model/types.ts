@@ -48,13 +48,16 @@ export type Stats = {
   consecutiveDays: number;
   averageDailyStudyTime: number;
   taskCompletionRate: number;
+  weekdayStudyTime: Record<
+    'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday',
+    number
+  >;
 };
 
 export type WeekdayStudyTime = Record<
   'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday',
   number
 >;
-
 
 export type HeatMapData = {
   date: string;

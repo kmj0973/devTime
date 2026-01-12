@@ -1,7 +1,7 @@
 import type { HeatMapData } from '../model/types';
 
-export const mergeHeatMapData = (results: { heatmap: HeatMapData[] }) => {
-  const mergedData = results.heatmap.reduce(
+export const mergeHeatMapData = (heatmaps: { heatmap: HeatMapData[] }) => {
+  const mergedData = heatmaps.heatmap.reduce(
     (acc: Record<string, HeatMapData>, curr: HeatMapData) => {
       const date = curr.date;
       if (!acc[date]) {

@@ -4,21 +4,23 @@ import DeleteDialog from '../dialog/DeleteDialog';
 import DoubleArrowSVG from '../svg/DoubleArrowSVG';
 import ArrowSVG from '../svg/ArrowSVG';
 import { useStudyLog } from '../../hooks/useStudyLog';
+import type { StudyLogs } from '../../model/types';
 
 export default function StudyLogDiv() {
   const {
-    studyLogs,
     targetId,
     isOpen,
-    pagiNation,
+    studyLogs,
+    pagination,
     targetPage,
     openModal,
     openDialog,
     closeDialog,
     handleDelete,
-    getStudyLogs,
+    setTargetPage,
   } = useStudyLog();
-
+  console.log('pagination:', pagination);
+  console.log('totalPages:', pagination?.totalPages);
   return (
     <div className='bg-white w-[1200px] min-h-[450px] col-span-3 rounded-[18px] p-6'>
       {isOpen && (
@@ -41,7 +43,7 @@ export default function StudyLogDiv() {
       ) : (
         <div className='flex flex-col mb-9 min-h-[230px]'>
           {studyLogs &&
-            studyLogs.map((log) => {
+            studyLogs.map((log: StudyLogs) => {
               return (
                 <div
                   key={log.id}
@@ -62,15 +64,18 @@ export default function StudyLogDiv() {
       )}
 
       <div className='w-full flex justify-center items-center gap-3 mb-3'>
-        <div onClick={() => getStudyLogs({ page: 1 })} className='cursor-pointer'>
+        <div onClick={() => setTargetPage(1)} className='cursor-pointer'>
           <DoubleArrowSVG />
         </div>
-        <div onClick={() => getStudyLogs({ page: targetPage - 1 })} className='cursor-pointer'>
+        <div
+          onClick={() => setTargetPage((prev) => Math.max(prev - 1, 1))}
+          className='cursor-pointer'
+        >
           <ArrowSVG />
         </div>
-        {Array.from({ length: pagiNation?.totalPages || 0 }).map((_, index) => (
+        {Array.from({ length: pagination?.totalPages ?? 0 }).map((_, index) => (
           <div
-            onClick={() => getStudyLogs({ page: index + 1 })}
+            onClick={() => setTargetPage(index + 1)}
             key={index + 1}
             className={`rounded-[5px] w-6 h-6 ${targetPage == index + 1 ? 'bg-primary' : 'bg-gray-200 hover:bg-gray-400'} transition-all text-body-b text-white flex justify-center items-center cursor-pointer`}
           >
@@ -78,13 +83,15 @@ export default function StudyLogDiv() {
           </div>
         ))}
         <div
-          onClick={() => getStudyLogs({ page: targetPage + 1 })}
+          onClick={() =>
+            setTargetPage((prev) => Math.min(prev + 1, pagination?.totalPages ?? prev))
+          }
           className='rotate-180 cursor-pointer'
         >
           <ArrowSVG />
         </div>
         <div
-          onClick={() => getStudyLogs({ page: pagiNation?.totalPages })}
+          onClick={() => setTargetPage(pagination?.totalPages)}
           className='rotate-180 cursor-pointer'
         >
           <DoubleArrowSVG />

@@ -28,8 +28,8 @@ export const requestGetStudyLogs = async ({
     },
   });
 
-  console.log(response.data);
-  return response.data;
+  console.log(response.data.data);
+  return response.data.data;
 };
 
 export const requestGetStudyLog = async (studyLogId: string) => {

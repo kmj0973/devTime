@@ -1,17 +1,16 @@
-import { useHeatMapQuery } from '../queries/useHeatMapQuery';
+import { useHeatMapQuery } from '../queries/useDashboardQuery';
 import { useMemo } from 'react';
 import { createHeatMapLayout } from '../lib/createHeatMapLayout';
 import { mergeHeatMapData } from '../lib/mergeHeatMapData';
 
 export const useHeatMap = () => {
-  const { results } = useHeatMapQuery();
+  const { heatmaps } = useHeatMapQuery();
 
   const layout = useMemo(() => createHeatMapLayout(), []);
 
   const mergedData = useMemo(() => {
-    if (!results) return {};
-    return mergeHeatMapData(results);
-  }, [results]);
+    return mergeHeatMapData(heatmaps);
+  }, [heatmaps]);
 
   return {
     results: layout.results,
