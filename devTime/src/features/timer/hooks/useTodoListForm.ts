@@ -16,7 +16,7 @@ export const useTodoListForm = () => {
   const { timerId, studyLogId, pause, restartTime, initTimer } = useTimerStore();
 
   const { updateTodoList, saveReview } = useTodoListQuery(studyLogId);
-  const { timer, saveTimer, updateTimer } = useTimerQuery();
+  const { refetch, saveTimer, updateTimer } = useTimerQuery();
 
   const {
     register,
@@ -52,6 +52,7 @@ export const useTodoListForm = () => {
     const { tasks, review } = data;
 
     // 서버에서 기존 splitTimes 가져오기
+    const { data: timer } = await refetch();
     const original = timer.splitTimes;
 
     let newSplitTimes: Time[] = [];
