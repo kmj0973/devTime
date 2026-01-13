@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import ProfileImageSVG from './svg/ProfileImageSVG';
-import { requestGetRankings } from '../api/requests';
+import { useRankingQuery } from '../queries/useRankingQuery';
+import { useEffect, useRef } from 'react';
 
 type TechStack = {
   id: number;
@@ -23,27 +23,34 @@ type Ranking = {
   userId: string;
 };
 
-type Pagination = {
-  currentPage: number;
-  hasNext: boolean;
-  hasPrev: boolean;
-  totalItems: number;
-  totalPages: number;
-};
+export default function RankingInfo({ sortBy }: { sortBy: string }) {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useRankingQuery(sortBy);
 
-export default function RankingInfo({ sortset }: { sortset: string }) {
-  const [rankings, setRankings] = useState<Ranking[]>();
-  const [pagination, setPagination] = useState<Pagination>();
+  const rankings: Ranking[] = data?.pages.flatMap((page) => page.data.rankings) ?? [];
+
+  const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const getRankings = async () => {
-      const results = await requestGetRankings(sortset);
-      setRankings(results.data.rankings);
-      setPagination(results.data.pagination);
-    };
+    if (!ref.current) return;
 
-    getRankings();
-  }, [sortset]);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      {
+        root: null, // viewport
+        threshold: 0.1, // 조금만 보여도 트리거
+      },
+    );
+
+    observer.observe(ref.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <>
@@ -103,6 +110,9 @@ export default function RankingInfo({ sortset }: { sortset: string }) {
           </div>
         </div>
       ))}
+      <div ref={ref} style={{ height: 1 }} />
+
+      {isFetchingNextPage && <div>로딩 중...</div>}
     </>
   );
 }

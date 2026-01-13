@@ -21,6 +21,7 @@ export const useTimerQuery = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['timer'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['ranking'] });
     },
   }).mutateAsync;
 
@@ -30,6 +31,7 @@ export const useTimerQuery = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['timer'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['ranking'] });
     },
     onError: (error) => console.log(error.message),
   }).mutateAsync;
@@ -39,6 +41,7 @@ export const useTimerQuery = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['timer'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['ranking'] });
     },
     onError: (error) => console.log(error.message),
   }).mutateAsync;

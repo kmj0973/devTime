@@ -31,7 +31,7 @@ export default function ReviewDialog() {
   const initialized = useRef(false);
   const [isEdit, setIsEdit] = useState(false);
   const [taskValue, setTaskValue] = useState('');
-  const { refetch } = useTodoListQuery(studyLogId);
+  const { refetch, isFetching } = useTodoListQuery(studyLogId);
 
   useEffect(() => {
     if (initialized.current) return;
@@ -110,48 +110,72 @@ export default function ReviewDialog() {
           )}
         </div>
 
-        <div className='w-full h-[400px] mb-9 overflow-y-auto'>
-          {fields.map((field, index) => {
-            const content = watch(`tasks.${index}.content`);
-            const completed = watch(`tasks.${index}.isCompleted`);
+        {isFetching ? (
+          <div className='w-full h-[400px] mb-9 overflow-y-auto'>로딩중...</div>
+        ) : (
+          <div className='w-full h-[400px] mb-9 overflow-y-auto'>
+            {fields.map((field, index) => {
+              const content = watch(`tasks.${index}.content`);
+              const completed = watch(`tasks.${index}.isCompleted`);
 
-            return (
-              <div
-                key={field.id}
-                className={`flex justify-between items-center w-full h-[72px] ${
-                  completed ? 'bg-state-disabled' : 'bg-primary'
-                } rounded-xl px-6 py-[26px] gap-4 mb-3`}
-              >
-                <TodoSVG />
+              return (
+                <div
+                  key={field.id}
+                  className={`flex justify-between items-center w-full h-[72px] ${
+                    completed ? 'bg-state-disabled' : 'bg-primary'
+                  } rounded-xl px-6 py-[26px] gap-4 mb-3`}
+                >
+                  <TodoSVG />
 
-                {!isEdit ? ( // 일반모드
-                  <>
-                    <div className='w-[422px] text-body-s text-white'>{content}</div>
-                    <button
-                      className={`${
-                        completed ? 'bg-white/50' : ''
-                      } flex justify-center items-center w-7 h-7 border-[1.5px] border-white rounded-[8px] cursor-pointer`}
-                      type='button'
-                      onClick={() => {
-                        setValue(`tasks.${index}.isCompleted`, !completed, {
-                          shouldDirty: true,
-                          shouldValidate: true,
-                        });
-                      }}
-                    >
-                      {completed ? <CheckButtonSVG /> : <></>}
-                    </button>
-                  </>
-                ) : // 편집 모드
-                editNum === field.id ? (
-                  <>
-                    <input
-                      autoFocus
-                      {...register(`tasks.${index}.content`)}
-                      maxLength={30}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
+                  {!isEdit ? ( // 일반모드
+                    <>
+                      <div className='w-[422px] text-body-s text-white'>{content}</div>
+                      <button
+                        className={`${
+                          completed ? 'bg-white/50' : ''
+                        } flex justify-center items-center w-7 h-7 border-[1.5px] border-white rounded-[8px] cursor-pointer`}
+                        type='button'
+                        onClick={() => {
+                          setValue(`tasks.${index}.isCompleted`, !completed, {
+                            shouldDirty: true,
+                            shouldValidate: true,
+                          });
+                        }}
+                      >
+                        {completed ? <CheckButtonSVG /> : <></>}
+                      </button>
+                    </>
+                  ) : // 편집 모드
+                  editNum === field.id ? (
+                    <>
+                      <input
+                        autoFocus
+                        {...register(`tasks.${index}.content`)}
+                        maxLength={30}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            setValue(
+                              `tasks.${index}`,
+                              {
+                                content: content,
+                                isCompleted: false,
+                              },
+                              {
+                                shouldDirty: true,
+                                shouldValidate: true,
+                              },
+                            );
+                            setEditNum(null);
+                          }
+                        }}
+                        className='w-[422px] text-body-s text-white focus:outline-none'
+                      />
+
+                      <button
+                        className='cursor-pointer'
+                        type='button'
+                        onClick={() => {
                           setValue(
                             `tasks.${index}`,
                             {
@@ -164,57 +188,41 @@ export default function ReviewDialog() {
                             },
                           );
                           setEditNum(null);
-                        }
-                      }}
-                      className='w-[422px] text-body-s text-white focus:outline-none'
-                    />
+                        }}
+                      >
+                        <CheckSVG />
+                      </button>
+                    </>
+                  ) : (
+                    // 수정 모드
+                    <>
+                      <div className='w-[382px] text-body-s text-white'>{content}</div>
 
-                    <button
-                      className='cursor-pointer'
-                      type='button'
-                      onClick={() => {
-                        setValue(
-                          `tasks.${index}`,
-                          {
-                            content: content,
-                            isCompleted: false,
-                          },
-                          {
-                            shouldDirty: true,
-                            shouldValidate: true,
-                          },
-                        );
-                        setEditNum(null);
-                      }}
-                    >
-                      <CheckSVG />
-                    </button>
-                  </>
-                ) : (
-                  // 수정 모드
-                  <>
-                    <div className='w-[382px] text-body-s text-white'>{content}</div>
+                      <button
+                        className='cursor-pointer'
+                        type='button'
+                        onClick={() => {
+                          setValue(`tasks.${index}.isCompleted`, false);
+                          setEditNum(field.id);
+                        }}
+                      >
+                        <EditSVG />
+                      </button>
 
-                    <button
-                      className='cursor-pointer'
-                      type='button'
-                      onClick={() => {
-                        setValue(`tasks.${index}.isCompleted`, false);
-                        setEditNum(field.id);
-                      }}
-                    >
-                      <EditSVG />
-                    </button>
-
-                    <button className='cursor-pointer' type='button' onClick={() => remove(index)}>
-                      <DeleteSVG />
-                    </button>
-                  </>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                      <button
+                        className='cursor-pointer'
+                        type='button'
+                        onClick={() => remove(index)}
+                      >
+                        <DeleteSVG />
+                      </button>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         <div className='w-full flex flex-col gap-2 mb-9'>
           <div className='text-body-s-m text-gray-600'>학습 회고</div>

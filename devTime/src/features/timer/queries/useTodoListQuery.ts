@@ -5,7 +5,11 @@ import type { Task, Time } from '../model/types';
 export const useTodoListQuery = (studyLogId: string) => {
   const queryClient = useQueryClient();
 
-  const { data: todoList, refetch } = useQuery({
+  const {
+    data: todoList,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey: ['todoList'],
     queryFn: () => requestGetTodoLists(studyLogId),
     enabled: false,
@@ -17,6 +21,7 @@ export const useTodoListQuery = (studyLogId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['todoList'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['ranking'] });
     },
   }).mutateAsync;
 
@@ -31,8 +36,9 @@ export const useTodoListQuery = (studyLogId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['todoList'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+      queryClient.invalidateQueries({ queryKey: ['ranking'] });
     },
   }).mutateAsync;
 
-  return { todoList, refetch, updateTodoList, saveReview };
+  return { todoList, refetch, isFetching, updateTodoList, saveReview };
 };

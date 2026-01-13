@@ -8,7 +8,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary fallback={<div>에러발생</div>}>
-        <Suspense fallback={<div className='skeleton-layout' />}>
+        <Suspense fallback={<div className='skeleton-layout'>gdgd</div>}>
           <Router />
         </Suspense>
       </ErrorBoundary>
