@@ -1,10 +1,10 @@
 // src/features/timer/hooks/useTimer.ts
 import { useTimerStore } from '@/shared/store/useTimerStore';
-import { requestGetTimer, requestUpdateTimer, requestDeleteTimer } from '../api/requests';
 import useAuthStore from '@/shared/store/useAuthStore';
 import useModalStore from '@/shared/store/useModalStroe';
 import splitTimeByDate from '../util/splitTimeByDate';
 import mergeSplitTimes from '../util/mergeSplitTimes';
+import { useTimerQuery } from '../queries/useTimerQuery';
 
 export const useTimer = () => {
   const {
@@ -21,6 +21,8 @@ export const useTimer = () => {
 
   const isLogined = useAuthStore((state) => state.isLogined);
   const openModal = useModalStore((state) => state.openModal);
+
+  const { refetch, updateTimer, deleteTimer } = useTimerQuery();
 
   const handleStart = () => {
     if (timerId) {
@@ -41,13 +43,13 @@ export const useTimer = () => {
     const segments = splitTimeByDate(new Date(restartTime).getTime(), now);
 
     // 서버 기존 데이터 가져오기
-    const data = await requestGetTimer();
+    const { data } = await refetch();
     const original = data.splitTimes;
 
     // 기존 + 신규 segment 병합
     const newSplitTimes = mergeSplitTimes(original, segments);
     // 서버에 저장
-    await requestUpdateTimer(timerId, { splitTimes: newSplitTimes });
+    updateTimer({ timerId, payload: newSplitTimes });
 
     // 클라이언트 상태 갱신
     setPause(true);
@@ -56,7 +58,7 @@ export const useTimer = () => {
 
   const handleDelete = async () => {
     if (timerId) {
-      await requestDeleteTimer(timerId);
+      deleteTimer(timerId);
       useTimerStore.getState().reset();
     }
   };

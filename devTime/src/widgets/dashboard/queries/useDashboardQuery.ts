@@ -1,6 +1,12 @@
-import { requestGetHeatMap, requestGetStats, requestGetStudyLogs } from '../api/requests';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  requestDeleteStudyLog,
+  requestGetHeatMap,
+  requestGetStats,
+  requestGetStudyLogs,
+} from '../api/requests';
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { type Stats, type HeatMapData } from '../model/types';
+import { requestDeleteTimer } from '@/features/timer/api/requests';
 
 export const useStatsQuery = () => {
   const { data: stats } = useSuspenseQuery<Stats>({
@@ -30,4 +36,21 @@ export const useStudyLogsQuery = (page?: number) => {
   });
 
   return { studyLogs, isFetching };
+};
+
+export const useStudyLogMutation = () => {
+  const queryClient = useQueryClient();
+
+  const deleteStudyLog = useMutation({
+    mutationFn: ({ id, timerId }: { id: string; timerId?: string }) => {
+      if (timerId) {
+        return requestDeleteTimer(timerId);
+      }
+      return requestDeleteStudyLog(id);
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
+    onError: (error) => console.log(error.message),
+  }).mutateAsync;
+
+  return { deleteStudyLog };
 };

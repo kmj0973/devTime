@@ -1,14 +1,9 @@
 import useModalStore from '@/shared/store/useModalStroe';
 import { useTimerStore } from '@/shared/store/useTimerStore';
 import { useState } from 'react';
-import { requestDeleteTimer } from '@/features/timer/api/requests';
-import { requestDeleteStudyLog } from '../api/requests';
-import { useStudyLogsQuery } from '../queries/useDashboardQuery';
-import { useQueryClient } from '@tanstack/react-query';
+import { useStudyLogMutation, useStudyLogsQuery } from '../queries/useDashboardQuery';
 
 export const useStudyLog = () => {
-  const queryClient = useQueryClient();
-
   const { studyLogId, timerId, reset } = useTimerStore();
   const openModal = useModalStore((state) => state.openModal);
 
@@ -17,6 +12,7 @@ export const useStudyLog = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { studyLogs, isFetching } = useStudyLogsQuery(targetPage);
+  const { deleteStudyLog } = useStudyLogMutation();
 
   const openDialog = (id: string) => {
     setTargetId(id);
@@ -29,17 +25,14 @@ export const useStudyLog = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (studyLogId == id) {
-      await requestDeleteTimer(timerId);
-      reset();
-    } else {
-      await requestDeleteStudyLog(id);
-    }
-
-    await queryClient.invalidateQueries({ queryKey: ['dashboard', 'studyLogs'] });
-    await queryClient.refetchQueries({
-      queryKey: ['dashboard', 'studyLogs'],
+    await deleteStudyLog({
+      id,
+      timerId: studyLogId === id ? timerId : undefined,
     });
+    if (studyLogId === id) {
+      reset();
+    }
+    // await queryClient.invalidateQueries({ queryKey: ['dashboard', 'studyLogs'] });
   };
 
   return {

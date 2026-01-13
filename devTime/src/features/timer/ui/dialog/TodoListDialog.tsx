@@ -3,10 +3,10 @@ import CheckSVG from '../svg/TodoList/CheckSVG';
 import DeleteSVG from '../svg/TodoList/DeleteSVG';
 import EditSVG from '../svg/TodoList/EditSVG';
 import TodoSVG from '../svg/TodoList/TodoSVG';
-import { requestGetTodoLists } from '../../api/requests';
 import { useTodoListForm } from '../../hooks/useTodoListForm';
 import EditButtonSVG from '../svg/Button/EditButtonSVG';
 import CheckButtonSVG from '../svg/Button/CheckButtonSVG';
+import { useTodoListQuery } from '../../queries/useTodoListQuery';
 
 export default function TodoListDialog() {
   const {
@@ -31,17 +31,18 @@ export default function TodoListDialog() {
   const initialized = useRef(false);
   const [isEdit, setIsEdit] = useState(false);
   const [taskValue, setTaskValue] = useState('');
+  const { refetch } = useTodoListQuery(studyLogId);
 
   useEffect(() => {
     if (initialized.current) return;
     initialized.current = true;
 
     const initialTasks = async () => {
-      const todoLists = await requestGetTodoLists(studyLogId);
+      const { data: todoList } = await refetch();
 
       reset({
         todayGoal: '',
-        tasks: todoLists.data.tasks,
+        tasks: todoList.data.tasks,
       });
     };
 

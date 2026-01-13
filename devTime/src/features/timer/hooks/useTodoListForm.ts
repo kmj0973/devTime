@@ -4,21 +4,19 @@ import useModalStore from '@/shared/store/useModalStroe';
 import { useTimerStore } from '@/shared/store/useTimerStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
-import {
-  requestGetTimer,
-  requestSaveReivew,
-  requestSaveTimer,
-  requestUpdateTimer,
-  requestUpdateTodoLists,
-} from '../api/requests';
 import type { Time } from '../model/types';
 import mergeSplitTimes from '../util/mergeSplitTimes';
 import splitTimeByDate from '../util/splitTimeByDate';
+import { useTodoListQuery } from '../queries/useTodoListQuery';
+import { useTimerQuery } from '../queries/useTimerQuery';
 
 export const useTodoListForm = () => {
   const [editNum, setEditNum] = useState<string | null>(null);
   const closeModal = useModalStore((state) => state.closeModal);
   const { timerId, studyLogId, pause, restartTime, initTimer } = useTimerStore();
+
+  const { updateTodoList, saveReview } = useTodoListQuery(studyLogId);
+  const { timer, saveTimer, updateTimer } = useTimerQuery();
 
   const {
     register,
@@ -54,7 +52,7 @@ export const useTodoListForm = () => {
     const { tasks, review } = data;
 
     // 서버에서 기존 splitTimes 가져오기
-    const { splitTimes: original } = await requestGetTimer();
+    const original = timer.splitTimes;
 
     let newSplitTimes: Time[] = [];
 
@@ -73,10 +71,13 @@ export const useTodoListForm = () => {
     }
 
     // 저장 요청
-    await requestSaveReivew(timerId, {
-      splitTimes: newSplitTimes,
-      tasks,
-      review: review as string,
+    await saveReview({
+      timerId,
+      data: {
+        splitTimes: newSplitTimes,
+        tasks,
+        review: review as string,
+      },
     });
 
     // 타이머 상태 초기화
@@ -90,9 +91,10 @@ export const useTodoListForm = () => {
     const newTasks = tasks.map((item) => item.content);
     const newTask = { todayGoal: todayGoal as string, tasks: newTasks };
 
-    const results = await requestSaveTimer(newTask);
-    await requestUpdateTimer(results.timerId, {
-      splitTimes: [{ date: results.startTime, timeSpent: 0 }],
+    const results = await saveTimer(newTask);
+    await updateTimer({
+      timerId: results.timerId,
+      payload: [{ date: results.startTime, timeSpent: 0 }],
     });
 
     initTimer({
@@ -111,13 +113,13 @@ export const useTodoListForm = () => {
   const onUpdateClick = async (data: TodoListFormFields) => {
     const { tasks } = data;
 
-    await requestUpdateTodoLists(studyLogId, tasks);
+    await updateTodoList({ studyLogId, payload: tasks });
   };
 
   const onUpdateSubmit: SubmitHandler<TodoListFormFields> = async (data) => {
     const { tasks } = data;
 
-    await requestUpdateTodoLists(studyLogId, tasks);
+    await updateTodoList({ studyLogId, payload: tasks });
 
     closeModal();
   };

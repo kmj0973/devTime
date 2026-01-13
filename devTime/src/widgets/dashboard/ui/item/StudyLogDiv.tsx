@@ -19,8 +19,7 @@ export default function StudyLogDiv() {
     handleDelete,
     setTargetPage,
   } = useStudyLog();
-  console.log('pagination:', pagination);
-  console.log('totalPages:', pagination?.totalPages);
+
   return (
     <div className='bg-white w-[1200px] min-h-[450px] col-span-3 rounded-[18px] p-6'>
       {isOpen && (
