@@ -5,7 +5,7 @@ import StatsContainer from './StatsContainer';
 
 export default function DashboardContainer() {
   return (
-    <div className=' w-full items-center bg-linear-to-b from-[#F6F7F9] to-[#E9ECF5] pt-4 pb-12'>
+    <div className=' w-full min-h-screen items-center bg-linear-to-b from-[#F6F7F9] to-[#E9ECF5] pt-4 pb-12'>
       <NavBar />
       <div className='grid grid-cols-3 gap-4 max-w-[1200px] mx-auto mt-10'>
         <StatsContainer />

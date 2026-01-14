@@ -74,8 +74,9 @@ export default function HeatMap() {
                 style={{
                   gridColumn: weekIndex + 2,
                   gridRow: dayIndex + 2,
+                  backgroundColor: level != null ? `var(--heatmap-level-${level + 1})` : '#f9fafb',
                 }}
-                className={`group w-[18px] h-[18px] ${level != null ? `bg-heatmap-level-${level + 1}` : 'bg-gray-50'} border border-gray-300 rounded-[5px]`}
+                className={`group w-[18px] h-[18px] border border-gray-300 rounded-[5px]`}
               >
                 <div
                   className='absolute w-[124px] h-5 z-10  opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap

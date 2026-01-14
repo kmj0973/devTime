@@ -3,7 +3,7 @@ import LoginForm from '@/features/auth/ui/LoginForm/LoginForm';
 
 export default function LoginPage() {
   return (
-    <div className='relative h-screen flex justify-center items-center'>
+    <div className='relative min-h-screen flex justify-center items-center'>
       <BackgroundLogo />
       <LoginForm />
     </div>

@@ -8,7 +8,7 @@ export default function MyPageContainer() {
   const user = useAuthStore((state) => state.user);
 
   return (
-    <div className='h-screen items-center bg-linear-to-b from-[#F6F7F9] to-[#E9ECF5] pt-4'>
+    <div className='min-h-screen items-center bg-linear-to-b from-[#F6F7F9] to-[#E9ECF5] pt-4'>
       <NavBar />
       <div className='w-full flex flex-col justify-center items-center mt-10'>
         <div className='bg-white w-[1200px] h-[424px] flex justify-between p-9 gap-14 rounded-xl'>
