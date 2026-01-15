@@ -8,6 +8,7 @@ import ModalRoot from '@/pages/public/ModalRoot';
 import RankingPage from '@/pages/ranking/ui/RankingPage';
 import SignUpPage from '@/pages/signup/ui/SignUpPage';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import ProtectedRoute from './ProtecedRoute';
 
 const router = createBrowserRouter([
   {
@@ -22,11 +23,46 @@ const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignUpPage /> },
-      { path: 'profile', element: <ProfilePage /> },
-      { path: 'dashboard', element: <DashboardPage /> },
-      { path: 'ranking', element: <RankingPage /> },
-      { path: 'mypage', element: <MyPage /> },
-      { path: 'mypage/edit', element: <EditMyPage /> },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'dashboard',
+        element: (
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'ranking',
+        element: (
+          <ProtectedRoute>
+            <RankingPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'mypage',
+        element: (
+          <ProtectedRoute>
+            <MyPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'mypage/edit',
+        element: (
+          <ProtectedRoute>
+            <EditMyPage />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);

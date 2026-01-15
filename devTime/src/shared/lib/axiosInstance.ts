@@ -2,7 +2,6 @@ import axios from 'axios';
 import useAuthStore from '../store/useAuthStore';
 import { useTimerStore } from '../store/useTimerStore';
 import useModalStore from '../store/useModalStroe';
-import { useNavigate } from 'react-router-dom';
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -67,8 +66,6 @@ axiosInstance.interceptors.response.use(
         useAuthStore.getState().logout();
         useTimerStore.getState().reset();
         useModalStore.getState().closeModal();
-        const navigate = useNavigate();
-        navigate('/', { replace: true });
         return Promise.reject(error);
       }
     }
