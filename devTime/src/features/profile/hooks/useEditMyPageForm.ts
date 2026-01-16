@@ -2,12 +2,14 @@ import useAuthStore from '@/shared/store/useAuthStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { requestCreateProfile, requestFileUpload, requestUpdateProfile } from '../api/requests';
+import { requestFileUpload } from '../api/requests';
 import { editMyPageFormSchema, type EditMyPageFormFields } from '../model/schema';
 import { useCallback, useEffect, useState } from 'react';
 import { requestNicknameCheck } from '@/features/signup/api/requests';
+import { useProfileQuery } from '../queries/useProfileQuery';
 
 export const useEditMyPageForm = () => {
+  const { createProfile, updateProfile } = useProfileQuery();
   const setUser = useAuthStore((state) => state.setUser);
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
@@ -108,7 +110,7 @@ export const useEditMyPageForm = () => {
       });
 
       if (user?.profile) {
-        await requestUpdateProfile({
+        await updateProfile({
           career: newData.career,
           purpose: newData.purpose,
           goal: newData.goal,
@@ -118,14 +120,14 @@ export const useEditMyPageForm = () => {
           ...(isNicknameChanged && { nickname: newData.nickname }),
         });
       } else if (!user?.profile) {
-        await requestCreateProfile({
+        await createProfile({
           career: newData.career,
           purpose: newData.purpose,
           goal: newData.goal,
           techStacks: newData.techStacks,
           profileImage: key,
         });
-        await requestUpdateProfile({
+        await updateProfile({
           career: newData.career,
           purpose: newData.purpose,
           goal: newData.goal,

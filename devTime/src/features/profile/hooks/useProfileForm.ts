@@ -1,9 +1,10 @@
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { profileFormSchema, type ProfileFormFields } from '../model/schema';
-import { requestCreateProfile, requestFileUpload } from '../api/requests';
+import { requestFileUpload } from '../api/requests';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '@/shared/store/useAuthStore';
+import { useProfileQuery } from '../queries/useProfileQuery';
 
 export const useProfileForm = () => {
   const {
@@ -25,6 +26,8 @@ export const useProfileForm = () => {
     mode: 'onChange',
     shouldUnregister: true,
   });
+
+  const { createProfile } = useProfileQuery();
 
   const setUser = useAuthStore((state) => state.setUser);
   const user = useAuthStore((state) => state.user);
@@ -61,7 +64,7 @@ export const useProfileForm = () => {
         body: data.profileImage[0], // 사용자가 직접 업로드 한 이미지 파일 데이터
       });
 
-      await requestCreateProfile({ ...newData, profileImage: key });
+      await createProfile({ ...newData, profileImage: key });
       if (user) setUser({ ...user, profile: { ...newData, profileImage: key } });
 
       navigate('/', { replace: true });
