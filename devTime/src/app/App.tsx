@@ -8,7 +8,13 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary fallback={<div>에러발생</div>}>
-        <Suspense fallback={<div className='skeleton-layout'>gdgd</div>}>
+        <Suspense
+          fallback={
+            <div className='h-screen mx-auto flex justify-center items-center text-2xl'>
+              로딩중...
+            </div>
+          }
+        >
           <Router />
         </Suspense>
       </ErrorBoundary>

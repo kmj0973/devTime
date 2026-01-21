@@ -41,7 +41,7 @@ export default function RankingInfo({ sortBy }: { sortBy: string }) {
       },
       {
         root: null, // viewport
-        threshold: 0.1, // 조금만 보여도 트리거
+        threshold: 0.5, // 조금만 보여도 트리거
       },
     );
 
